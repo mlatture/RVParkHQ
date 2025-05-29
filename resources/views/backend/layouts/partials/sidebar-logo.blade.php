@@ -1,0 +1,54 @@
+<aside
+    :class="sidebarToggle ? 'translate-x-0 lg:w-[85px] app-sidebar-minified' : '-translate-x-full'"
+    class="sidebar fixed left-0 top-0 z-10 flex h-screen w-[290px] flex-col overflow-y-hidden border-r transition-all duration-300 ease-in-out {{ config('settings.sidebar_bg_lite') ? '' : 'bg-gray-800' }} dark:border-gray-900 dark:bg-gray-900 lg:static lg:translate-x-0"
+    id="appSidebar"
+    x-data="{
+        isHovered: false,
+        init() {
+            this.updateBg();
+            const observer = new MutationObserver(() => this.updateBg());
+            observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+
+            if (localStorage.getItem('sidebarToggle')) {
+                sidebarToggle = JSON.parse(localStorage.getItem('sidebarToggle'));
+            }
+        },
+        updateBg() {
+            const htmlHasDark = document.documentElement.classList.contains('dark');
+            const liteBg = '{{ config('settings.sidebar_bg_lite') }}';
+            const darkBg = '{{ config('settings.sidebar_bg_dark') }}';
+            this.$el.style.backgroundColor = htmlHasDark ? darkBg : liteBg;
+        }
+    }"
+    x-init="init()"
+    @mouseenter="if(sidebarToggle) { isHovered = true; $el.classList.add('lg:w-[290px]'); $el.classList.remove('lg:w-[85px]', 'app-sidebar-minified'); }"
+    @mouseleave="if(sidebarToggle) { isHovered = false; $el.classList.add('lg:w-[85px]', 'app-sidebar-minified'); $el.classList.remove('lg:w-[290px]'); }"
+>
+    <!-- Sidebar Header -->
+    <div
+        class="flex items-center justify-center sidebar-header py-5 px-5 h-[100px] transition-all duration-300"
+    >
+        <a href="{{ route('admin.dashboard') }}" class="block w-full text-center">
+            <span class="logo transition-opacity duration-300 block mx-auto">
+                <img
+                    class="dark:hidden max-h-[80px] mx-auto"
+                    src="{{ config('settings.site_logo_lite') ?? asset('images/logo/lara-dashboard.png') }}"
+                    alt="{{ config('app.name') }}"
+                />
+                <img
+                    class="hidden dark:block max-h-[80px] mx-auto"
+                    src="{{ config('settings.site_logo_dark') ?? '/images/logo/lara-dashboard-dark.png' }}"
+                    alt="{{ config('app.name') }}"
+                />
+            </span>
+        </a>
+    </div>
+    <!-- End Sidebar Header -->
+
+    <div
+        class="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar"
+    >
+        @include('backend.layouts.partials.sidebar-menu')
+    </div>
+</aside>
+<!-- End Sidebar -->
