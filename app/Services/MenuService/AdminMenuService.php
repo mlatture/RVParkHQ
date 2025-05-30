@@ -126,6 +126,16 @@ class AdminMenuService
             ]
         ]);
 
+        $this->addMenuItem([
+            'label' => __('Park'),
+            'icon' => 'dashboard.svg',
+            'route' => route('admin.parks.index'),
+            'active' => Route::is('admin.parks.index'),
+            'id' => 'parks',
+            'priority' => 1,
+            'permissions' => 'park.view'
+        ]);
+
 //        $this->addMenuItem([
 //            'label' => __('Modules'),
 //            'icon' => 'three-dice.svg',

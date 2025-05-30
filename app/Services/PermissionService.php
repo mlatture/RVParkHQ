@@ -12,7 +12,7 @@ class PermissionService
 {
     /**
      * Get all permissions organized by groups
-     * 
+     *
      * @return array
      */
     public function getAllPermissions(): array
@@ -94,6 +94,15 @@ class PermissionService
                     'translations.edit',
                 ],
             ],
+            [
+                'group_name' => 'parks',
+                'permissions' => [
+                    'park.view',
+                    'park.create',
+                    'park.edit',
+                    'park.delete',
+                ],
+            ],
         ];
 
         return $permissions;
@@ -101,7 +110,7 @@ class PermissionService
 
     /**
      * Get a specific set of permissions by group name
-     * 
+     *
      * @param string $groupName
      * @return array|null
      */
@@ -120,7 +129,7 @@ class PermissionService
 
     /**
      * Get all permission group names
-     * 
+     *
      * @return array
      */
     public function getPermissionGroups(): array
@@ -132,7 +141,7 @@ class PermissionService
 
         return $groups;
     }
-    
+
     /**
      * Get all permission models from database
      *
@@ -142,7 +151,7 @@ class PermissionService
     {
         return Permission::all();
     }
-    
+
     /**
      * Get permissions by group name from database
      *
@@ -155,7 +164,7 @@ class PermissionService
             ->where('group_name', $group_name)
             ->get();
     }
-    
+
     /**
      * Get permission groups from database
      *
@@ -167,32 +176,32 @@ class PermissionService
             ->groupBy('group_name')
             ->get();
     }
-    
+
     /**
      * Create all permissions from the definitions
-     * 
+     *
      * @return array Created permissions
      */
     public function createPermissions(): array
     {
         $createdPermissions = [];
         $permissions = $this->getAllPermissions();
-        
+
         foreach ($permissions as $permissionGroup) {
             $groupName = $permissionGroup['group_name'];
-            
+
             foreach ($permissionGroup['permissions'] as $permissionName) {
                 $permission = $this->findOrCreatePermission($permissionName, $groupName);
                 $createdPermissions[] = $permission;
             }
         }
-        
+
         return $createdPermissions;
     }
-    
+
     /**
      * Find or create a permission
-     * 
+     *
      * @param string $name
      * @param string $groupName
      * @return Permission
@@ -208,10 +217,10 @@ class PermissionService
             ]
         );
     }
-    
+
     /**
      * Get all permission objects by their names
-     * 
+     *
      * @param array $permissionNames
      * @return array
      */
@@ -243,7 +252,7 @@ class PermissionService
             $roles = $permission->roles()->get();
             $permission->role_count = $roles->count();
             $permission->roles_list = $roles->pluck('name')->take(5)->implode(', ');
-            
+
             if ($permission->role_count > 5) {
                 $permission->roles_list .= ', ...';
             }
@@ -254,7 +263,7 @@ class PermissionService
 
     /**
      * Get roles for permission
-     * 
+     *
      * @param Permission $permission
      * @return Collection
      */

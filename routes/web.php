@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Http\Controllers\Backend\ActionLogController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\ModulesController;
+use App\Http\Controllers\Backend\ParkController;
 use App\Http\Controllers\Backend\PermissionsController;
 use App\Http\Controllers\Backend\RolesController;
 use App\Http\Controllers\Backend\UsersController;
@@ -62,6 +63,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth']], 
 
     // Action Log Routes.
     Route::get('/action-log', [ActionLogController::class, 'index'])->name('actionlog.index');
+
+    Route::resource('parks', ParkController::class);
 });
 
 /**
