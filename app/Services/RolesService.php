@@ -45,7 +45,7 @@ class RolesService
 
     /**
      * Get permissions by group
-     * 
+     *
      * @param string $groupName
      * @return array|null
      */
@@ -100,7 +100,7 @@ class RolesService
 
     /**
      * Count users in a specific role
-     * 
+     *
      * @param Role|string $role
      * @return int
      */
@@ -118,7 +118,7 @@ class RolesService
 
     /**
      * Get roles with user counts
-     * 
+     *
      * @param string|null $search
      * @param int $perPage
      * @return LengthAwarePaginator
@@ -143,7 +143,7 @@ class RolesService
 
     /**
      * Create predefined roles with their permissions
-     * 
+     *
      * @return array
      */
     public function createPredefinedRoles(): array
@@ -173,9 +173,9 @@ class RolesService
         $editorPermissions = [
             'dashboard.view',
             // Blog permissions
-            'blog.create',
-            'blog.view',
-            'blog.edit',
+//            'blog.create',
+//            'blog.view',
+//            'blog.edit',
             // Profile permissions
             'profile.view',
             'profile.edit',
@@ -184,24 +184,24 @@ class RolesService
             'translations.view',
         ];
 
-        $roles['editor'] = $this->createRole('Editor', $editorPermissions);
+        $roles['editor'] = $this->createRole('camper', $editorPermissions);
 
         // 4. Subscriber role - basic user role
-        $subscriberPermissions = [
-            'dashboard.view',
-            'profile.view',
-            'profile.edit',
-            'profile.update',
-        ];
+//        $subscriberPermissions = [
+//            'dashboard.view',
+//            'profile.view',
+//            'profile.edit',
+//            'profile.update',
+//        ];
 
-        $roles['subscriber'] = $this->createRole('Subscriber', $subscriberPermissions);
+//        $roles['subscriber'] = $this->createRole('Subscriber', $subscriberPermissions);
 
         return $roles;
     }
 
     /**
      * Get a specific predefined role's permissions
-     * 
+     *
      * @param string $roleName
      * @return array
      */

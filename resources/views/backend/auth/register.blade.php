@@ -29,7 +29,6 @@
                         <select name="type"
                                 class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90">
                             <option value="">Select Type</option>
-                            <option value="admin" {{ old('type') == 'admin' ? 'selected' : '' }}>Admin</option>
                             <option value="owner" {{ old('type') == 'owner' ? 'selected' : '' }}>Owner</option>
                             <option value="camper" selected {{ old('type') == 'camper' ? 'selected' : '' }}>Camper</option>
                         </select>
