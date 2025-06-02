@@ -39,18 +39,44 @@
                 <div class="p-5 space-y-6 border-t border-gray-100 dark:border-gray-800 sm:p-6">
                     @include('backend.layouts.partials.messages')
 
-                    <form action="{{ route('admin.parks.update', $park->id) }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('admin.parks.update', $park->id) }}" method="POST" enctype="multipart/form-data" id="park_form">
                         @csrf
                         @method('PUT')
 
                         <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
 
+{{--                            <div>--}}
+{{--                                <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-400">--}}
+{{--                                    {{ __('Park Name') }}--}}
+{{--                                </label>--}}
+{{--                                <input type="text" name="name" id="name" value="{{ old('name', $park->name) }}"--}}
+{{--                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 dark:bg-gray-900 dark:text-white">--}}
+{{--                            </div>--}}
+
                             <div>
-                                <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                    {{ __('Park Name') }}
-                                </label>
-                                <input type="text" name="name" id="name" value="{{ old('name', $park->name) }}"
-                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 dark:bg-gray-900 dark:text-white">
+                                <div class="flex items-center justify-between mb-2">
+                                    <label for="name" class="text-sm font-medium text-gray-700 dark:text-gray-400">
+                                        {{ __('Park Name') }}
+                                    </label>
+
+                                    <div class="form-check form-switch flex items-center">
+                                        <input class="form-check-input" type="checkbox" name="change_name" id="change_name">
+                                        <label class="form-check-label ml-2" for="change_name" id="name_check_box_label">Manual</label>
+                                    </div>
+                                </div>
+
+                                <div id="inputWrapper" class="flex mt-1 hidden">
+                                    <input type="text" name="name" id="name" value="{{ old('name', $park->name) }}"
+                                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 dark:bg-gray-900 dark:text-white">
+                                </div>
+
+                                <div id="selectWrapper" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 dark:bg-gray-900 dark:text-white">
+                                    <select id="parkDropdown" name="name" class="w-full select2">
+                                        <option value="">Select a park</option>
+                                    </select>
+                                </div>
+
+                                <span id="error-name" class="text-sm text-red-600 mt-1 block"></span>
                             </div>
 
                             <div>
@@ -184,7 +210,7 @@
                                     {{ __('Main Image') }}
                                 </label>
                                 <input type="file" name="main_image_url" id="main_image_url"
-                                       class="mt-1 block w-full text-sm text-gray-800 file:mr-4 file:rounded file:border-0 file:bg-brand-600 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-brand-700">
+                                       class="focus:border-ring-brand-300 cursor-pointer focus:file:ring-brand-300 w-full overflow-hidden rounded-lg border border-gray-300 bg-transparent text-sm text-gray-500 transition-colors file:mr-5 file:border-collapse file:cursor-pointer file:rounded-l-lg file:border-0 file:border-r file:border-solid file:border-gray-200 file:bg-gray-50 file:py-3 file:px-4 file:text-sm file:text-gray-700 placeholder:text-gray-400 hover:file:bg-gray-100 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 dark:file:border-gray-800 dark:file:bg-white/[0.03] dark:file:text-gray-400 px-4">
 
                                 @if($park->main_image_url)
                                     <div class="mt-2">
@@ -194,7 +220,8 @@
                             </div>
                         </div>
 
-                        <div class="pt-6">
+                        <div class="mt-6 flex justify-start gap-4">
+                            <button type="button" class="btn-primary" id="generateAI" class="btn-secondary">{{ __('Search') }}</button>
                             <button type="submit"
                                     class="inline-flex items-center justify-center rounded-md bg-brand-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2">
                                 {{ __('Update Park') }}
@@ -208,28 +235,175 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const nameInput = document.getElementById('name');
-            const slugInput = document.getElementById('slug');
-
-            nameInput.addEventListener('input', function () {
-                let slug = nameInput.value
+        $(document).ready(function () {
+            $('#name').on('input', function () {
+                let slug = $(this).val()
                     .toLowerCase()
                     .trim()
                     .replace(/\s+/g, '-')
                     .replace(/[^\w\-]+/g, '')
                     .replace(/\-\-+/g, '-');
 
-                slugInput.value = slug;
+                $('#slug').val(slug);
             });
-        });
 
-        document.getElementById('latitude').addEventListener('input', function (e) {
-            this.value = this.value.replace(/[^0-9.-]/g, '');
-        });
+            $('#latitude').on('input', function () {
+                $(this).val($(this).val().replace(/[^0-9.-]/g, ''));
+            });
 
-        document.getElementById('longitude').addEventListener('input', function (e) {
-            this.value = this.value.replace(/[^0-9.-]/g, '');
+            $('#longitude').on('input', function () {
+                $(this).val($(this).val().replace(/[^0-9.-]/g, ''));
+            });
+
+
+            $('#generateAI').on('click', function () {
+                let formData = {};
+                $('#park_form').find('input, textarea, select').each(function() {
+                    let name = $(this).attr('name');
+                    let value = $(this).val();
+
+                    if (name && name !== 'main_image_url') {
+                        formData[name] = value;
+                    }
+                });
+
+                console.log(formData)
+                // return true;
+
+                $('#ajaxLoader').removeClass('hidden');
+                $('#generateAI').attr('disabled', true).text('Processing...');
+
+                $.ajax({
+                    url: '{{ route("admin.parks.openAi") }}',
+                    method: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        formData: formData
+                    },
+                    success: function (response) {
+                        console.log(response.data)
+                        Swal.fire({
+                            toast: true,
+                            position: 'top-end',
+                            icon: 'success',
+                            title: 'Data Successfully Fetched',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                        });
+
+                        for (const field in response.data) {
+                            document.querySelector(`[name="${field}"]`).value = response.data[field];
+                        }
+                    },
+                    error: function (xhr) {
+                        Swal.fire({
+                            toast: true,
+                            position: 'top-end',
+                            icon: 'error',
+                            title: xhr.responseText,
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                        });
+                    },
+                    complete: function () {
+                        $('#ajaxLoader').addClass('hidden');
+                        $('#generateAI').attr('disabled', false).text('Search');
+                    }
+                });
+            });
+
+            $('.select2').select2();
+
+            $('#parkDropdown').select2({
+                placeholder: 'Select or search a park',
+                allowClear: true,
+                minimumInputLength: 1,
+                ajax: {
+                    url: '{{ route("admin.parks.searchPark") }}',
+                    type: 'POST',
+                    dataType: 'json',
+                    delay: 250,
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    data: function(params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(data) {
+                        return {
+                            results: data.over_pass.map(function(park) {
+                                return {
+                                    id: park.name,
+                                    text: park.name,
+                                    state: park.state,
+                                    city: park.city,
+                                    zip: park.zip,
+                                    latitude: park.latitude,
+                                    longitude: park.longitude
+                                };
+                            })
+                        };
+                    },
+                    cache: true
+                }
+            });
+
+            $('#parkDropdown').on('select2:select', function (e) {
+                var park = e.params.data;
+
+                $('[name="name"]').val(park.text);
+                $('[name="slug"]').val(slugify(park.text));
+
+                $('[name="state"]').val(park.state || '');
+                $('[name="city"]').val(park.city || '');
+                $('[name="zip"]').val(park.zip || '');
+                $('[name="latitude"]').val(park.latitude || '');
+                $('[name="longitude"]').val(park.longitude || '');
+            });
+
+            $('#parkDropdown').on('select2:clear', function () {
+                $('[name="name"]').val('');
+                $('[name="slug"]').val('');
+                $('[name="state"]').val('');
+                $('[name="city"]').val('');
+                $('[name="zip"]').val('');
+                $('[name="latitude"]').val('');
+                $('[name="longitude"]').val('');
+            });
+
+            function slugify(text) {
+                return text
+                    .toString()
+                    .toLowerCase()
+                    .trim()
+                    .replace(/\s+/g, '-')
+                    .replace(/[^\w\-]+/g, '')
+                    .replace(/\-\-+/g, '-');
+            }
+
+            $('#change_name').on('change', function () {
+                if ($(this).is(':checked')) {
+                    $('#inputWrapper').addClass('hidden').find('input').prop('disabled', true);
+                    $('#selectWrapper').removeClass('hidden').find('select').prop('disabled', false);
+                    $('#name_check_box_label').text('Manual');
+
+                    $('[name="name"]').val('');
+                    $('[name="slug"]').val('');
+                    $('#parkDropdown').val(null).trigger('change');
+                } else {
+                    $('#inputWrapper').removeClass('hidden').find('input').prop('disabled', false);
+                    $('#selectWrapper').addClass('hidden').find('select').prop('disabled', true);
+                    $('#name_check_box_label').text('Search');
+
+                    $('#parkDropdown').val(null).trigger('change');
+                    // $('[name="name"]').val('');
+                    // $('[name="slug"]').val('');
+                }
+            }).trigger('change');
         });
     </script>
 @endsection

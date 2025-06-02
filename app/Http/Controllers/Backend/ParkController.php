@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ParkRequest;
+use App\Models\OverPass;
 use App\Models\Park;
+use App\Services\OpenAIService;
 use App\Services\ParkService;
-use App\Services\RolesService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class ParkController extends Controller
@@ -14,6 +16,7 @@ class ParkController extends Controller
 
     public function __construct(
         private readonly parkService $parkService,
+        private readonly OpenAIService $OpenAIService,
     ) {
     }
 
@@ -35,9 +38,10 @@ class ParkController extends Controller
     public function store(ParkRequest $request)
     {
         $this->checkAuthorization(auth()->user(), ['park.create']);
-        $park = new Park();
 
+        $park = new Park();
         $park->name = $request->name;
+        $park->name_check_box = $request->change_name == 'on' ? 1 : 0;
         $park->slug = $request->slug ?? null;
         $park->description = $request->description ?? null;
         $park->short_description = $request->short_description ?? null;
@@ -82,6 +86,7 @@ class ParkController extends Controller
 
         $data = [
             'name' => $request->name,
+            'name_check_box' => $request->change_name == 'on' ? 1 : 0,
             'slug' => $request->slug,
             'description' => $request->description,
             'short_description' => $request->short_description,
@@ -112,8 +117,6 @@ class ParkController extends Controller
         return redirect()->route('admin.parks.index')->with('success', 'Park updated successfully.');
     }
 
-
-
     public function destroy($id)
     {
         $this->checkAuthorization(auth()->user(), ['park.delete']);
@@ -121,5 +124,22 @@ class ParkController extends Controller
         $park->delete();
 
         return redirect()->route('admin.parks.index')->with('success', 'Park delete successfully.');
+    }
+
+    public function openAi(Request $request)
+    {
+        $formData = $request->input('formData');
+        return $this->OpenAIService->generateParkDescription($formData);
+    }
+
+    public function searchPark(Request $request)
+    {
+        $over_pass = OverPass::where('name', 'like', '%' . $request->search . '%')
+            ->select('name', 'state', 'city', 'zip', 'latitude', 'longitude')
+            ->get();
+
+        return response()->json([
+            'over_pass' => $over_pass,
+        ]);
     }
 }

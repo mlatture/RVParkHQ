@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Backend\OverPassController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,11 +22,13 @@ use Illuminate\Support\Facades\Route;
 // API endpoint to get translations for a specific language
 Route::get('/translations/{lang}', function (string $lang) {
     $path = resource_path("lang/{$lang}.json");
-    
+
     if (!file_exists($path)) {
         return response()->json(['error' => 'Language not found'], 404);
     }
-    
+
     $translations = json_decode(file_get_contents($path), true);
     return response()->json($translations);
 });
+
+Route::post('import-campgrounds', [OverPassController::class, 'fetchCampgroundsByState']);

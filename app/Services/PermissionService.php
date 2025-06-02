@@ -24,16 +24,16 @@ class PermissionService
                     'dashboard.view',
                 ],
             ],
-            [
-                'group_name' => 'blog',
-                'permissions' => [
-                    'blog.create',
-                    'blog.view',
-                    'blog.edit',
-                    'blog.delete',
-                    'blog.approve',
-                ],
-            ],
+//            [
+//                'group_name' => 'blog',
+//                'permissions' => [
+//                    'blog.create',
+//                    'blog.view',
+//                    'blog.edit',
+//                    'blog.delete',
+//                    'blog.approve',
+//                ],
+//            ],
             [
                 'group_name' => 'user',
                 'permissions' => [
@@ -55,15 +55,15 @@ class PermissionService
                     'role.approve',
                 ],
             ],
-            [
-                'group_name' => 'module',
-                'permissions' => [
-                    'module.create',
-                    'module.view',
-                    'module.edit',
-                    'module.delete',
-                ],
-            ],
+//            [
+//                'group_name' => 'module',
+//                'permissions' => [
+//                    'module.create',
+//                    'module.view',
+//                    'module.edit',
+//                    'module.delete',
+//                ],
+//            ],
             [
                 'group_name' => 'profile',
                 'permissions' => [
@@ -101,6 +101,15 @@ class PermissionService
                     'park.create',
                     'park.edit',
                     'park.delete',
+                ],
+            ],
+            [
+                'group_name' => 'campground',
+                'permissions' => [
+                    'campground.view',
+                    'campground.create',
+                    'campground.edit',
+                    'campground.delete',
                 ],
             ],
         ];

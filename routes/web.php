@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Http\Controllers\Backend\ActionLogController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\ModulesController;
+use App\Http\Controllers\Backend\OverPassController;
 use App\Http\Controllers\Backend\ParkController;
 use App\Http\Controllers\Backend\PermissionsController;
 use App\Http\Controllers\Backend\RolesController;
@@ -65,6 +66,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth']], 
     Route::get('/action-log', [ActionLogController::class, 'index'])->name('actionlog.index');
 
     Route::resource('parks', ParkController::class);
+
+    Route::post('parks/openAi', [ParkController::class, 'openAi'])->name('parks.openAi');
+    Route::post('parks/search-park', [ParkController::class, 'searchPark'])->name('parks.searchPark');
+
+    Route::resource('campground', OverPassController::class);
+    Route::get('campground-import', [OverPassController::class, 'importCreate'])->name('campground.import');
+    Route::post('campground-overpass', [OverPassController::class, 'fetchCampgroundsByState'])->name('campground.overpass');
 });
 
 /**
