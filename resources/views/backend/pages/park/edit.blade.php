@@ -5,6 +5,27 @@
 @endsection
 
 @section('admin-content')
+    <style>
+        /* Increase height of the main container */
+        .select2-container .select2-selection--single {
+            height: 44px !important; /* change to your desired height */
+            display: flex;
+            align-items: center;
+            padding: 6px 12px;
+            font-size: 16px; /* optional */
+        }
+        
+        /* Adjust the rendered text inside the selection */
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 44px !important; /* match the container height */
+        }
+        
+        /* Optional: adjust the arrow icon */
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 44px !important;
+        }
+
+    </style>
     <div class="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">
         <div x-data="{ pageName: '{{ __('Edit Park') }}' }">
             <div class="mb-6 flex flex-wrap items-center justify-between gap-3">
@@ -80,7 +101,7 @@
                             </div>
 
                             <div>
-                                <label for="slug" class="block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                <label for="slug" class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-4">
                                     {{ __('Slug') }}
                                 </label>
                                 <input type="text" name="slug" id="slug" value="{{ old('slug', $park->slug) }}" readonly
@@ -281,7 +302,18 @@
                         formData: formData
                     },
                     success: function (response) {
-                        console.log(response.data)
+                         if (!response.data || Object.keys(response.data).length === 0) {
+                            Swal.fire({
+                                toast: true,
+                                position: 'top-end',
+                                icon: 'error',
+                                title: 'No matching data found. Try removing or updating some filter values to refine your search.',
+                                showConfirmButton: false,
+                                timer: 3000,
+                                timerProgressBar: true,
+                            });
+                            return;
+                        }
                         Swal.fire({
                             toast: true,
                             position: 'top-end',
@@ -291,10 +323,12 @@
                             timer: 3000,
                             timerProgressBar: true,
                         });
-
-                        for (const field in response.data) {
-                            document.querySelector(`[name="${field}"]`).value = response.data[field];
-                        }
+                        Object.keys(response.data).forEach(field => {
+                            const el = document.querySelector(`[name="${field}"]`);
+                            if (el) {
+                                el.value = response.data[field];
+                            }
+                        });
                     },
                     error: function (xhr) {
                         Swal.fire({
@@ -363,6 +397,14 @@
                 $('[name="zip"]').val(park.zip || '');
                 $('[name="latitude"]').val(park.latitude || '');
                 $('[name="longitude"]').val(park.longitude || '');
+                
+                $('[name="email"]').val('');
+                $('[name="address"]').val('');
+                $('[name="website_url"]').val('');
+                $('[name="country"]').val('');
+                $('[name="description"]').val('');
+                $('[name="short_description"]').val('');
+                $('[name="phone"]').val('');
             });
 
             $('#parkDropdown').on('select2:clear', function () {
@@ -373,6 +415,14 @@
                 $('[name="zip"]').val('');
                 $('[name="latitude"]').val('');
                 $('[name="longitude"]').val('');
+                
+                $('[name="email"]').val('');
+                $('[name="address"]').val('');
+                $('[name="website_url"]').val('');
+                $('[name="country"]').val('');
+                $('[name="description"]').val('');
+                $('[name="short_description"]').val('');
+                $('[name="phone"]').val('');
             });
 
             function slugify(text) {

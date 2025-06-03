@@ -14,6 +14,7 @@ return [
 
     'api_key' => env('OPENAI_API_KEY'),
     'organization' => env('OPENAI_ORGANIZATION'),
+    'google_api_key' => env('GOOGLE_API_KEY'),
 
     /*
     |--------------------------------------------------------------------------

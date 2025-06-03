@@ -89,11 +89,11 @@
 
                                 <td class="flex px-5 py-4 sm:px-6 text-center gap-1">
 
-                                    <a data-tooltip-target="tooltip-edit-user-{{ $park->id }}" class="btn-default !p-3"
+                                    <a data-tooltip-target="tooltip-edit-park-{{ $park->id }}" class="btn-default !p-3"
                                        href="{{ route('admin.parks.edit', $park->id) }}">
                                         <i class="bi bi-pencil text-sm"></i>
                                     </a>
-                                    <div id="tooltip-edit-user-{{ $park->id }}" role="tooltip"
+                                    <div id="tooltip-edit-park-{{ $park->id }}" role="tooltip"
                                          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-700">
                                         {{ __('Edit User') }}
                                         <div class="tooltip-arrow" data-popper-arrow></div>
