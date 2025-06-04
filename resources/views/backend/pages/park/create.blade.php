@@ -84,7 +84,7 @@
                                 </div>
 
                                 <div id="selectWrapper" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 dark:bg-gray-900 dark:text-white">
-                                    <select id="parkDropdown" name="name" class="w-full select2">
+                                    <select id="parkDropdown" class="w-full select2">
                                         <option value="">Select a park</option>
                                     </select>
                                 </div>
@@ -429,7 +429,7 @@
             $('#change_name').on('change', function () {
                 if ($(this).is(':checked')) {
                     $('#inputWrapper').addClass('hidden').find('input').prop('disabled', true);
-                    $('#selectWrapper').removeClass('hidden').find('select').prop('disabled', false);
+                    $('#selectWrapper').removeClass('hidden').find('select').prop('disabled', false).attr('name', 'name');
                     $('#name_check_box_label').text('Manual');
 
                     $('[name="name"]').val('');
@@ -437,7 +437,7 @@
                     $('#parkDropdown').val(null).trigger('change');
                 } else {
                     $('#inputWrapper').removeClass('hidden').find('input').prop('disabled', false);
-                    $('#selectWrapper').addClass('hidden').find('select').prop('disabled', true);
+                    $('#selectWrapper').addClass('hidden').find('select').prop('disabled', true).removeAttr('name');
                     $('#name_check_box_label').text('Search');
 
                     $('#parkDropdown').val(null).trigger('change');

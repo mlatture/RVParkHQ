@@ -438,7 +438,7 @@
             $('#change_name').on('change', function () {
                 if ($(this).is(':checked')) {
                     $('#inputWrapper').addClass('hidden').find('input').prop('disabled', true);
-                    $('#selectWrapper').removeClass('hidden').find('select').prop('disabled', false);
+                    $('#selectWrapper').removeClass('hidden').find('select').prop('disabled', false).attr('name', 'name');
                     $('#name_check_box_label').text('Manual');
 
                     $('[name="name"]').val('');
@@ -446,7 +446,7 @@
                     $('#parkDropdown').val(null).trigger('change');
                 } else {
                     $('#inputWrapper').removeClass('hidden').find('input').prop('disabled', false);
-                    $('#selectWrapper').addClass('hidden').find('select').prop('disabled', true);
+                    $('#selectWrapper').addClass('hidden').find('select').prop('disabled', true).removeAttr('name');
                     $('#name_check_box_label').text('Search');
 
                     $('#parkDropdown').val(null).trigger('change');
