@@ -7,6 +7,7 @@ use App\Http\Requests\CampgroundRequest;
 use App\Models\OverPass;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class OverPassController extends Controller
 {
@@ -163,4 +164,23 @@ EOT;
             ]);
         }
     }
+    
+    public function track($campground, $filename = null)
+    {
+        // Log the visit
+        $data = [
+            'campground' => $campground,
+            'ip' => request()->ip(),
+            'user_agent' => request()->userAgent(),
+            'referrer' => request()->headers->get('referer'),
+        ];
+        Log::info('Review image hit', $data);
+    
+        // You can also store to database instead of log
+    
+        return response()->file(public_path('images/login.jpg'), [
+            'Content-Type' => 'image/png'
+        ]);
+    }
+
 }

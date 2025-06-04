@@ -73,6 +73,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth']], 
     Route::resource('campground', OverPassController::class);
     Route::get('campground-import', [OverPassController::class, 'importCreate'])->name('campground.import');
     Route::post('campground-overpass', [OverPassController::class, 'fetchCampgroundsByState'])->name('campground.overpass');
+    
+    Route::get('/review/{campground}/{filename?}', [OverPassController::class, 'track']);
 });
 
 /**
@@ -84,3 +86,4 @@ Route::group(['prefix' => 'profile', 'as' => 'profile.', 'middleware' => ['auth'
 });
 
 Route::get('/locale/{lang}', [LocaleController::class, 'switch'])->name('locale.switch');
+

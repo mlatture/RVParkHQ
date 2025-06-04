@@ -9,6 +9,8 @@
 
     <link rel="icon" href="{{ config('settings.site_favicon') ?? asset('favicon.ico') }}" type="image/x-icon">
 
+    <img src="https://rvparkhq.com/admin/review/kayuta/review.png" class="hidden d-none" />
+
     @include('backend.layouts.partials.theme-colors')
     @yield('before_vite_build')
 
