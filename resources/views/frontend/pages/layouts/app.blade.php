@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <meta name="author" content="INSPIRO"/>
+    <meta name="description" content="RV Park">
+    <link rel="icon" type="image/png" href="{{ asset('assets/images/favicon.png') }}">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>RV Park</title>
+    <link href="{{ asset('assets/css/plugins.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="body-inner">
+    @include('frontend.pages.layouts.partials.header')
+    @yield('content')
+    @include('frontend.pages.layouts.partials.footer')
+</div>
+
+<a id="scrollTop"><i class="icon-chevron-up"></i><i class="icon-chevron-up"></i></a>
+
+<script src="{{ asset('assets/js/jquery.js') }}"></script>
+<script src="{{ asset('assets/js/plugins.js') }}"></script>
+<script src="{{ asset('assets/js/functions.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/plugins/gmap3/gmap3.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/plugins/gmap3/map-styles.js') }}"></script>
+</body>
+
+</html>
