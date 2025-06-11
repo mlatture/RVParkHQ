@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
     <meta name="author" content="INSPIRO"/>
-    <meta name="description" content="RV Park">
+    <meta name="description" content="RVParkHQ">
     <link rel="icon" type="image/png" href="{{ asset('assets/images/favicon.png') }}">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>RV Park</title>
+    <title>RVParkHQ</title>
     <link href="{{ asset('assets/css/plugins.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
 </head>
