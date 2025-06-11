@@ -2,7 +2,7 @@
     <div class="header-inner">
         <div class="container">
             <div id="logo">
-                <a href="index.html">
+                <a href="">
                     <span class="logo-default">RVParkHQ</span>
                     <span class="logo-dark">RVParkHQ</span>
                 </a>
