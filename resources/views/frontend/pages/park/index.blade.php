@@ -2,7 +2,7 @@
 
 @section('content')
     @php use Illuminate\Support\Str; @endphp
-    <section id="page-title" class="text-light" data-bg-parallax="images/parallax/6.jpg">
+    <section id="page-title" class="text-light" data-bg-parallax="{{asset('assets/images/slider/revolution/polo-homepage/dummy.png')}}">
         <div class="container">
             <div class="page-title">
                 <h1>Parks</h1>
