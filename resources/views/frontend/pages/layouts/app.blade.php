@@ -20,6 +20,18 @@
 
 <div class="body-inner">
     @include('frontend.pages.layouts.partials.header')
+    @if(session('success'))
+        <script>
+            Swal.fire({
+                text: '{{ session('success') }}',
+                icon: '{{ session('icon') }}',
+                position: 'top-end',
+                timer: 4000,
+                showConfirmButton: false,
+                timerProgressBar: true,
+            });
+        </script>
+    @endif
     @yield('content')
     @include('frontend.pages.layouts.partials.footer')
 </div>

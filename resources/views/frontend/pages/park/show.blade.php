@@ -32,7 +32,7 @@
         color: #6c757d;
         margin-top: 0.4rem;
     }
-    
+
     .additional-info-table {
         background: #fff;
         border-radius: 8px;
@@ -64,7 +64,7 @@
         margin-right: 8px;
         color: #ffc107;
     }
-    
+
     .reviews-wrapper {
         background-color: #f9f9f9;
         border-radius: 10px;
@@ -120,10 +120,26 @@
             <div class="breadcrumb">
                 <ul>
                     <li>{{ request()->segment(1) }}</li>
-                    <li>{{ ucfirst(request()->segment(2)) }}</li>
-                    <li>{{ ucfirst(request()->segment(3)) }}</li>
-                    <li>{{ ucfirst(request()->segment(4)) }}</li>
-                    <li>{{ ucfirst(request()->segment(5)) }}</li>
+                    <li>
+                        <a href="{{ route('rv-park.park') }}">
+                            {{ ucfirst(request()->segment(2)) }}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('rv-park.park', ['country' => request()->segment(3)]) }}">
+                            {{ ucfirst(request()->segment(3)) }}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('rv-park.park', ['state' => request()->segment(4)]) }}">
+                            {{ ucfirst(request()->segment(4)) }}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('rv-park.park', ['city' => request()->segment(5)]) }}">
+                            {{ ucfirst(request()->segment(5)) }}
+                        </a>
+                    </li>
                     <li>{{ ucfirst(request()->segment(6)) }}</li>
                 </ul>
             </div>
@@ -156,7 +172,7 @@
                         </div>
                         <div class="seperator m-b-10"></div>
                         <div class="product-description">
-                            <p>{!! $parks->description !!}</p>    
+                            <p>{!! $parks->description !!}</p>
                         </div>
                     </div>
                 </div>
@@ -224,14 +240,14 @@
                         </div>
                     </div>
 
-                
+
                     <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
                         <div class="comments reviews-wrapper" id="comments">
                             <div class="review-header">
                                 {{ $reviews->count() ? 'What Campers Are Saying' : 'No Reviews Yet' }}
                                 <span class="text-muted" style="font-size: 1rem;"></span>
                             </div>
-                        
+
                             @if ($reviews && $reviews->count())
                                 <div class="comment-list">
                                     @foreach ($reviews as $review)
@@ -278,7 +294,7 @@
                     </div>
 
                     <div class="m-t-30">
-                        <form id="review-form" method="POST" action="{{ route('rv-park.add-review') }}">
+                        <form id="review-form" method="POST" action="{{ route('rv-park.pending-review') }}">
                             @csrf
                             <input type="hidden" name="park_id" value="{{ $parks->id }}">
 

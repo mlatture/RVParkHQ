@@ -1,7 +1,10 @@
 @extends('frontend.pages.layouts.app')
 
 @section('content')
-    @php use Illuminate\Support\Str; @endphp
+    @php
+        use Illuminate\Support\Str;
+        $location = request()->query('country') ?? request()->query('state') ?? request()->query('city');
+    @endphp
     <section id="page-title" class="text-light" data-bg-parallax="{{asset('assets/images/slider/revolution/polo-homepage/dummy.png')}}">
         <div class="container">
             <div class="page-title">
@@ -11,6 +14,10 @@
                 <ul>
                     <li>{{ request()->segment(1) }}</li>
                     <li class="active">{{ ucfirst(request()->segment(2)) }}</li>
+                    @if ($location)
+                        <li class="active">{{ ucwords(str_replace('-', ' ', $location)) }}</li>
+                    @endif
+
                 </ul>
             </div>
         </div>
@@ -22,9 +29,35 @@
                     <strong>Discover a variety of parks perfect for your next getaway. Browse locations, explore amenities, and find the ideal spot to relax, camp, or adventure.</strong>
                 </div>
             </div>
+            <form method="GET" class="mb-4">
+                <div class="row g-2 align-items-center justify-content-end">
+                    <div class="col-md-6 col-lg-4">
+                        <select class="form-select " name="states">
+                            <option value="">Select State</option>
+                            @foreach($parks['states'] as $park)
+                                <option value="{{ $park['state'] }}" {{ request('states') == $park['state'] ? 'selected' : '' }}>
+                                    {{ $park['state'] }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-auto">
+                        <button type="submit" class="btn btn-primary shadow-sm px-4">
+                            <i class="bi bi-search"></i> Search
+                        </button>
+                    </div>
+                    <div class="col-auto">
+                        <a href="{{ url()->current() }}" class="btn btn-outline-danger shadow-sm px-4">
+                            <i class="bi bi-x-circle"></i> Clear
+                        </a>
+                    </div>
+                </div>
+            </form>
+
             <div class="shop">
                 <div class="grid-layout grid-5-columns" data-item="grid-item">
-                    @forelse($parks as $park)
+
+                    @forelse($parks['parks'] as $park)
                         <div class="grid-item">
                             <div class="product">
                                 <div class="product-image">
@@ -81,8 +114,8 @@
                 </div>
             </div>
 
-            @if($parks->total() > 0 || $parks->total() > 12)
-                @include('frontend.pages.layouts.partials.pagination', ['paginator' => $parks])
+            @if($parks['parks']->total() > 0 || $parks['parks']->total() > 12)
+                @include('frontend.pages.layouts.partials.pagination', ['paginator' => $parks['parks']])
             @endif
         </div>
     </section>
