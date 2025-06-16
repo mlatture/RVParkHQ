@@ -3,7 +3,6 @@
 namespace App\Services\Frontend;
 
 use App\Models\Review;
-use App\Models\PendingReviews;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ReviewConfirmationMail;
@@ -29,20 +28,22 @@ class ReviewService
         ];
     }
 
-    public function getParkDetails($encryptedId)
+    public function getParkDetails($country, $state, $city)
     {
-        $park = Park::findOrFail(decrypt($encryptedId));
-        $reviews = Review::latest()->limit(10)->get();
+        $park = Park::where('city', 'like', $city)
+            ->orWhere('state', 'like', $state)
+            ->orWhere('country', 'like', $country)->firstOrFail();
+        $reviews = Review::where(['park_id' => $park->id, 'status' => 'confirmed'])->latest()->limit(10)->get();
 
         return compact('park', 'reviews');
     }
 
-    public function storePendingReview(array $data): PendingReviews
+    public function storePendingReview(array $data)
     {
         $data['ip_address'] = request()->ip();
         $data['token'] = Str::uuid()->toString();
-
-        $pending = PendingReviews::create($data);
+        
+        $pending = Review::create($data);
         $pending->load('park');
 
         Mail::to($pending->email)->send(new ReviewConfirmationMail($pending));
@@ -52,27 +53,21 @@ class ReviewService
 
     public function confirmReview(string $token): string
     {
-        $pending = PendingReviews::where('token', $token)->firstOrFail();
+        $pending = Review::where('token', $token)->firstOrFail();
 
         $alreadyExists = Review::where([
             'email' => $pending->email,
             'park_id' => $pending->park_id,
+            'status' => 'confirmed',
         ])->exists();
 
         if ($alreadyExists) {
             return 'already_submitted';
         }
 
-        Review::create([
-            'park_id' => $pending->park_id,
-            'rating' => $pending->rating,
-            'name' => $pending->name,
-            'email' => $pending->email,
-            'message' => $pending->message,
-            'ip_address' => $pending->ip_address,
+        $pending->update([
+            'status' => 'confirmed',
         ]);
-
-        // $pending->delete();
 
         return 'confirmed';
     }

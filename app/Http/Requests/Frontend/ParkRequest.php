@@ -29,10 +29,10 @@ class ParkRequest extends FormRequest
             'email' => [
                 'required',
                 'email',
-                Rule::unique('pending_reviews')->where(function ($query) {
-                    return $query->where('park_id', $this->park_id)
-                        ->where('email', $this->email);
-                }),
+                // Rule::unique('pending_reviews')->where(function ($query) {
+                //     return $query->where('park_id', $this->park_id)
+                //         ->where('email', $this->email);
+                // }),
             ],
             'message' => 'required|string|min:10',
         ];

@@ -6,10 +6,6 @@
 </head>
 <body style="font-family: Arial, sans-serif; background-color: #f9f9f9; padding: 20px; color: #333;">
 
-{{--<div style="text-align: center; margin-bottom: 20px;">--}}
-{{--    <img src="https://rvparkhq.com/favicon.jpg" alt="Header Image" style="max-width: 100px; height: auto;">--}}
-{{--</div>--}}
-
 <div style="background-color: #ffffff; padding: 25px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
     <h2 style="margin-top: 0;">Hello {{ $pendingFeedback->name }},</h2>
 

@@ -11,8 +11,9 @@ Route::name('rv-park.')->group(function () {
 
     Route::prefix('en-us/parks')->controller(ParkController::class)->group(function () {
         Route::get('/', 'index')->name('park');
-        Route::get('{country?}/{state?}/{city?}/{campground?}/{id}', 'show')->name('park-show');
         Route::get('/confirm-review/{token}', 'confirmReview')->name('conform-review');
         Route::post('/pending', 'pendingReview')->name('pending-review');
+        Route::get('/winner-park', 'winnerPark');
+        Route::get('{country?}/{state?}/{city?}/{campground?}/{id?}', 'show')->name('park-show');
     });
 });

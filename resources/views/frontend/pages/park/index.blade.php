@@ -5,6 +5,69 @@
         use Illuminate\Support\Str;
         $location = request()->query('country') ?? request()->query('state') ?? request()->query('city');
     @endphp
+    <style>
+        .park-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .park-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .park-image-container {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+        }
+
+        .park-image-container img.main {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .winner-badges {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 6px;
+            z-index: 2;
+        }
+
+        .winner-badges img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid white;
+            box-shadow: 0 0 5px rgba(0,0,0,0.3);
+        }
+
+        .park-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.5);
+            color: white;
+            text-align: center;
+            padding: 6px 0;
+            font-size: 14px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .park-image-container:hover .park-overlay {
+            opacity: 1;
+        }
+    </style>
     <section id="page-title" class="text-light" data-bg-parallax="{{asset('assets/images/slider/revolution/polo-homepage/dummy.png')}}">
         <div class="container">
             <div class="page-title">
@@ -59,19 +122,23 @@
 
                     @forelse($parks['parks'] as $park)
                         <div class="grid-item">
-                            <div class="product">
-                                <div class="product-image">
+                            <div class="park-card">
+                                <div class="park-image-container">
+                                    {{-- Winner Badges --}}
+                                    <div class="winner-badges">
+                                        @foreach($park->winnerParks as $winner)
+                                            <img src="{{ asset('assets/winner-park.png') }}"
+                                                 alt="Winner - {{ \Carbon\Carbon::parse($winner->date)->year }}"
+                                                 title="Winner - {{ \Carbon\Carbon::parse($winner->date)->year }}" />
+                                        @endforeach
+                                    </div>
+
+                                    {{-- Main Park Image --}}
                                     @php
                                         $imagePath = $park->main_image_url;
-                                        if (!empty($imagePath)) {
-                                            if (preg_match('/^https?:\/\//', $imagePath)) {
-                                                $imageUrl = $imagePath;
-                                            } else {
-                                                $imageUrl = asset('storage/' . $imagePath);
-                                            }
-                                        } else {
-                                            $imageUrl = asset('images/login.jpg');
-                                        }
+                                        $imageUrl = !empty($imagePath) ?
+                                            (preg_match('/^https?:\/\//', $imagePath) ? $imagePath : asset('storage/' . $imagePath))
+                                            : asset('images/placeholder.jpg');
                                     @endphp
 
                                     <a href="{{ route('rv-park.park-show', [
@@ -79,31 +146,22 @@
                                         'state'      => Str::slug($park->state),
                                         'city'       => Str::slug($park->city),
                                         'campground' => 'kayuta-lake-campground',
-                                        'id'         => encrypt($park->id)
                                     ]) }}">
-                                        <img src="{{ $imageUrl }}" onerror="this.onerror=null;this.src='{{ asset('images/login.jpg') }}';" alt="Park Image" />
+                                        <img class="main" src="{{ $imageUrl }}" onerror="this.onerror=null;this.src='{{ asset('images/placeholder.jpg') }}';" alt="Park Image">
+                                        <div class="park-overlay">View Park</div>
                                     </a>
-                                    <div class="product-overlay">
-                                        <a href="{{ route('rv-park.park-show', [
-                                            'country'    => Str::slug($park->country),
-                                            'state'      => Str::slug($park->state),
-                                            'city'       => Str::slug($park->city),
-                                            'campground' => 'kayuta-lake-campground',
-                                            'id'         => encrypt($park->id)
-                                        ]) }}">
-                                        View Park</a>
-                                    </div>
                                 </div>
-                                <div class="text-sm mt-2">
-                                    <h5>
+
+                                <div class="p-3 text-center">
+                                    <h5 class="mb-0">
                                         <a href="{{ route('rv-park.park-show', [
                                             'country'    => Str::slug($park->country),
                                             'state'      => Str::slug($park->state),
                                             'city'       => Str::slug($park->city),
                                             'campground' => 'kayuta-lake-campground',
-                                            'id'         => encrypt($park->id)
-                                        ]) }}">
-                                            {{ $park->name }}</a>
+                                        ]) }}" class="text-dark text-decoration-none">
+                                            {{ $park->name }}
+                                        </a>
                                     </h5>
                                 </div>
                             </div>

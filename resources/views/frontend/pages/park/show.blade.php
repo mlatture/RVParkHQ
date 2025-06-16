@@ -158,10 +158,10 @@
                                         ? $imagePath
                                         : asset('storage/' . $imagePath);
                                 } else {
-                                    $imageUrl = asset('images/login.jpg');
+                                    $imageUrl = asset('images/placeholder.jpg');
                                 }
                             @endphp
-                            <img src="{{ $imageUrl }}" onerror="this.onerror=null;this.src='{{ asset('images/login.jpg') }}';" alt="Park Image" />
+                            <img src="{{ $imageUrl }}" onerror="this.onerror=null;this.src='{{ asset('images/placeholder.jpg') }}';" alt="Park Image" />
                         </div>
                     </div>
                     <div class="col-lg-7">
@@ -174,6 +174,25 @@
                         <div class="product-description">
                             <p>{!! $parks->description !!}</p>
                         </div>
+                        @if($parks->winnerParks->count() > 0)
+                            <div class="mt-4">
+                                <h3 class="text-center mb-3" style="font-weight: 600; color: #d4af37;">🏆 Park of the Year</h3>
+                                <div class="d-flex flex-wrap justify-content-center gap-4">
+                                    @foreach($parks->winnerParks as $winner)
+                                        <div class="text-center position-relative winner-badge">
+                                            <img src="{{ asset('assets/winner-park.png') }}"
+                                                 alt="Winner {{ \Carbon\Carbon::parse($winner->date)->year }}"
+                                                 title="Winner - {{ \Carbon\Carbon::parse($winner->date)->year }}"
+                                                 class="rounded-circle shadow"
+                                                 style="width: 120px; height: 120px; border: 4px solid #d4af37;" />
+                                            <div class="badge-year mt-2" style="font-weight: bold; color: #333;">
+                                                {{ \Carbon\Carbon::parse($winner->date)->year }}
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -257,7 +276,7 @@
                                             </div>
                                             <div>
                                                 <h6 class="mb-1">{{ $review->name }}</h6>
-                                                <div class="review-meta mb-1">Posted by {{ $review->email }} on {{ $review->created_at->format('F j, Y \\a\\t g:i A') }}</div>
+                                                <div class="review-meta mb-1">Posted on {{ $review->created_at->format('F j, Y \\a\\t g:i A') }}</div>
                                                 <div class="star-rating mb-2 d-inline-block" style="direction: ltr;">
                                                     @for ($i = 1; $i <= 5; $i++)
                                                         @if ($i <= $review->rating)

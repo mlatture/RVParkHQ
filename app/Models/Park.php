@@ -36,4 +36,9 @@ class Park extends Model
 
         return $query;
     }
+    
+    public function winnerParks()
+    {
+        return $this->hasMany(WinnerPark::class, 'park_id');
+    }
 }
