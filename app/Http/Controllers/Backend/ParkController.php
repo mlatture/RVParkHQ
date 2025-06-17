@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ParkRequest;
 use App\Models\OverPass;
 use App\Models\Park;
+use App\Models\Amenity;
 use App\Services\OpenAIService;
 use App\Services\ParkService;
 use Illuminate\Http\Request;
@@ -32,7 +33,10 @@ class ParkController extends Controller
     public function create()
     {
         $this->checkAuthorization(auth()->user(), ['park.create']);
-        return view('backend.pages.park.create');
+        
+        $amenities = Amenity::select('id','amenity', 'category', 'blackicon', 'whiteicon')->get();
+        
+        return view('backend.pages.park.create', compact('amenities'));
     }
 
     public function store(ParkRequest $request)
@@ -69,8 +73,9 @@ class ParkController extends Controller
             Str::slug($request->city),
             Str::slug($request->name),
         ]));
-
         $park->save();
+        
+        $park->amenities()->sync($request->amenities);
 
         return redirect()->route('admin.parks.index')->with('success', 'Park created successfully.');
     }
@@ -78,10 +83,13 @@ class ParkController extends Controller
     public function edit($id)
     {
         $this->checkAuthorization(auth()->user(), ['park.edit']);
-        $park = park::findorFail($id);
+        
+        $park = Park::with('amenities')->findOrFail($id);
+        $amenities = Amenity::select('id', 'amenity', 'category', 'blackicon', 'whiteicon')->get();
 
-        return view('backend.pages.park.edit',[
+        return view('backend.pages.park.edit', [
             'park' => $park,
+            'amenities' => $amenities,
         ]);
 
     }
@@ -125,8 +133,9 @@ class ParkController extends Controller
             Str::slug($request->city),
             Str::slug($request->name),
         ]));
-
+        
         $park->update($data);
+        $park->amenities()->sync($request->amenities);
 
         return redirect()->route('admin.parks.index')->with('success', 'Park updated successfully.');
     }

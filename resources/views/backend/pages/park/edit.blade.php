@@ -14,12 +14,12 @@
             padding: 6px 12px;
             font-size: 16px; /* optional */
         }
-        
+
         /* Adjust the rendered text inside the selection */
         .select2-container--default .select2-selection--single .select2-selection__rendered {
             line-height: 44px !important; /* match the container height */
         }
-        
+
         /* Optional: adjust the arrow icon */
         .select2-container--default .select2-selection--single .select2-selection__arrow {
             height: 44px !important;
@@ -60,19 +60,20 @@
                 <div class="p-5 space-y-6 border-t border-gray-100 dark:border-gray-800 sm:p-6">
                     @include('backend.layouts.partials.messages')
 
-                    <form action="{{ route('admin.parks.update', $park->id) }}" method="POST" enctype="multipart/form-data" id="park_form">
+                    <form action="{{ route('admin.parks.update', $park->id) }}" method="POST"
+                          enctype="multipart/form-data" id="park_form">
                         @csrf
                         @method('PUT')
 
                         <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
 
-{{--                            <div>--}}
-{{--                                <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-400">--}}
-{{--                                    {{ __('Park Name') }}--}}
-{{--                                </label>--}}
-{{--                                <input type="text" name="name" id="name" value="{{ old('name', $park->name) }}"--}}
-{{--                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 dark:bg-gray-900 dark:text-white">--}}
-{{--                            </div>--}}
+                            {{--                            <div>--}}
+                            {{--                                <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-400">--}}
+                            {{--                                    {{ __('Park Name') }}--}}
+                            {{--                                </label>--}}
+                            {{--                                <input type="text" name="name" id="name" value="{{ old('name', $park->name) }}"--}}
+                            {{--                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 dark:bg-gray-900 dark:text-white">--}}
+                            {{--                            </div>--}}
 
                             <div>
                                 <div class="flex items-center justify-between mb-2">
@@ -81,8 +82,10 @@
                                     </label>
 
                                     <div class="form-check form-switch flex items-center">
-                                        <input class="form-check-input" type="checkbox" name="change_name" id="change_name">
-                                        <label class="form-check-label ml-2" for="change_name" id="name_check_box_label">Manual</label>
+                                        <input class="form-check-input" type="checkbox" name="change_name"
+                                               id="change_name">
+                                        <label class="form-check-label ml-2" for="change_name"
+                                               id="name_check_box_label">Manual</label>
                                     </div>
                                 </div>
 
@@ -91,7 +94,8 @@
                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 dark:bg-gray-900 dark:text-white">
                                 </div>
 
-                                <div id="selectWrapper" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 dark:bg-gray-900 dark:text-white">
+                                <div id="selectWrapper"
+                                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 dark:bg-gray-900 dark:text-white">
                                     <select id="parkDropdown" name="name" class="w-full select2">
                                         <option value="">Select a park</option>
                                     </select>
@@ -101,15 +105,79 @@
                             </div>
 
                             <div>
-                                <label for="slug" class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-4">
+                                <label for="slug"
+                                       class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-4">
                                     {{ __('Slug') }}
                                 </label>
                                 <input type="text" name="slug" id="slug" value="{{ old('slug', $park->slug) }}" readonly
                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 dark:bg-gray-900 dark:text-white">
                             </div>
 
+                            <div>
+                                <label for="type" class="block font-medium text-sm text-gray-700">Park Type</label>
+                                <select name="type" id="type"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 dark:bg-gray-900 dark:text-white">
+                                    <option
+                                        value="Campground" {{ old('type', $park->type ?? 'Campground and RV Park') == 'Campground' ? 'selected' : '' }}>
+                                        Campground
+                                    </option>
+                                    <option
+                                        value="RV Park" {{ old('type', $park->type ?? 'Campground and RV Park') == 'RV Park' ? 'selected' : '' }}>
+                                        RV Park
+                                    </option>
+                                    <option
+                                        value="Campground and RV Park" {{ old('type', $park->type ?? 'Campground and RV Park') == 'Campground and RV Park' ? 'selected' : '' }}>
+                                        Campground and RV Park
+                                    </option>
+                                </select>
+                            </div>
+
+                            @if($amenities->count() > 0)
+                                <div class="sm:col-span-2">
+                                    <label class="block font-medium text-sm text-gray-700 mb-4">Amenities</label>
+
+                                    @foreach($amenities->groupBy('category') as $category => $items)
+                                        <div class="mb-5 border border-gray-200 p-4 rounded-md bg-gray-50">
+                                            <h4 class="text-md font-semibold text-brand-600 mb-3">{{ $category }}</h4>
+
+                                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                                @foreach($items as $amenity)
+                                                    <div class="flex items-center">
+                                                        <input type="checkbox"
+                                                               id="amenity_{{ $amenity->id }}"
+                                                               name="amenities[]"
+                                                               value="{{ $amenity->id }}"
+                                                               {{ in_array($amenity->id, old('amenities', $park->amenities->pluck('id')->toArray())) ? 'checked' : '' }}
+                                                               class="form-checkbox text-brand-600">
+                                                        @if ($amenity->blackicon)
+                                                            @php
+                                                                $blackIconPath = $amenity->blackicon;
+                                                                $blackIconImage = !empty($blackIconPath) && preg_match('/^https?:\/\//', $blackIconPath) ? $blackIconPath : asset('storage/' . $blackIconPath);
+                                                            @endphp
+                                                            <img src="{{ $blackIconImage }}" class="ml-2 w-6 h-6 object-contain rounded-full" alt="White Icon">
+                                                        @endif
+                                                        @if ($amenity->whiteicon)
+                                                            @php
+                                                                $whiteIconPath = $amenity->whiteicon;
+                                                                $whiteIconImage = !empty($whiteIconPath) && preg_match('/^https?:\/\//', $whiteIconPath) ? $whiteIconPath : asset('storage/' . $whiteIconPath);
+                                                            @endphp
+                                                            <img src="{{ $whiteIconImage }}" class="ml-2 w-6 h-6 object-contain rounded-full" alt="White Icon">
+                                                        @endif
+                                                        <label for="amenity_{{ $amenity->id }}"
+                                                               class="ml-2 text-sm text-gray-700">
+                                                            {{ $amenity->amenity }}
+                                                        </label>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @endif
+
                             <div class="sm:col-span-2">
-                                <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                <label for="description"
+                                       class="block text-sm font-medium text-gray-700 dark:text-gray-400">
                                     {{ __('Description') }}
                                 </label>
                                 <textarea name="description" id="description" rows="4"
@@ -117,7 +185,8 @@
                             </div>
 
                             <div class="sm:col-span-2">
-                                <label for="short_description" class="block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                <label for="short_description"
+                                       class="block text-sm font-medium text-gray-700 dark:text-gray-400">
                                     {{ __('Short Description') }}
                                 </label>
                                 <textarea name="short_description" id="short_description" rows="3"
@@ -128,7 +197,8 @@
                                 <label for="address" class="block text-sm font-medium text-gray-700 dark:text-gray-400">
                                     {{ __('Address') }}
                                 </label>
-                                <input type="text" name="address" id="address" value="{{ old('address', $park->address) }}"
+                                <input type="text" name="address" id="address"
+                                       value="{{ old('address', $park->address) }}"
                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 dark:bg-gray-900 dark:text-white">
                             </div>
 
@@ -152,31 +222,38 @@
                                 <label for="country" class="block text-sm font-medium text-gray-700 dark:text-gray-400">
                                     {{ __('Country') }}
                                 </label>
-                                <input type="text" name="country" id="country" value="{{ old('country', $park->country) }}"
+                                <input type="text" name="country" id="country"
+                                       value="{{ old('country', $park->country) }}"
                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 dark:bg-gray-900 dark:text-white">
                             </div>
 
                             <div>
-                                <label for="postal_code" class="block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                <label for="postal_code"
+                                       class="block text-sm font-medium text-gray-700 dark:text-gray-400">
                                     {{ __('Postal Code') }}
                                 </label>
-                                <input type="text" name="postal_code" id="postal_code" value="{{ old('postal_code', $park->postal_code) }}"
+                                <input type="text" name="postal_code" id="postal_code"
+                                       value="{{ old('postal_code', $park->postal_code) }}"
                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 dark:bg-gray-900 dark:text-white">
                             </div>
 
                             <div>
-                                <label for="latitude" class="block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                <label for="latitude"
+                                       class="block text-sm font-medium text-gray-700 dark:text-gray-400">
                                     {{ __('Latitude') }}
                                 </label>
-                                <input type="text" name="latitude" id="latitude" value="{{ old('latitude', $park->latitude) }}"
+                                <input type="text" name="latitude" id="latitude"
+                                       value="{{ old('latitude', $park->latitude) }}"
                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 dark:bg-gray-900 dark:text-white">
                             </div>
 
                             <div>
-                                <label for="longitude" class="block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                <label for="longitude"
+                                       class="block text-sm font-medium text-gray-700 dark:text-gray-400">
                                     {{ __('Longitude') }}
                                 </label>
-                                <input type="text" name="longitude" id="longitude" value="{{ old('longitude', $park->longitude) }}"
+                                <input type="text" name="longitude" id="longitude"
+                                       value="{{ old('longitude', $park->longitude) }}"
                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 dark:bg-gray-900 dark:text-white">
                             </div>
 
@@ -197,10 +274,12 @@
                             </div>
 
                             <div>
-                                <label for="website_url" class="block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                <label for="website_url"
+                                       class="block text-sm font-medium text-gray-700 dark:text-gray-400">
                                     {{ __('Website URL') }}
                                 </label>
-                                <input type="text" name="website_url" id="website_url" value="{{ old('website_url', $park->website_url) }}"
+                                <input type="text" name="website_url" id="website_url"
+                                       value="{{ old('website_url', $park->website_url) }}"
                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 dark:bg-gray-900 dark:text-white">
                             </div>
 
@@ -210,24 +289,38 @@
                                 </label>
                                 <select name="status" id="status"
                                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm dark:bg-gray-900 dark:text-white">
-                                    <option value="active" {{ old('status', $park->status) == 'active' ? 'selected' : '' }}>Active</option>
-                                    <option value="inactive" {{ old('status', $park->status) == 'inactive' ? 'selected' : '' }}>Inactive</option>
+                                    <option
+                                        value="active" {{ old('status', $park->status) == 'active' ? 'selected' : '' }}>
+                                        Active
+                                    </option>
+                                    <option
+                                        value="inactive" {{ old('status', $park->status) == 'inactive' ? 'selected' : '' }}>
+                                        Inactive
+                                    </option>
                                 </select>
                             </div>
 
                             <div>
-                                <label for="is_featured" class="block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                <label for="is_featured"
+                                       class="block text-sm font-medium text-gray-700 dark:text-gray-400">
                                     {{ __('Featured') }}
                                 </label>
                                 <select name="is_featured" id="is_featured"
                                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm dark:bg-gray-900 dark:text-white">
-                                    <option value="0" {{ old('is_featured', $park->is_featured) == '0' ? 'selected' : '' }}>No</option>
-                                    <option value="1" {{ old('is_featured', $park->is_featured) == '1' ? 'selected' : '' }}>Yes</option>
+                                    <option
+                                        value="0" {{ old('is_featured', $park->is_featured) == '0' ? 'selected' : '' }}>
+                                        No
+                                    </option>
+                                    <option
+                                        value="1" {{ old('is_featured', $park->is_featured) == '1' ? 'selected' : '' }}>
+                                        Yes
+                                    </option>
                                 </select>
                             </div>
 
                             <div class="sm:col-span-2">
-                                <label for="main_image_url" class="block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                <label for="main_image_url"
+                                       class="block text-sm font-medium text-gray-700 dark:text-gray-400">
                                     {{ __('Main Image') }}
                                 </label>
                                 <input type="file" name="main_image_url" id="main_image_url"
@@ -235,14 +328,16 @@
 
                                 @if($park->main_image_url)
                                     <div class="mt-2">
-                                        <img src="{{ asset('storage/' . $park->main_image_url) }}" class="h-20 rounded" alt="Current Image">
+                                        <img src="{{ asset('storage/' . $park->main_image_url) }}" class="h-20 rounded"
+                                             alt="Current Image">
                                     </div>
                                 @endif
                             </div>
                         </div>
 
                         <div class="mt-6 flex justify-start gap-4">
-                            <button type="button" class="btn-primary" id="generateAI" class="btn-secondary">{{ __('Search') }}</button>
+                            <button type="button" class="btn-primary" id="generateAI"
+                                    class="btn-secondary">{{ __('Search') }}</button>
                             <button type="submit"
                                     class="inline-flex items-center justify-center rounded-md bg-brand-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2">
                                 {{ __('Update Park') }}
@@ -279,7 +374,7 @@
 
             $('#generateAI').on('click', function () {
                 let formData = {};
-                $('#park_form').find('input, textarea, select').each(function() {
+                $('#park_form').find('input, textarea, select').each(function () {
                     let name = $(this).attr('name');
                     let value = $(this).val();
 
@@ -302,7 +397,7 @@
                         formData: formData
                     },
                     success: function (response) {
-                         if (!response.data || Object.keys(response.data).length === 0) {
+                        if (!response.data || Object.keys(response.data).length === 0) {
                             Swal.fire({
                                 toast: true,
                                 position: 'top-end',
@@ -362,14 +457,14 @@
                     headers: {
                         'X-CSRF-TOKEN': '{{ csrf_token() }}'
                     },
-                    data: function(params) {
+                    data: function (params) {
                         return {
                             search: params.term
                         };
                     },
-                    processResults: function(data) {
+                    processResults: function (data) {
                         return {
-                            results: data.over_pass.map(function(park) {
+                            results: data.over_pass.map(function (park) {
                                 return {
                                     id: park.name,
                                     text: park.name,
@@ -397,7 +492,7 @@
                 $('[name="zip"]').val(park.zip || '');
                 $('[name="latitude"]').val(park.latitude || '');
                 $('[name="longitude"]').val(park.longitude || '');
-                
+
                 $('[name="email"]').val('');
                 $('[name="address"]').val('');
                 $('[name="website_url"]').val('');
@@ -415,7 +510,7 @@
                 $('[name="zip"]').val('');
                 $('[name="latitude"]').val('');
                 $('[name="longitude"]').val('');
-                
+
                 $('[name="email"]').val('');
                 $('[name="address"]').val('');
                 $('[name="website_url"]').val('');

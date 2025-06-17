@@ -30,6 +30,7 @@ return new class extends Migration
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->boolean('is_featured')->default(false);
             $table->string('main_image_url')->nullable();
+            $table->string('slug_path');
             $table->timestamps();
         });
     }

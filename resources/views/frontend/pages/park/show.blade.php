@@ -1,9 +1,7 @@
 @extends('frontend.pages.layouts.app')
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    @php
-        use Illuminate\Support\Str;
-    @endphp
+
 <style>
     .star-rating {
         direction: rtl;
@@ -38,7 +36,7 @@
     .additional-info-table {
         background: #fff;
         border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         overflow: hidden;
     }
 
@@ -96,7 +94,7 @@
         object-fit: cover;
         border-radius: 50%;
         border: 2px solid #fff;
-        box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
     }
 
     .review-meta {
@@ -112,9 +110,29 @@
     .star-rating span {
         font-size: 1.2rem;
     }
+
+    .amenity-icon-img {
+        width: 150px;
+        height: 150px;
+        object-fit: contain;
+        background-color: #f8f9fa;
+        padding: 10px;
+        border-radius: 12px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+    }
+
+    .amenity-icon-img:hover {
+        transform: scale(1.05);
+    }
+
 </style>
+@php
+    use Illuminate\Support\Str;
+@endphp
 @section('content')
-    <section id="page-title" class="text-light" data-bg-parallax="{{asset('assets/images/slider/revolution/polo-homepage/dummy.png')}}">
+    <section id="page-title" class="text-light"
+             data-bg-parallax="{{asset('assets/images/slider/revolution/polo-homepage/dummy.png')}}">
         <div class="container">
             <div class="page-title">
                 <h1>{{ ucfirst($parks->name) }}</h1>
@@ -153,6 +171,7 @@
                     @endif
                     
                     <li>{{  Str::slug($parks->name) }}</li>
+                    
                 </ul>
             </div>
         </div>
@@ -170,25 +189,41 @@
                                         ? $imagePath
                                         : asset('storage/' . $imagePath);
                                 } else {
-                                    $imageUrl = asset('images/placeholder.jpg');
+                                    $imageUrl = asset('images/login.jpg');
                                 }
                             @endphp
-                            <img src="{{ $imageUrl }}" onerror="this.onerror=null;this.src='{{ asset('images/placeholder.jpg') }}';" alt="Park Image" />
+                            <img src="{{ $imageUrl }}"
+                                 onerror="this.onerror=null;this.src='{{ asset('images/login.jpg') }}';"
+                                 alt="Park Image"/>
                         </div>
                     </div>
                     <div class="col-lg-7">
                         <div class="product-title">
                             <h3>
-                                {{ ucfirst($parks->name) }} @if(!empty($parks->short_description))<small>({!! strip_tags($parks->short_description, '<b><i><u>') !!})</small>@endif
+                                {{ ucfirst($parks->name) }}
+                                <small>({!! strip_tags($parks->short_description, '<b><i><u>') !!})</small>
                             </h3>
                         </div>
-                        <div class="seperator m-b-10"></div>
+                        @if($parks->amenities->count() > 0)
+                            @foreach($parks->amenities->pluck('blackicon')->toArray() as $blackIconPath)
+                                @php
+                                    $blackIconImage = preg_match('/^https?:\/\//', $blackIconPath)
+                                        ? $blackIconPath
+                                        : asset('storage/' . $blackIconPath);
+                                @endphp
+                                <img src="{{ $blackIconImage }}" class="mt-2 mb-2 ml-1 rounded-circle"
+                                     style="width: 35px; height: 35px; object-fit: contain;"
+                                     alt="Black Icon">
+                            @endforeach
+                        @endif
+                        <hr>
                         <div class="product-description">
                             <p>{!! $parks->description !!}</p>
                         </div>
                         @if($parks->winnerParks->count() > 0)
                             <div class="mt-4">
-                                <h3 class="text-center mb-3" style="font-weight: 600; color: #d4af37;">🏆 Park of the Year</h3>
+                                <h3 class="text-center mb-3" style="font-weight: 600; color: #d4af37;">🏆 Park of the
+                                    Year</h3>
                                 <div class="d-flex flex-wrap justify-content-center gap-4">
                                     @foreach($parks->winnerParks as $winner)
                                         <div class="text-center position-relative winner-badge">
@@ -196,7 +231,7 @@
                                                  alt="Winner {{ \Carbon\Carbon::parse($winner->date)->year }}"
                                                  title="Winner - {{ \Carbon\Carbon::parse($winner->date)->year }}"
                                                  class="rounded-circle shadow"
-                                                 style="width: 120px; height: 120px; border: 4px solid #d4af37;" />
+                                                 style="width: 120px; height: 120px; border: 4px solid #d4af37;"/>
                                             <div class="badge-year mt-2" style="font-weight: bold; color: #333;">
                                                 {{ \Carbon\Carbon::parse($winner->date)->year }}
                                             </div>
@@ -212,7 +247,8 @@
             <div class="tabs tabs-folder">
                 <ul class="nav nav-tabs" id="myTab3" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active show" id="additional-tab" data-bs-toggle="tab" href="#additional" role="tab"
+                        <a class="nav-link active show" id="additional-tab" data-bs-toggle="tab" href="#additional"
+                           role="tab"
                            aria-controls="additional" aria-selected="true">
                             <i class="fa fa-info"></i>Additional Info
                         </a>
@@ -223,60 +259,75 @@
                             <i class="fa fa-star"></i>Reviews ({{ $reviews->count() }})
                         </a>
                     </li>
-                </ul>
 
+                    @if($parks->amenities->count() > 0)
+                        <li class="nav-item">
+                            <a class="nav-link" id="amenities-tab" data-bs-toggle="tab" href="#amenities" role="tab"
+                               aria-controls="amenities" aria-selected="true">
+                                Amenities
+                            </a>
+                        </li>
+                    @endif
+
+                    @if(!empty($parks->latitude) && !empty($parks->longitude))
+                        <li class="nav-item">
+                            <a class="nav-link" id="map-tab" data-bs-toggle="tab" href="#map-tab-pane" role="tab"
+                               aria-controls="map-tab-pane" aria-selected="true">
+                                Map
+                            </a>
+                        </li>
+                    @endif
+                </ul>
                 <div class="tab-content" id="myTabContent3">
-                    <div class="tab-pane fade active show" id="additional" role="tabpanel" aria-labelledby="additional-tab">
+                    <div class="tab-pane fade active show" id="additional" role="tabpanel"
+                         aria-labelledby="additional-tab">
                         <div class="table-responsive">
                             <table class="table additional-info-table">
                                 <tbody>
-                                    <tr>
-                                        <td class="info-label"><i class="fas fa-flag info-icon"></i>Country</td>
-                                        <td class="info-value">{{ $parks->country }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="info-label"><i class="fas fa-city info-icon"></i>City</td>
-                                        <td class="info-value">{{ $parks->city }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="info-label"><i class="fas fa-map-marker-alt info-icon"></i>State</td>
-                                        <td class="info-value">{{ $parks->state }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="info-label"><i class="fas fa-map info-icon"></i>Address</td>
-                                        <td class="info-value">{{ $parks->address }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="info-label"><i class="fas fa-mail-bulk info-icon"></i>Postal Code</td>
-                                        <td class="info-value">{{ $parks->postal_code }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="info-label"><i class="fas fa-globe info-icon"></i>Latitude</td>
-                                        <td class="info-value">{{ $parks->latitude }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="info-label"><i class="fas fa-globe info-icon"></i>Longitude</td>
-                                        <td class="info-value">{{ $parks->longitude }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="info-label"><i class="fas fa-phone info-icon"></i>Phone</td>
-                                        <td class="info-value">{{ $parks->phone }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="info-label"><i class="fas fa-envelope info-icon"></i>Email</td>
-                                        <td class="info-value">{{ $parks->email }}</td>
-                                    </tr>
+                                <tr>
+                                    <td class="info-label"><i class="fas fa-flag info-icon"></i>Country</td>
+                                    <td class="info-value">{{ $parks->country }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="info-label"><i class="fas fa-city info-icon"></i>City</td>
+                                    <td class="info-value">{{ $parks->city }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="info-label"><i class="fas fa-map-marker-alt info-icon"></i>State</td>
+                                    <td class="info-value">{{ $parks->state }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="info-label"><i class="fas fa-map info-icon"></i>Address</td>
+                                    <td class="info-value">{{ $parks->address }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="info-label"><i class="fas fa-mail-bulk info-icon"></i>Postal Code</td>
+                                    <td class="info-value">{{ $parks->postal_code }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="info-label"><i class="fas fa-globe info-icon"></i>Latitude</td>
+                                    <td class="info-value">{{ $parks->latitude }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="info-label"><i class="fas fa-globe info-icon"></i>Longitude</td>
+                                    <td class="info-value">{{ $parks->longitude }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="info-label"><i class="fas fa-phone info-icon"></i>Phone</td>
+                                    <td class="info-value">{{ $parks->phone }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="info-label"><i class="fas fa-envelope info-icon"></i>Email</td>
+                                    <td class="info-value">{{ $parks->email }}</td>
+                                </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
-
-
                     <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
                         <div class="comments reviews-wrapper" id="comments">
                             <div class="review-header">
                                 {{ $reviews->count() ? 'What Campers Are Saying' : 'No Reviews Yet' }}
-                                <span class="text-muted" style="font-size: 1rem;"></span>
                             </div>
 
                             @if ($reviews && $reviews->count())
@@ -284,7 +335,9 @@
                                     @foreach ($reviews as $review)
                                         <div class="review-card d-flex align-items-start">
                                             <div class="me-3">
-                                                <img alt="Avatar" src="{{ asset('assets/images/clients/' . rand(1, 10) . '.png') }}" class="avatar">
+                                                <img alt="Avatar"
+                                                     src="{{ asset('assets/images/clients/' . rand(1, 10) . '.png') }}"
+                                                     class="avatar">
                                             </div>
                                             <div>
                                                 <h6 class="mb-1">{{ $review->name }}</h6>
@@ -304,24 +357,74 @@
                                     @endforeach
                                 </div>
                             @else
-                                <p class="text-muted">No reviews yet. Be the first to support this park with a review and help it shine in the RVParkHQ Excellence Awards!</p>
+                                <p class="text-muted">No reviews yet. Be the first to support this park with a review
+                                    and help it shine in the RVParkHQ Excellence Awards!</p>
                             @endif
                         </div>
 
                     </div>
-                </div>
+                    @if($parks->amenities->count() > 0)
+                        <div class="tab-pane fade" id="amenities" role="tabpanel" aria-labelledby="amenities-tab">
+                            @if ($parks->amenities)
+                                @foreach($parks->amenities->groupBy('category') as $category => $items)
+                                    <div class="mb-4 shadow p-3 rounded reviews-wrapper">
+                                        <h4 class="h6 font-weight-bold text-dark mb-3">{{ $category }}</h4>
 
+                                        <div class="row">
+                                            @foreach($items as $amenity)
+                                                <div class="col-12 col-md-12 mb-2 d-flex align-items-center">
+                                                    @if ($amenity->blackicon)
+                                                        @php
+                                                            $blackIconPath = $amenity->blackicon;
+                                                            $blackIconImage = preg_match('/^https?:\/\//', $blackIconPath)
+                                                                ? $blackIconPath
+                                                                : asset('storage/' . $blackIconPath);
+                                                        @endphp
+                                                        <img src="{{ $blackIconImage }}" class="ml-1 rounded-circle"
+                                                             style="width: 20px; height: 20px; object-fit: contain;"
+                                                             alt="Black Icon">
+                                                    @endif
+
+                                                    @if ($amenity->whiteicon)
+                                                        @php
+                                                            $whiteIconPath = $amenity->whiteicon;
+                                                            $whiteIconImage = preg_match('/^https?:\/\//', $whiteIconPath)
+                                                                ? $whiteIconPath
+                                                                : asset('storage/' . $whiteIconPath);
+                                                        @endphp
+                                                        <img src="{{ $whiteIconImage }}" class="ml-1 rounded-circle"
+                                                             style="width: 20px; height: 20px; object-fit: contain;"
+                                                             alt="White Icon">
+                                                    @endif
+
+                                                    <label for="amenity_{{ $amenity->id }}"
+                                                           class="ml-3 mb-0 small text-muted">
+                                                        {{ $amenity->amenity }}
+                                                    </label>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @endforeach
+                            @endif
+                        </div>
+                    @endif
+                    <div class="tab-pane fade" id="map-tab-pane" role="tabpanel" aria-labelledby="map-tab">
+                        <div id="map" style="height: 300px; width: 100%; border: 1px solid #ccc;"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
     <section>
         <div class="container">
-            <div class="row card p-4 shadow-lg rounded-lg border border-light">
+            <div class="row card p-4 shadow-md rounded-lg border border-light">
                 <div class="col-lg-12">
                     <div class="text-center">
                         <h3 class="text-uppercase">Support This Park with a Review</h3>
-                        <p>Support your favorite parks with your review — and help them earn a place among the best in the RVParkHQ community.</p>
+                        <p>Support your favorite parks with your review — and help them earn a place among the best in
+                            the RVParkHQ community.</p>
                     </div>
 
                     <div class="m-t-30">
@@ -333,34 +436,40 @@
                                 <label for="rating" class="form-label fw-bold">Rate This Park <span class="text-danger">*</span></label>
                                 <div class="star-rating mb-2">
                                     @for ($i = 5; $i >= 1; $i--)
-                                        <input type="radio" id="star{{ $i }}" name="rating" value="{{ $i }}" required />
-                                        <label for="star{{ $i }}" title="{{ $i }} star{{ $i > 1 ? 's' : '' }}">&#9733;</label>
+                                        <input type="radio" id="star{{ $i }}" name="rating" value="{{ $i }}" required/>
+                                        <label for="star{{ $i }}"
+                                               title="{{ $i }} star{{ $i > 1 ? 's' : '' }}">&#9733;</label>
                                     @endfor
                                 </div>
                                 <div class="review-helper-text">
-                                    🌟 Your review helps this park earn a spot in the annual <strong>RVParkHQ Excellence Awards</strong>.
+                                    🌟 Your review helps this park earn a spot in the annual <strong>RVParkHQ Excellence
+                                        Awards</strong>.
                                 </div>
                             </div>
 
                             <div class="row mt-4">
                                 <div class="form-group col-md-6">
                                     <label for="name">Name <span class="text-danger">*</span></label>
-                                    <input type="text" name="name" required class="form-control" placeholder="Enter your Name">
+                                    <input type="text" name="name" required class="form-control"
+                                           placeholder="Enter your Name">
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="email">Email <span class="text-danger">*</span></label>
-                                    <input type="email" name="email" required class="form-control" placeholder="Enter your Email">
+                                    <input type="email" name="email" required class="form-control"
+                                           placeholder="Enter your Email">
                                 </div>
                             </div>
 
                             <div class="form-group mt-3">
                                 <label for="message">Describe Your Feedback <span class="text-danger">*</span></label>
-                                <textarea name="message" rows="5" class="form-control" required placeholder="Enter your Message"></textarea>
+                                <textarea name="message" rows="5" class="form-control" required
+                                          placeholder="Enter your Message"></textarea>
                             </div>
 
                             <div class="form-group mt-3 text-start">
                                 <small class="text-dark">
-                                    By submitting your vote, you agree to receive occasional emails from RVParkHQ with camping tips, special offers, and nearby park promotions. Unsubscribe anytime.
+                                    By submitting your vote, you agree to receive occasional emails from RVParkHQ with
+                                    camping tips, special offers, and nearby park promotions. Unsubscribe anytime.
                                 </small>
                             </div>
                             <button class="btn btn-dark mt-1" type="submit" id="form-submit">
@@ -372,8 +481,7 @@
             </div>
         </div>
     </section>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <script>
         $('#review-form').on('submit', function (e) {
             e.preventDefault();
@@ -391,19 +499,19 @@
                 success: function (response) {
                     form[0].reset();
                     return Swal.fire({
-                      title: '🎊 Hurrah!',
-                      text: response.message,
-                      icon: 'success',
-                      position: 'top-end',
-                      timerProgressBar: true,
-                      timer: 4000,
-                      showConfirmButton: false,
-                      showClass: {
-                        popup: 'animate__animated animate__bounceIn'
-                      },
-                      hideClass: {
-                        popup: 'animate__animated animate__fadeOutUp'
-                      }
+                        title: '🎊 Hurrah!',
+                        text: response.message,
+                        icon: 'success',
+                        position: 'top-end',
+                        timerProgressBar: true,
+                        timer: 4000,
+                        showConfirmButton: false,
+                        showClass: {
+                            popup: 'animate__animated animate__bounceIn'
+                        },
+                        hideClass: {
+                            popup: 'animate__animated animate__fadeOutUp'
+                        }
                     });
                 },
                 error: function (xhr) {
@@ -421,5 +529,35 @@
             });
         });
     </script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let mapInstance;
+            let mapInitialized = false;
 
+            const lat = {{ $parks->latitude ?? 0 }};
+            const lng = {{ $parks->longitude ?? 0 }};
+
+            const mapTabEl = document.querySelector('#map-tab');
+            mapTabEl.addEventListener('shown.bs.tab', function (event) {
+                if (!mapInitialized) {
+                    mapInstance = L.map('map').setView([lat, lng], 15);
+
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        maxZoom: 19,
+                        attribution: '&copy; OpenStreetMap contributors'
+                    }).addTo(mapInstance);
+
+                    L.marker([lat, lng]).addTo(mapInstance);
+
+                    mapInitialized = true;
+                } else {
+                    setTimeout(() => {
+                        mapInstance.invalidateSize();
+                    }, 300); // ensure resizing is triggered after tab animation
+                }
+            });
+        });
+    </script>
 @endsection

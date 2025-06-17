@@ -15,6 +15,7 @@ use App\Http\Controllers\Backend\ProfilesController;
 use App\Http\Controllers\Backend\TranslationController;
 use App\Http\Controllers\Backend\UserLoginAsController;
 use App\Http\Controllers\Backend\LocaleController;
+use App\Http\Controllers\Backend\AmenityController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -80,6 +81,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth']], 
     Route::post('campground-overpass', [OverPassController::class, 'fetchCampgroundsByState'])->name('campground.overpass');
 
     Route::get('/review/{campground}/{filename?}', [OverPassController::class, 'track']);
+    
+    Route::resource('amenities', AmenityController::class);
 });
 
 /**

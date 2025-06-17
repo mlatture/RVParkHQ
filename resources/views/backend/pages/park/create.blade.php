@@ -14,12 +14,12 @@
             padding: 6px 12px;
             font-size: 16px; /* optional */
         }
-        
+
         /* Adjust the rendered text inside the selection */
         .select2-container--default .select2-selection--single .select2-selection__rendered {
             line-height: 44px !important; /* match the container height */
         }
-        
+
         /* Optional: adjust the arrow icon */
         .select2-container--default .select2-selection--single .select2-selection__arrow {
             height: 44px !important;
@@ -61,7 +61,8 @@
                 <div class="p-5 space-y-6 border-t border-gray-100 dark:border-gray-800 sm:p-6">
                     @include('backend.layouts.partials.messages')
 
-                    <form action="{{ route('admin.parks.store') }}" method="POST" enctype="multipart/form-data" id="park_form">
+                    <form action="{{ route('admin.parks.store') }}" method="POST" enctype="multipart/form-data"
+                          id="park_form">
                         @csrf
 
                         <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
@@ -73,17 +74,20 @@
                                     </label>
 
                                     <div class="form-check form-switch flex items-center">
-                                        <input class="form-check-input" type="checkbox" name="change_name" id="change_name">
-                                        <label class="form-check-label ml-2" for="change_name" id="name_check_box_label">Manual</label>
+                                        <input class="form-check-input" type="checkbox" name="change_name"
+                                               id="change_name">
+                                        <label class="form-check-label ml-2" for="change_name"
+                                               id="name_check_box_label">Manual</label>
                                     </div>
                                 </div>
 
                                 <div id="inputWrapper" class="flex mt-1 hidden">
                                     <input type="text" name="name" id="name" value="{{ old('name') }}"
-                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 dark:bg-gray-900 dark:text-white">
+                                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 dark:bg-gray-900 dark:text-white">
                                 </div>
 
-                                <div id="selectWrapper" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 dark:bg-gray-900 dark:text-white">
+                                <div id="selectWrapper"
+                                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 dark:bg-gray-900 dark:text-white">
                                     <select id="parkDropdown" class="w-full select2">
                                         <option value="">Select a park</option>
                                     </select>
@@ -93,12 +97,70 @@
                             </div>
 
                             <div>
-                                <label for="slug" class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-4">
+                                <label for="slug"
+                                       class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-4">
                                     {{ __('Slug') }}
                                 </label>
                                 <input type="text" name="slug" id="slug" value="{{ old('slug') }}" readonly
                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 dark:bg-gray-900 dark:text-white">
                             </div>
+
+                            <div>
+                                <label for="type"
+                                       class="block font-medium text-sm text-gray-700">{{ __('Park Type') }}</label>
+                                <select name="type" id="type"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 dark:bg-gray-900 dark:text-white">
+                                    <option
+                                        value="Campground" {{ old('type', 'Campground and RV Park') == 'Campground' ? 'selected' : '' }}>{{ __('Campground') }}</option>
+                                    <option
+                                        value="RV Park" {{ old('type', 'Campground and RV Park') == 'RV Park' ? 'selected' : '' }}>{{ __('RV Park') }}</option>
+                                    <option
+                                        value="Campground and RV Park" {{ old('type', 'Campground and RV Park') == 'Campground and RV Park' ? 'selected' : '' }}>{{ __('Campground and RV Park') }}</option>
+                                </select>
+                            </div>
+
+                            @if($amenities->count() > 0)
+                                <div class="sm:col-span-2">
+                                    <label class="block font-medium text-sm text-gray-700 mb-4">Amenities</label>
+
+                                    @foreach($amenities->groupBy('category') as $category => $items)
+                                        <div class="mb-5 border border-gray-200 p-4 rounded-md bg-gray-50">
+                                            <h4 class="text-md font-semibold text-brand-600 mb-3">{{ $category }}</h4>
+
+                                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                                @foreach($items as $amenity)
+                                                    <div class="flex items-center">
+                                                        <input type="checkbox"
+                                                               id="amenity_{{ $amenity->id }}"
+                                                               name="amenities[]"
+                                                               value="{{ $amenity->id }}"
+                                                               {{ in_array($amenity->id, old('amenities', [])) ? 'checked' : '' }}
+                                                               class="form-checkbox text-brand-600">
+                                                        @if ($amenity->blackicon)
+                                                            @php
+                                                                $blackIconPath = $amenity->blackicon;
+                                                                $blackIconImage = !empty($blackIconPath) && preg_match('/^https?:\/\//', $blackIconPath) ? $blackIconPath : asset('storage/' . $blackIconPath);
+                                                            @endphp
+                                                            <img src="{{ $blackIconImage }}" class="ml-2 w-6 h-6 object-contain rounded-full" alt="White Icon">
+                                                        @endif
+                                                        @if ($amenity->whiteicon)
+                                                            @php
+                                                                $whiteIconPath = $amenity->whiteicon;
+                                                                $whiteIconImage = !empty($whiteIconPath) && preg_match('/^https?:\/\//', $whiteIconPath) ? $whiteIconPath : asset('storage/' . $whiteIconPath);
+                                                            @endphp
+                                                            <img src="{{ $whiteIconImage }}" class="ml-2 w-6 h-6 object-contain rounded-full" alt="White Icon">
+                                                        @endif
+                                                        <label for="amenity_{{ $amenity->id }}"
+                                                               class="ml-2 text-sm text-gray-700">
+                                                            {{ $amenity->amenity }}
+                                                        </label>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @endif
 
                             <div class="sm:col-span-2">
                                 <label for="description"
@@ -239,7 +301,8 @@
                         </div>
 
                         <div class="mt-6 flex justify-start gap-4">
-                            <button type="button" class="btn-primary" id="generateAI" class="btn-secondary">{{ __('Search') }}</button>
+                            <button type="button" class="btn-primary" id="generateAI"
+                                    class="btn-secondary">{{ __('Search') }}</button>
                             <button type="submit" class="btn-primary">{{ __('Save') }}</button>
                             <a href="{{ route('admin.parks.index') }}" class="btn-default">{{ __('Cancel') }}</a>
                         </div>
@@ -251,6 +314,9 @@
 
     <script>
         $(document).ready(function () {
+
+            $('.select2').select2();
+
             $('#name').on('input', function () {
                 let slug = $(this).val()
                     .toLowerCase()
@@ -273,7 +339,7 @@
 
             $('#generateAI').on('click', function () {
                 let formData = {};
-                $('#park_form').find('input, textarea, select').each(function() {
+                $('#park_form').find('input, textarea, select').each(function () {
                     let name = $(this).attr('name');
                     let value = $(this).val();
 
@@ -339,8 +405,6 @@
                 });
             });
 
-            $('.select2').select2();
-
             $('#parkDropdown').select2({
                 placeholder: 'Select or search a park',
                 allowClear: true,
@@ -353,14 +417,14 @@
                     headers: {
                         'X-CSRF-TOKEN': '{{ csrf_token() }}'
                     },
-                    data: function(params) {
+                    data: function (params) {
                         return {
                             search: params.term
                         };
                     },
-                    processResults: function(data) {
+                    processResults: function (data) {
                         return {
-                            results: data.over_pass.map(function(park) {
+                            results: data.over_pass.map(function (park) {
                                 return {
                                     id: park.name,
                                     text: park.name,
@@ -388,7 +452,7 @@
                 $('[name="zip"]').val(park.zip || '');
                 $('[name="latitude"]').val(park.latitude || '');
                 $('[name="longitude"]').val(park.longitude || '');
-                
+
                 $('[name="email"]').val('');
                 $('[name="address"]').val('');
                 $('[name="website_url"]').val('');
@@ -406,7 +470,7 @@
                 $('[name="zip"]').val('');
                 $('[name="latitude"]').val('');
                 $('[name="longitude"]').val('');
-                
+
                 $('[name="email"]').val('');
                 $('[name="address"]').val('');
                 $('[name="website_url"]').val('');
