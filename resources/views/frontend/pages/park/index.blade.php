@@ -140,13 +140,8 @@
                                             (preg_match('/^https?:\/\//', $imagePath) ? $imagePath : asset('storage/' . $imagePath))
                                             : asset('images/placeholder.jpg');
                                     @endphp
-
-                                    <a href="{{ route('rv-park.park-show', [
-                                        'country'    => Str::slug($park->country),
-                                        'state'      => Str::slug($park->state),
-                                        'city'       => Str::slug($park->city),
-                                        'campground' => 'kayuta-lake-campground',
-                                    ]) }}">
+                                    
+                                    <a href="{{ route('rv-park.park-show', $park->slug_path) }}">
                                         <img class="main" src="{{ $imageUrl }}" onerror="this.onerror=null;this.src='{{ asset('images/placeholder.jpg') }}';" alt="Park Image">
                                         <div class="park-overlay">View Park</div>
                                     </a>
@@ -154,13 +149,8 @@
 
                                 <div class="p-3 text-center">
                                     <h5 class="mb-0">
-                                        <a href="{{ route('rv-park.park-show', [
-                                            'country'    => Str::slug($park->country),
-                                            'state'      => Str::slug($park->state),
-                                            'city'       => Str::slug($park->city),
-                                            'campground' => 'kayuta-lake-campground',
-                                        ]) }}" class="text-dark text-decoration-none">
-                                            {{ $park->name }}
+                                        <a href="{{ route('rv-park.park-show', $park->slug_path) }}" class="text-dark text-decoration-none">
+                                            {{ ucfirst($park->name) }}
                                         </a>
                                     </h5>
                                 </div>

@@ -6,38 +6,9 @@ use App\Models\Review;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ReviewConfirmationMail;
-use App\Models\Park;
 
 class ReviewService
 {
-    public function getFilteredParks(array $filters, int $perPage = 12): array
-    {
-        $parks = Park::query()
-            ->filter($filters)
-            ->paginate($perPage)
-            ->withQueryString();
-
-        $states = Park::select('state')
-            ->distinct()
-            ->orderBy('state')
-            ->get();
-
-        return [
-            'parks' => $parks,
-            'states' => $states,
-        ];
-    }
-
-    public function getParkDetails($country, $state, $city)
-    {
-        $park = Park::where('city', 'like', $city)
-            ->orWhere('state', 'like', $state)
-            ->orWhere('country', 'like', $country)->firstOrFail();
-        $reviews = Review::where(['park_id' => $park->id, 'status' => 'confirmed'])->latest()->limit(10)->get();
-
-        return compact('park', 'reviews');
-    }
-
     public function storePendingReview(array $data)
     {
         $data['ip_address'] = request()->ip();

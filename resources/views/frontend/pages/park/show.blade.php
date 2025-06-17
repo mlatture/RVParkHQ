@@ -1,7 +1,9 @@
 @extends('frontend.pages.layouts.app')
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-
+    @php
+        use Illuminate\Support\Str;
+    @endphp
 <style>
     .star-rating {
         direction: rtl;
@@ -125,22 +127,32 @@
                             {{ ucfirst(request()->segment(2)) }}
                         </a>
                     </li>
+                    
+                    @if(!empty($parks->country))
                     <li>
-                        <a href="{{ route('rv-park.park', ['country' => request()->segment(3)]) }}">
-                            {{ ucfirst(request()->segment(3)) }}
+                        <a href="{{ route('rv-park.park', ['country' => $parks->country]) }}">
+                            {{ Str::slug($parks->country) }}
                         </a>
                     </li>
+                    @endif
+                    
+                    @if(!empty($parks->state))
                     <li>
-                        <a href="{{ route('rv-park.park', ['state' => request()->segment(4)]) }}">
-                            {{ ucfirst(request()->segment(4)) }}
+                        <a href="{{ route('rv-park.park', ['state' => $parks->state]) }}">
+                            {{ Str::slug($parks->state) }}
                         </a>
                     </li>
+                    @endif
+                    
+                    @if(!empty($parks->city))
                     <li>
-                        <a href="{{ route('rv-park.park', ['city' => request()->segment(5)]) }}">
-                            {{ ucfirst(request()->segment(5)) }}
+                        <a href="{{ route('rv-park.park', ['city' => $parks->city]) }}">
+                            {{ Str::slug($parks->city) }}
                         </a>
                     </li>
-                    <li>{{ ucfirst(request()->segment(6)) }}</li>
+                    @endif
+                    
+                    <li>{{  Str::slug($parks->name) }}</li>
                 </ul>
             </div>
         </div>
@@ -167,7 +179,7 @@
                     <div class="col-lg-7">
                         <div class="product-title">
                             <h3>
-                                {{ ucfirst($parks->name) }} <small>({!! strip_tags($parks->short_description, '<b><i><u>') !!})</small>
+                                {{ ucfirst($parks->name) }} @if(!empty($parks->short_description))<small>({!! strip_tags($parks->short_description, '<b><i><u>') !!})</small>@endif
                             </h3>
                         </div>
                         <div class="seperator m-b-10"></div>

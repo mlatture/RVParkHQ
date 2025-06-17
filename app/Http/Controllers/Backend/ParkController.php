@@ -62,6 +62,13 @@ class ParkController extends Controller
             $path = $request->file('main_image_url')->store('parks', 'public');
             $park->main_image_url = $path;
         }
+        
+        $park->slug_path = implode('-', array_filter([
+            Str::slug($request->country),
+            Str::slug($request->state),
+            Str::slug($request->city),
+            Str::slug($request->name),
+        ]));
 
         $park->save();
 
@@ -111,6 +118,13 @@ class ParkController extends Controller
 
             $data['main_image_url'] = $request->file('main_image_url')->store('parks', 'public');
         }
+        
+        $data['slug_path'] = implode('-', array_filter([
+            Str::slug($request->country),
+            Str::slug($request->state),
+            Str::slug($request->city),
+            Str::slug($request->name),
+        ]));
 
         $park->update($data);
 

@@ -4,25 +4,26 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Frontend\ParkRequest;
-use App\Models\WinnerPark;
-use App\Models\{Park, Review};
-use Illuminate\Http\Request;
+use App\Models\{Park, Review, WinnerPark};
 use App\Services\Frontend\ReviewService;
-
+use App\Services\ParkService;
+use Illuminate\Http\Request;
 
 class ParkController extends Controller
 {
     protected $reviewService;
+    protected $parkService;
 
-    public function __construct(ReviewService $reviewService)
+    public function __construct(ReviewService $reviewService, ParkService $parkService)
     {
         $this->reviewService = $reviewService;
+        $this->parkService = $parkService;
     }
 
     public function index(Request $request)
     {
         $filters = $request->only(['country', 'state', 'city', 'states']);
-        $data['parks'] = $this->reviewService->getFilteredParks($filters);
+        $data['parks'] = $this->parkService->getFilteredParks($filters);
 
         return view('frontend.pages.park.index', $data);
     }
@@ -56,10 +57,10 @@ class ParkController extends Controller
             ]);
     }
     
-    public function show($country, $state, $city, $campground)
+    public function show($slug_path)
     {
-        $data = $this->reviewService->getParkDetails($country, $state, $city);
-
+        $data = $this->parkService->getParkDetails($slug_path);
+        
         return view('frontend.pages.park.show', [
             'parks' => $data['park'],
             'reviews' => $data['reviews']

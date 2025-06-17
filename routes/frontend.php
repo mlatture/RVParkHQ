@@ -14,6 +14,6 @@ Route::name('rv-park.')->group(function () {
         Route::get('/confirm-review/{token}', 'confirmReview')->name('conform-review');
         Route::post('/pending', 'pendingReview')->name('pending-review');
         Route::get('/winner-park', 'winnerPark');
-        Route::get('{country?}/{state?}/{city?}/{campground?}/{id?}', 'show')->name('park-show');
+        Route::get('{slug_path}', 'show')->name('park-show');
     });
 });
