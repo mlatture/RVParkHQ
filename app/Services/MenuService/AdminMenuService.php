@@ -144,6 +144,16 @@ class AdminMenuService
             'priority' => 1,
             'permissions' => 'campground.view'
         ]);
+        
+        $this->addMenuItem([
+            'label' => __('Amenity'),
+            'icon' => 'dashboard.svg',
+            'route' => route('admin.amenities.index'),
+            'active' => Route::is('admin.amenities.index'),
+            'id' => 'campground',
+            'priority' => 1,
+            'permissions' => 'campground.view'
+        ]);
 
 //        $this->addMenuItem([
 //            'label' => __('Modules'),

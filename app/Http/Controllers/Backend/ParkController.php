@@ -11,6 +11,7 @@ use App\Services\OpenAIService;
 use App\Services\ParkService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ParkController extends Controller
 {
