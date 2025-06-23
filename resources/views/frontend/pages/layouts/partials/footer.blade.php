@@ -125,9 +125,9 @@
                     <div class="widget">
                         <div class="widget-title">Subscribe for Camping Tips</div>
                         <p class="mb-3 text-white">Join our mailing list for top camping tips, exclusive discounts, and nearby park alerts.</p>
-                        <form class="footer-subscribe d-flex flex-wrap" method="POST" action="#">
+                        <form class="footer-subscribe d-flex flex-wrap" method="POST" action="{{ route('rv-park.email.subscribe') }}">
                             @csrf
-                            <input type="email" name="subscribe_email" placeholder="Enter your email" required />
+                            <input type="email" name="email" placeholder="Enter your email" required />
                             <button type="submit">Subscribe</button>
                         </form>
                     </div>

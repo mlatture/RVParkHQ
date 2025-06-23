@@ -36,17 +36,22 @@ class Park extends Model
 
         return $query;
     }
-    
+
     public function winnerParks()
     {
         return $this->hasMany(WinnerPark::class, 'park_id');
     }
-    
+
     public function amenities()
     {
         return $this->belongsToMany(Amenity::class, 'amenity_park')->withTimestamps();
     }
-    
+
+    public function editRequests()
+    {
+        return $this->hasMany(ParkEditRequest::class, 'park_id');
+    }
+
     public function claim_parks()
     {
         return $this->hasMany(ClaimPark::class, 'park_id');
