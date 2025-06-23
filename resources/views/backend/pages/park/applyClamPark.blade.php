@@ -32,6 +32,51 @@
         </div>
 
         <div class="space-y-6">
+            
+            <div class="max-w-4xl mx-auto my-10">
+              <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                <div class="bg-blue-600 text-white px-6 py-4">
+                  <h4 class="text-lg font-semibold mb-0">Award Criteria</h4>
+                </div>
+                <div class="p-6 overflow-x-auto">
+                  <table class="min-w-full table-auto text-left text-sm align-middle">
+                    <thead class="bg-gray-100">
+                      <tr>
+                        <th class="w-2/5 px-4 py-3 font-medium text-gray-700">Criteria</th>
+                        <th class="px-4 py-3 font-medium text-gray-700">Example</th>
+                      </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                      <tr>
+                        <td class="px-4 py-3">
+                          <span class="text-xl" title="Average rating threshold">⭐</span>
+                          <span class="ml-2">Average rating threshold</span>
+                        </td>
+                        <td class="px-4 py-3">
+                          4.6+ for <span class="font-semibold text-yellow-500">Gold</span>,
+                          4.2–4.59 for <span class="font-semibold text-gray-600">Silver</span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="px-4 py-3">
+                          <span class="text-xl" title="Minimum number of reviews">📈</span>
+                          <span class="ml-2">Minimum number of reviews</span>
+                        </td>
+                        <td class="px-4 py-3">e.g. at least 10</td>
+                      </tr>
+                      <tr>
+                        <td class="px-4 py-3">
+                          <span class="text-xl" title="Time-based filter">📅</span>
+                          <span class="ml-2">Time-based filter</span>
+                        </td>
+                        <td class="px-4 py-3">Only reviews within the past 12 months</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+        
             <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
                 <div class="px-5 py-4 sm:px-6 sm:py-5">
                     <h3 class="text-base font-medium text-gray-800 dark:text-white/90">{{ __('Clam Park') }}</h3>
