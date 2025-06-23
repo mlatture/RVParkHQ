@@ -150,7 +150,6 @@ class RolesService
     {
         $roles = [];
 
-        // 1. Superadmin role - has all permissions
         $allPermissionNames = [];
         foreach ($this->permissionService->getAllPermissions() as $group) {
             foreach ($group['permissions'] as $permission) {
@@ -158,43 +157,33 @@ class RolesService
             }
         }
 
+        // Superadmin role with all permissions
         $roles['superadmin'] = $this->createRole('Superadmin', $allPermissionNames);
 
-        // 2. Admin role - has almost all permissions except some critical ones
-        $adminPermissions = $allPermissionNames;
-        $adminExcludedPermissions = [
-            'user.delete', // Cannot delete users
-        ];
+        // Remove admin role creation entirely
+        // $adminPermissions = $allPermissionNames;
+        // $adminExcludedPermissions = ['user.delete'];
+        // $adminPermissions = array_diff($adminPermissions, $adminExcludedPermissions);
+        // $roles['admin'] = $this->createRole('Admin', $adminPermissions);
 
-        $adminPermissions = array_diff($adminPermissions, $adminExcludedPermissions);
-        $roles['admin'] = $this->createRole('Admin', $adminPermissions);
-
-        // 3. Editor role - can manage content but not users/settings
-        $editorPermissions = [
+        // Owner role
+        $ownerPermissions = [
             'dashboard.view',
-            // Blog permissions
-//            'blog.create',
-//            'blog.view',
-//            'blog.edit',
-            // Profile permissions
+            'park.view',
+            'park.edit',
             'profile.view',
             'profile.edit',
-            'profile.update',
-            // Translations
-            'translations.view',
         ];
+        $roles['owner'] = $this->createRole('Owner', $ownerPermissions);
 
-        $roles['editor'] = $this->createRole('camper', $editorPermissions);
-
-        // 4. Subscriber role - basic user role
-//        $subscriberPermissions = [
-//            'dashboard.view',
-//            'profile.view',
-//            'profile.edit',
-//            'profile.update',
-//        ];
-
-//        $roles['subscriber'] = $this->createRole('Subscriber', $subscriberPermissions);
+        // Camper role
+        $camperPermissions = [
+            'dashboard.view',
+            'profile.view',
+            'profile.edit',
+            'park.view',
+        ];
+        $roles['camper'] = $this->createRole('Camper', $camperPermissions);
 
         return $roles;
     }
@@ -236,23 +225,32 @@ class RolesService
             case 'editor':
                 return [
                     'dashboard.view',
-                    'blog.create',
-                    'blog.view',
-                    'blog.edit',
                     'profile.view',
                     'profile.edit',
                     'profile.update',
-                    'translations.view',
+                    'park.view',
                 ];
 
-            case 'subscriber':
-            default:
+            case 'owner':
                 return [
                     'dashboard.view',
                     'profile.view',
                     'profile.edit',
                     'profile.update',
+                    'park.view',
+                    'park.create',
+                    'park.edit',
+                    'park.delete',
                 ];
+
+//            case 'subscriber':
+//            default:
+//                return [
+//                    'dashboard.view',
+//                    'profile.view',
+//                    'profile.edit',
+//                    'profile.update',
+//                ];
         }
     }
 }

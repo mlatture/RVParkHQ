@@ -18,26 +18,26 @@ class UserSeeder extends Seeder
 
         User::insert([
             [
-                'name' => 'Mark',
-                'email' => 'mark@rvparkhq.com',
+                'name' => 'Super Admin',
+                'email' => 'superadmin@example.com',
                 'username' => 'superadmin',
                 'type' => 'admin',
                 'password' => Hash::make('12345678'),
             ],
             [
                 'name' => 'Owner',
-                'email' => 'owner@rvparkhq.com',
+                'email' => 'owner@example.com',
                 'username' => 'Owner',
                 'type' => 'owner',
                 'password' => Hash::make('12345678'),
             ],
-            // [
-            //     'name' => 'Camper',
-            //     'email' => 'camper@example.com',
-            //     'username' => 'Camper',
-            //     'type' => 'camper',
-            //     'password' => Hash::make('12345678'),
-            // ],
+            [
+                'name' => 'Camper',
+                'email' => 'camper@example.com',
+                'username' => 'Camper',
+                'type' => 'camper',
+                'password' => Hash::make('12345678'),
+            ],
         ]);
 
         // Run factory to create additional users with unique details.
