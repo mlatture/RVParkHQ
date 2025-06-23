@@ -144,15 +144,44 @@ class AdminMenuService
             'priority' => 1,
             'permissions' => 'campground.view'
         ]);
-        
+
         $this->addMenuItem([
             'label' => __('Amenity'),
             'icon' => 'dashboard.svg',
             'route' => route('admin.amenities.index'),
             'active' => Route::is('admin.amenities.index'),
-            'id' => 'campground',
+            'id' => 'amenity',
             'priority' => 1,
-            'permissions' => 'campground.view'
+            'permissions' => 'amenity.view'
+        ]);
+        $this->addMenuItem([
+            'label' => __('Park Request'),
+            'icon' => 'dashboard.svg',
+            'route' => route('admin.park-request.index'),
+            'active' => Route::is('admin.park-request.index'),
+            'id' => 'park-request',
+            'priority' => 1,
+            'permissions' => 'park-request.view'
+        ]);
+
+        $this->addMenuItem([
+            'label' => __('Subscribers'),
+            'icon' => 'dashboard.svg',
+            'route' => route('admin.subscribers.index'),
+            'active' => Route::is('admin.subscribers.index'),
+            'id' => 'subscribers',
+            'priority' => 1,
+            'permissions' => 'subscribers.view'
+        ]);
+
+        $this->addMenuItem([
+            'label' => __('Claim Park'),
+            'icon' => 'dashboard.svg',
+            'route' => route('admin.claim.index'),
+            'active' => Route::is('admin.claim.index'),
+            'id' => 'claim_park',
+            'priority' => 1,
+            'permissions' => 'claim_park.view'
         ]);
 
 //        $this->addMenuItem([

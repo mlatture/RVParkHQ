@@ -9,11 +9,6 @@ use App\Services\PermissionService;
 use App\Services\RolesService;
 use Illuminate\Database\Seeder;
 
-/**
- * Class RolePermissionSeeder.
- *
- * @see https://spatie.be/docs/laravel-permission/v5/basic-usage/multiple-guards
- */
 class RolePermissionSeeder extends Seeder
 {
     public function __construct(
@@ -22,41 +17,32 @@ class RolePermissionSeeder extends Seeder
     ) {
     }
 
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
     public function run()
     {
-        // Create all permissions
         $this->command->info('Creating permissions...');
         $this->permissionService->createPermissions();
 
-        // Create predefined roles with their permissions
         $this->command->info('Creating predefined roles...');
         $roles = $this->rolesService->createPredefinedRoles();
 
-        // Assign superadmin role to superadmin user if exists
-        $user = User::where('username', 'superadmin')->first();
-        if ($user) {
-            $this->command->info('Assigning Superadmin role to superadmin user...');
-            $user->assignRole($roles['superadmin']);
+        // Assign Superadmin role
+        $superadmin = User::where('username', 'superadmin')->first();
+        if ($superadmin) {
+            $superadmin->assignRole($roles['superadmin']);
         }
 
-        // Assign random roles to other users
-        $this->command->info('Assigning random roles to other users...');
-        $availableRoles = ['Admin', 'camper']; // Exclude Superadmin from random assignment
-        $users = User::all();
-
-        foreach ($users as $user) {
-            if (!$user->hasRole('Superadmin')) {
-                // Get a random role from the available roles
-                $randomRole = $availableRoles[array_rand($availableRoles)];
-                $user->assignRole($randomRole);
-            }
+        // Assign Owner role
+        $owner = User::where('username', 'owner')->first();
+        if ($owner) {
+            $owner->assignRole($roles['owner']);
         }
 
-        $this->command->info('Roles and Permissions created successfully!');
+        // Assign Camper role
+        $camper = User::where('username', 'camper')->first();
+        if ($camper) {
+            $camper->assignRole($roles['camper']);
+        }
+
+        $this->command->info('Roles assigned successfully!');
     }
 }

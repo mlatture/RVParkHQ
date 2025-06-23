@@ -45,7 +45,7 @@
 
                     <div class="flex items-center gap-2">
 
-                        @if (auth()->user()->can('user.edit'))
+                        @if (auth()->user()->can('user.create'))
                             <a href="{{ route('admin.parks.create') }}" class="btn-primary">
                                 <i class="bi bi-plus-circle mr-2"></i>
                                 {{ __('New Park') }}
@@ -58,21 +58,19 @@
                     <table id="dataTable" class="w-full dark:text-gray-400">
                         <thead class="bg-light text-capitalize">
                         <tr class="border-b border-gray-100 dark:border-gray-800">
-                            <th width="5%"
-                                class="p-2 bg-gray-50 dark:bg-gray-800 dark:text-white text-left px-5">{{ __('Sl') }}</th>
-                            <th width="15%"
-                                class="p-2 bg-gray-50 dark:bg-gray-800 dark:text-white text-left px-5">{{ __('Name') }}</th>
-                            <th width="10%"
-                                class="p-2 bg-gray-50 dark:bg-gray-800 dark:text-white text-left px-5">{{ __('Email') }}</th>
-                            <th width="30%"
-                                class="p-2 bg-gray-50 dark:bg-gray-800 dark:text-white text-left px-5">{{ __('Status') }}</th>
-                            @php ld_apply_filters('user_list_page_table_header_before_action', '') @endphp
-                            <th width="15%"
-                                class="p-2 bg-gray-50 dark:bg-gray-800 dark:text-white text-left px-5">{{ __('Action') }}</th>
-                            @php ld_apply_filters('user_list_page_table_header_after_action', '') @endphp
+                            <th class="p-2 bg-gray-50 dark:bg-gray-800 dark:text-white text-left px-5">{{ __('Sl') }}</th>
+                            <th class="p-2 bg-gray-50 dark:bg-gray-800 dark:text-white text-left px-5">{{ __('Name') }}</th>
+                            <th class="p-2 bg-gray-50 dark:bg-gray-800 dark:text-white text-left px-5">{{ __('Email') }}</th>
+                            <th class="p-2 bg-gray-50 dark:bg-gray-800 dark:text-white text-left px-5">{{ __('Status') }}</th>
+                            @if(auth()->user()->can('park.edit') || auth()->user()->can('park.delete'))
+                                <th class="p-2 bg-gray-50 dark:bg-gray-800 dark:text-white text-left px-5">{{ __('Action') }}</th>
+                            @endif
                         </tr>
                         </thead>
                         <tbody>
+                        @php
+                            $user = auth()->user();
+                        @endphp
                         @forelse ($parks as $park)
                             <tr class="'border-b border-gray-100 dark:border-gray-800'">
                                 <td class="px-5 py-4 sm:px-6">{{ $loop->index + 1 }}</td>
@@ -86,72 +84,76 @@
                                         {{ ucfirst($park->status) }}
                                     </span>
                                 </td>
-
                                 <td class="flex px-5 py-4 sm:px-6 text-center gap-1">
+                                    @if($user->hasRole('Superadmin'))
+                                        <a data-tooltip-target="tooltip-edit-park-{{ $park->id }}"
+                                           class="btn-default !p-3" href="{{ route('admin.parks.edit', $park->id) }}">
+                                            <i class="bi bi-pencil text-sm"></i>
+                                        </a>
 
-                                    <a data-tooltip-target="tooltip-edit-park-{{ $park->id }}" class="btn-default !p-3"
-                                       href="{{ route('admin.parks.edit', $park->id) }}">
-                                        <i class="bi bi-pencil text-sm"></i>
-                                    </a>
-                                    <div id="tooltip-edit-park-{{ $park->id }}" role="tooltip"
-                                         class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-700">
-                                        {{ __('Edit User') }}
-                                        <div class="tooltip-arrow" data-popper-arrow></div>
-                                    </div>
-
-                                    <a data-modal-target="delete-modal-{{ $park->id }}"
-                                       data-modal-toggle="delete-modal-{{ $park->id }}"
-                                       data-tooltip-target="tooltip-delete-park-{{ $park->id }}" class="btn-danger !p-3"
-                                       href="javascript:void(0);">
-                                        <i class="bi bi-trash text-sm"></i>
-                                    </a>
-                                    <div id="tooltip-delete-park-{{ $park->id }}" role="tooltip"
-                                         class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-700">
-                                        {{ __('Delete Park') }}
-                                        <div class="tooltip-arrow" data-popper-arrow></div>
-                                    </div>
-
-                                    <div id="delete-modal-{{ $park->id }}" tabindex="-1"
-                                         class="hidden fixed inset-0 z-50 flex items-center justify-center">
-                                        <!-- Modal Content -->
-                                        <div
-                                            class="relative p-4 w-full max-w-md bg-white rounded-lg shadow-lg dark:bg-gray-700 z-60">
-                                            <button type="button"
-                                                    class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                                                    data-modal-hide="delete-modal-{{ $park->id }}">
-                                                <svg class="w-3 h-3" aria-hidden="true"
-                                                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                                                    <path stroke="currentColor" stroke-linecap="round"
-                                                          stroke-linejoin="round" stroke-width="2"
-                                                          d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                                                </svg>
-                                                <span class="sr-only">{{ __('Close modal') }}</span>
+                                        <form action="{{ route('admin.parks.destroy', $park->id) }}" method="POST"
+                                              style="display:inline-block;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="btn btn-danger btn-sm"
+                                                    onclick="return confirm('Are you sure?')">
+                                                <i class="bi bi-trash text-sm"></i>
                                             </button>
-                                            <div class="p-4 md:p-5 text-center">
-                                                <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200"
-                                                     aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                     viewBox="0 0 20 20">
-                                                    <path stroke="currentColor" stroke-linecap="round"
-                                                          stroke-linejoin="round" stroke-width="2"
-                                                          d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-                                                </svg>
-                                                <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">{{ __('Are you sure you want to delete this park?') }}</h3>
-                                                <form id="delete-form-{{ $park->id }}"
-                                                      action="{{ route('admin.parks.destroy', $park->id) }}"
-                                                      method="POST">
-                                                    @method('DELETE')
-                                                    @csrf
+                                        </form>
+                                    @elseif($user->hasRole('Owner'))
+                                        @php
+                                            $editRequest = $park->editRequests()->where('owner_id', $user->id)->latest()->first();
 
-                                                    <button type="submit"
-                                                            class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
-                                                        {{ __('Yes, Confirm') }}
-                                                    </button>
-                                                    <button data-modal-hide="delete-modal-{{ $park->id }}" type="button"
-                                                            class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">{{ __('No, cancel') }}</button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
+                                            $userAppliedClaim = $park->claim_parks()
+                                                ->where('user_id', $user->id)
+                                                ->where('park_id', $park->id)
+                                                ->first();
+
+                                            $approvedClaim = $park->claim_parks()->where('status', 'approved')->first();
+                                        @endphp
+
+                                        {{-- CASE: If the park is claimed by another user --}}
+                                        @if($approvedClaim && $approvedClaim->user_id !== auth()->id())
+                                            <span class="text-danger fw-bold">This park is already claimed by its owner.</span>
+
+                                            {{-- CASE: If the park is claimed by current user --}}
+                                        @elseif($userAppliedClaim && $userAppliedClaim->status === 'approved')
+                                            <a class="btn-default !p-3" href="{{ route('admin.parks.edit', $park->id) }}">
+                                                <i class="bi bi-pencil text-sm"></i>
+                                            </a>
+
+                                            {{-- CASE: If user has applied for claim but not approved yet --}}
+                                        @elseif($userAppliedClaim)
+                                            <span class="text-warning">Request Claim Park</span>
+
+                                            {{-- CASE: No claim yet, allow user to apply --}}
+                                        @else
+                                            <a class="!p-3 btn btn-primary btn-sm" href="{{ route('admin.claim.park.apply', encrypt($park->id)) }}">
+                                                <i class="bi bi-hand-index-thumb-fill"></i>
+                                            </a>
+                                        @endif
+
+
+                                        @if($approvedClaim && $approvedClaim->user_id === auth()->id())
+
+                                        @elseif($editRequest && $editRequest->status === 'pending')
+                                            <span class="text-warning">Request Pending</span>
+
+                                        @elseif($editRequest && $editRequest->status === 'approved')
+                                            <a class="btn-default !p-3" href="{{ route('admin.parks.edit', $park->id) }}">
+                                                <i class="bi bi-pencil text-sm"></i>
+                                            </a>
+
+                                        @elseif(!$approvedClaim)
+                                        <form action="{{ route('admin.park_edit_requests.suggest', $park->id) }}" method="POST" style="display:inline-block;">
+                                            @csrf
+                                            <button class="btn btn-warning btn-sm" title="Suggest a change" type="submit">
+                                                <i class="bi bi-capslock-fill text-sm"></i>
+                                            </button>
+                                        </form>
+                                        @endif
+
+                                    @endif
                                 </td>
                             </tr>
                         @empty

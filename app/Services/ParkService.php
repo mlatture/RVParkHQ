@@ -10,7 +10,7 @@ class ParkService
 {
     public function getPark()
     {
-        $query = Park::query();
+        $query = Park::with('claim_parks');
         $search = request()->input('search');
 
         if ($search) {

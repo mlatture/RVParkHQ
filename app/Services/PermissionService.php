@@ -112,6 +112,38 @@ class PermissionService
                     'campground.delete',
                 ],
             ],
+            [
+                'group_name' => 'amenity',
+                'permissions' => [
+                    'amenity.view',
+                    'amenity.create',
+                    'amenity.edit',
+                    'amenity.delete',
+                ],
+            ],
+            [
+                'group_name' => 'park-request',
+                'permissions' => [
+                    'park-request.view',
+                    'park-request.create',
+                    'park-request.edit',
+                    'park-request.delete',
+                ],
+            ],
+            [
+                'group_name' => 'subscribers',
+                'permissions' => [
+                    'subscribers.view',
+                ],
+            ],
+            [
+                'group_name' => 'claim_park',
+                'permissions' => [
+                    'claim_park.view',
+                    'claim_park.edit',
+                    'claim_park.delete',
+                ],
+            ],
         ];
 
         return $permissions;

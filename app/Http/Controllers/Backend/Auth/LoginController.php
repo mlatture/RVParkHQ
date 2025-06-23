@@ -65,7 +65,8 @@ class LoginController extends Controller
      */
     public function login(LoginRequest $request)
     {
-        if (Auth::guard('web')->attempt(['email' => $request->email, 'password' => $request->password, 'type' => $request->type], $request->remember)) {
+//        if (Auth::guard('web')->attempt(['email' => $request->email, 'password' => $request->password, 'type' => $request->type], $request->remember)) {
+        if (Auth::guard('web')->attempt(['email' => $request->email, 'password' => $request->password], $request->remember)) {
             $this->demoAppService->maybeSetDemoLocaleToEnByDefault();
             session()->flash('success', 'Successfully Logged in!');
 
@@ -104,9 +105,9 @@ class LoginController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'type' => 'required',
+            //'type' => 'required',
             'email' => 'required|string|email|max:255|unique:users',
-            'username' => 'required|string|max:255|unique:users',
+            //'username' => 'required|string|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
         ]);
 
@@ -115,14 +116,15 @@ class LoginController extends Controller
         }
 
         $user = User::create([
-            'type' => $request->type,
+//            'type' => $request->type,
+            'type' => 'camper',
             'username' => strtolower($request->name),
             'name' => ucfirst($request->name),
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
 
-        $user->assignRole('admin');
+        $user->assignRole('camper');
         Auth::login($user);
 
         session()->flash('success', 'Account registered & logged in successfully.');

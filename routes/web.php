@@ -10,12 +10,14 @@ use App\Http\Controllers\Backend\ParkController;
 use App\Http\Controllers\Backend\PermissionsController;
 use App\Http\Controllers\Backend\RolesController;
 use App\Http\Controllers\Backend\UsersController;
+use App\Http\Controllers\Backend\ClaimController;
 use App\Http\Controllers\Backend\SettingsController;
 use App\Http\Controllers\Backend\ProfilesController;
 use App\Http\Controllers\Backend\TranslationController;
 use App\Http\Controllers\Backend\UserLoginAsController;
 use App\Http\Controllers\Backend\LocaleController;
 use App\Http\Controllers\Backend\AmenityController;
+use App\Http\Controllers\Backend\ParkEditRequestController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -81,8 +83,21 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth']], 
     Route::post('campground-overpass', [OverPassController::class, 'fetchCampgroundsByState'])->name('campground.overpass');
 
     Route::get('/review/{campground}/{filename?}', [OverPassController::class, 'track']);
-    
+
     Route::resource('amenities', AmenityController::class);
+
+    Route::resource('park-request', ParkEditRequestController::class);
+
+    Route::post('park-edit-requests/{park}/suggest', [ParkEditRequestController::class, 'suggest'])->name('park_edit_requests.suggest');
+    Route::get('/subscribers', [\App\Http\Controllers\Backend\SubscriberController::class, 'index'])->name('subscribers.index');
+
+    Route::get('/claim-park/{id}', [ParkController::class, 'applyClamPark'])->name('claim.park.apply');
+    Route::post('/claim-park/store', [ParkController::class, 'storeClamPark'])->name('claim.park.store');
+
+    Route::get('/claim', [ClaimController::class, 'index'])->name('claim.index');
+    Route::get('/claim/{id}', [ClaimController::class, 'edit'])->name('claim.edit');
+    Route::put('/claim/{id}', [ClaimController::class, 'update'])->name('claim.update');
+    Route::delete('/claim/{id}', [ClaimController::class, 'destroy'])->name('claim.destroy');
 });
 
 /**

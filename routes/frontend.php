@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Frontend\ParkController;
+use App\Http\Controllers\Frontend\SubscriberController;
 
 
 Route::name('rv-park.')->group(function () {
@@ -16,4 +17,8 @@ Route::name('rv-park.')->group(function () {
         Route::get('/winner-park', 'winnerPark');
         Route::get('{slug_path}', 'show')->name('park-show');
     });
+
+    Route::post('/email/subscribe', [SubscriberController::class, 'store'])->name('email.subscribe');
+    Route::get('/confirm-email', [SubscriberController::class, 'index'])->name('email-confirm.index');
+    Route::post('/confirm-subscribe', [SubscriberController::class, 'conformSubscribe'])->name('confirm-subscribe.store');
 });

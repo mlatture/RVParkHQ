@@ -46,4 +46,9 @@ class Park extends Model
     {
         return $this->belongsToMany(Amenity::class, 'amenity_park')->withTimestamps();
     }
+    
+    public function claim_parks()
+    {
+        return $this->hasMany(ClaimPark::class, 'park_id');
+    }
 }
