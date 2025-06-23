@@ -178,7 +178,7 @@ EOT;
     
         // You can also store to database instead of log
     
-        return response()->file(public_path('images/login.jpg'), [
+        return response()->file(public_path('images/review-image-i.jpg'), [
             'Content-Type' => 'image/png'
         ]);
     }

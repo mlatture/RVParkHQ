@@ -28,6 +28,23 @@ class ParkService
         $park = Park::with('winnerParks', 'amenities')->where('slug_path', $slug_path)->firstOrFail();
         $reviews = Review::where(['park_id' => $park->id, 'status' => 'confirmed'])->latest()->limit(10)->get();
 
+        $items = [];
+        if($park->rss_url) {
+            $rss = simplexml_load_file($park->rss_url);
+            if ($rss && isset($rss->channel->item)) {
+                foreach ($rss->channel->item as $item) {
+                    $items[] = [
+                        'title' => (string) $item->title,
+                        'link' => (string) $item->link,
+                        'description' => (string) $item->description,
+                        'author' => (string) $item->children('dc', true)->creator,
+                        'pubDate' => (string) $item->pubDate,
+                        'comments' => (string) $item->comments,
+                    ];
+                }
+            }
+        }
+        $park['rss_data'] = $items;
         return compact('park', 'reviews');
     }
     

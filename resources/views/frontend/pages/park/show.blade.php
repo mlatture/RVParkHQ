@@ -277,6 +277,13 @@
                             </a>
                         </li>
                     @endif
+                    <li class="nav-item">
+                        <a class="nav-link" id="latest-insightes-tab" data-bs-toggle="tab" href="#latest-insightes"
+                           role="tab"
+                           aria-controls="latest-insightes" aria-selected="true">
+                            <i class="fa fa-info"></i>Latest Insights
+                        </a>
+                    </li>
                 </ul>
                 <div class="tab-content" id="myTabContent3">
                     <div class="tab-pane fade active show" id="additional" role="tabpanel"
@@ -411,6 +418,54 @@
                     @endif
                     <div class="tab-pane fade" id="map-tab-pane" role="tabpanel" aria-labelledby="map-tab">
                         <div id="map" style="height: 300px; width: 100%; border: 1px solid #ccc;"></div>
+                    </div>
+                    <div class="tab-pane fade" id="latest-insightes" role="tabpanel"
+                         aria-labelledby="latest-insightes-tab">
+                        <div class="max-w-6xl mx-auto">
+                            <div class="grid gap-8 md:grid-cols-2">
+                                @forelse($parks['rss_data'] as $item)
+                                    <div class="reviews-wrapper mb-3">
+                                        <div class="p-2 flex flex-col flex-1">
+                                            <!-- Title -->
+                                            <h3 class="text-base font-semibold text-gray-800 leading-snug mb-2">
+                                                <a href="{{ $item['link'] }}" target="_blank" class="hover:text-blue-700 hover:underline">
+                                                    {{ $item['title'] }}
+                                                </a>
+                                            </h3>
+                        
+                                            <!-- Meta Info -->
+                                            <div class="text-xs text-gray-500 mb-3 flex items-center space-x-2">
+                                                <span>By <span class="font-medium text-gray-700">{{ $item['author'] ?? 'Unknown' }}</span></span>
+                                                <span>&bull;</span>
+                                                <span>{{ \Carbon\Carbon::parse($item['pubDate'])->format('d M Y') }}</span>
+                                            </div>
+                        
+                                            <!-- Description -->
+                                            <div class="text-sm text-gray-700 mb-5 leading-relaxed">
+                                                {!! Str::limit(strip_tags($item['description']), 150, '...') !!}
+                                                <a href="{{ $item['link'] }}" target="_blank"
+                                                   class="inline-block bg-blue-600 text-muted text-sm font-medium rounded hover:bg-blue-700 transition duration-200">
+                                                    Read More
+                                                </a>
+                                            </div>
+                        
+                                            <!-- Buttons -->
+                                            <div class="mt-auto flex flex-wrap gap-2">
+                                                @if($item['comments'])
+                                                    <a href="{{ $item['comments'] }}" target="_blank"
+                                                       class="inline-block px-2 py-2 border border-blue-600 text-blue-600 text-sm font-medium rounded hover:bg-blue-50 transition duration-200">
+                                                        Read Comments
+                                                    </a>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                @empty
+                                    <div class="col-span-2 text-center text-gray-500 text-sm">No items found in the feed.</div>
+                                @endforelse
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
