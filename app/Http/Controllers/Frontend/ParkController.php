@@ -63,7 +63,8 @@ class ParkController extends Controller
         
         return view('frontend.pages.park.show', [
             'parks' => $data['park'],
-            'reviews' => $data['reviews']
+            'reviews' => $data['reviews'],
+            'approvedClaim' => $data['approvedClaim'] ?? null,
         ]);
     }
     
