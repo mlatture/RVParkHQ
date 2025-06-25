@@ -33,6 +33,11 @@ class Park extends Model
         if (!empty($filters['states'])) {
             $query->where('state', 'like', "%{$filters['states']}%");
         }
+        
+        if (!empty($filters['global_search'])) {
+            $global_search = ucwords(str_replace('-', ' ', $filters['global_search']));
+            $query->where('name', 'like', "%{$global_search}%");
+        }
 
         return $query;
     }

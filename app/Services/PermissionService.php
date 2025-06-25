@@ -144,6 +144,15 @@ class PermissionService
                     'claim_park.delete',
                 ],
             ],
+            [
+                'group_name' => 'blogs',
+                'permissions' => [
+                    'blogs.view',
+                    'blogs.create',
+                    'blogs.edit',
+                    'blogs.delete',
+                ],
+            ],
         ];
 
         return $permissions;

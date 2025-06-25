@@ -12,6 +12,7 @@ use App\Http\Controllers\Backend\RolesController;
 use App\Http\Controllers\Backend\UsersController;
 use App\Http\Controllers\Backend\ClaimController;
 use App\Http\Controllers\Backend\SettingsController;
+use App\Http\Controllers\Backend\BlogController;
 use App\Http\Controllers\Backend\ProfilesController;
 use App\Http\Controllers\Backend\TranslationController;
 use App\Http\Controllers\Backend\UserLoginAsController;
@@ -98,6 +99,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth']], 
     Route::get('/claim/{id}', [ClaimController::class, 'edit'])->name('claim.edit');
     Route::put('/claim/{id}', [ClaimController::class, 'update'])->name('claim.update');
     Route::delete('/claim/{id}', [ClaimController::class, 'destroy'])->name('claim.destroy');
+    
+    Route::resource('blogs', BlogController::class);
 });
 
 /**

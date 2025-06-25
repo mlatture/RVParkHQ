@@ -125,7 +125,7 @@
     .amenity-icon-img:hover {
         transform: scale(1.05);
     }
-    
+
     .claim-section-title {
         font-size: 1.6rem;
         font-weight: 700;
@@ -196,33 +196,33 @@
                             {{ ucfirst(request()->segment(2)) }}
                         </a>
                     </li>
-                    
+
                     @if(!empty($parks->country))
-                    <li>
-                        <a href="{{ route('rv-park.park', ['country' => $parks->country]) }}">
-                            {{ Str::slug($parks->country) }}
-                        </a>
-                    </li>
+                        <li>
+                            <a href="{{ route('rv-park.park', ['country' => $parks->country]) }}">
+                                {{ Str::slug($parks->country) }}
+                            </a>
+                        </li>
                     @endif
-                    
+
                     @if(!empty($parks->state))
-                    <li>
-                        <a href="{{ route('rv-park.park', ['state' => $parks->state]) }}">
-                            {{ Str::slug($parks->state) }}
-                        </a>
-                    </li>
+                        <li>
+                            <a href="{{ route('rv-park.park', ['state' => $parks->state]) }}">
+                                {{ Str::slug($parks->state) }}
+                            </a>
+                        </li>
                     @endif
-                    
+
                     @if(!empty($parks->city))
-                    <li>
-                        <a href="{{ route('rv-park.park', ['city' => $parks->city]) }}">
-                            {{ Str::slug($parks->city) }}
-                        </a>
-                    </li>
+                        <li>
+                            <a href="{{ route('rv-park.park', ['city' => $parks->city]) }}">
+                                {{ Str::slug($parks->city) }}
+                            </a>
+                        </li>
                     @endif
-                    
+
                     <li>{{  Str::slug($parks->name) }}</li>
-                    
+
                 </ul>
             </div>
         </div>
@@ -311,7 +311,7 @@
                         </a>
                     </li>
 
-                    @if($parks->amenities->count() > 0)
+                    @if($parks->amenities->count() > 0 || !empty($approvedClaim))
                         <li class="nav-item">
                             <a class="nav-link" id="amenities-tab" data-bs-toggle="tab" href="#amenities" role="tab"
                                aria-controls="amenities" aria-selected="true">
@@ -328,13 +328,6 @@
                             </a>
                         </li>
                     @endif
-                    <li class="nav-item">
-                        <a class="nav-link" id="latest-insightes-tab" data-bs-toggle="tab" href="#latest-insightes"
-                           role="tab"
-                           aria-controls="latest-insightes" aria-selected="true">
-                            <i class="fa fa-info"></i>Latest Insights
-                        </a>
-                    </li>
                 </ul>
                 <div class="tab-content" id="myTabContent3">
                     <div class="tab-pane fade active show" id="additional" role="tabpanel"
@@ -399,7 +392,8 @@
                                             </div>
                                             <div>
                                                 <h6 class="mb-1">{{ $review->name }}</h6>
-                                                <div class="review-meta mb-1">Posted on {{ $review->created_at->format('F j, Y \\a\\t g:i A') }}</div>
+                                                <div class="review-meta mb-1">Posted
+                                                    on {{ $review->created_at->format('F j, Y \\a\\t g:i A') }}</div>
                                                 <div class="star-rating mb-2 d-inline-block" style="direction: ltr;">
                                                     @for ($i = 1; $i <= 5; $i++)
                                                         @if ($i <= $review->rating)
@@ -421,8 +415,9 @@
                         </div>
 
                     </div>
-                    @if($parks->amenities->count() > 0)
-                        <div class="tab-pane fade" id="amenities" role="tabpanel" aria-labelledby="amenities-tab">
+
+                    <div class="tab-pane fade" id="amenities" role="tabpanel" aria-labelledby="amenities-tab">
+                        @if($parks->amenities->count() > 0)
                             @if ($parks->amenities)
                                 @foreach($parks->amenities->groupBy('category') as $category => $items)
                                     <div class="mb-4 shadow p-3 rounded reviews-wrapper">
@@ -465,143 +460,101 @@
                                     </div>
                                 @endforeach
                             @endif
-                            @if(!empty($approvedClaim))
-                            {{-- RV & Tent Site Inventory --}}
-                                <h3 class="claim-section-title">RV & Tent Site Inventory</h3>
-                                <div class="row">
-                                    @php
-                                        $rvTentItems = [
-                                            '50 Amp Full Hookup Sites' => $approvedClaim->sites_50amp_full ?? '-',
-                                            '30 Amp Full Hookup Sites' => $approvedClaim->sites_30amp_full ?? '-',
-                                            '30 Amp Water & Electric Sites' => $approvedClaim->sites_30amp_water_electric ?? '-',
-                                            '50 Amp Water & Electric Sites' => $approvedClaim->sites_50amp_water_electric ?? '-',
-                                            '30 Amp Electric Only Sites' => $approvedClaim->sites_30amp_electric ?? '-',
-                                            '50 Amp Electric Only Sites' => $approvedClaim->sites_50amp_electric ?? '-',
-                                            'No Hookup RV Sites (Dry Camping)' => $approvedClaim->sites_dry_camping ?? '-',
-                                            'Tent Sites (with utilities)' => $approvedClaim->tent_sites_utilities ?? '-',
-                                            'Tent Sites (primitive)' => $approvedClaim->tent_sites_primitive ?? '-',
-                                            'Seasonal RV Sites' => $approvedClaim->seasonal_sites ?? '-',
-                                            'Group Campsites' => $approvedClaim->group_campsites ?? '-',
-                                        ];
-                                    @endphp
+                        @endif
+                        @if(!empty($approvedClaim))
 
-                                    @foreach($rvTentItems as $label => $value)
-                                        <div class="col-md-4 mb-4">
-                                            <div class="card custom-card h-100">
-                                                <div class="card-body">
-                                                    <h6 class="text-muted">{{ $label }}</h6>
-                                                    <p class="custom-value mb-0">{{ $value }}</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                </div>
 
-                                {{-- Cabins & Rentals --}}
-                                <h3 class="claim-section-title mt-5">Cabins & Rentals</h3>
-                                <div class="row">
-                                    @php
-                                        $cabinItems = [
-                                            'Deluxe Cabins (AC & Bath)' => $approvedClaim->deluxe_cabins ?? '-',
-                                            'Primitive Cabins' => $approvedClaim->primitive_cabins ?? '-',
-                                            'Yurts / Glamping Tents' => $approvedClaim->yurts_glamping ?? '-',
-                                            'Other Rentals (describe)' => $approvedClaim->other_rentals ?? '-',
-                                        ];
-                                    @endphp
+                                <div class="tab-pane fade show active" id="claim-park-info" role="tabpanel" aria-labelledby="claim-park-info-tab">
 
-                                    @foreach($cabinItems as $label => $value)
-                                        <div class="col-md-4 mb-4">
-                                            <div class="card custom-card h-100">
-                                                <div class="card-body">
-                                                    <h6 class="text-muted">{{ $label }}</h6>
-                                                    <p class="custom-value mb-0">{{ $value }}</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                </div>
+                                    {{-- RV & Tent Site Inventory --}}
+                                    <h3 class="claim-section-title">RV & Tent Site Inventory</h3>
+                                    <div class="row">
+                                        @php
+                                            $rvTentItems = [
+                                                '50 Amp Full Hookup Sites' => $approvedClaim->sites_50amp_full ?? '-',
+                                                '30 Amp Full Hookup Sites' => $approvedClaim->sites_30amp_full ?? '-',
+                                                '30 Amp Water & Electric Sites' => $approvedClaim->sites_30amp_water_electric ?? '-',
+                                                '50 Amp Water & Electric Sites' => $approvedClaim->sites_50amp_water_electric ?? '-',
+                                                '30 Amp Electric Only Sites' => $approvedClaim->sites_30amp_electric ?? '-',
+                                                '50 Amp Electric Only Sites' => $approvedClaim->sites_50amp_electric ?? '-',
+                                                'No Hookup RV Sites (Dry Camping)' => $approvedClaim->sites_dry_camping ?? '-',
+                                                'Tent Sites (with utilities)' => $approvedClaim->tent_sites_utilities ?? '-',
+                                                'Tent Sites (primitive)' => $approvedClaim->tent_sites_primitive ?? '-',
+                                                'Seasonal RV Sites' => $approvedClaim->seasonal_sites ?? '-',
+                                                'Group Campsites' => $approvedClaim->group_campsites ?? '-',
+                                            ];
+                                        @endphp
 
-                                {{-- Waterfront & Marina --}}
-                                <h3 class="claim-section-title mt-5">Waterfront & Marina</h3>
-                                <div class="row">
-                                    @php
-                                        $marinaItems = [
-                                            'Boat Slips' => $approvedClaim->boat_slips ?? '-',
-                                            'Canoes / Kayaks for Rent' => $approvedClaim->canoe_kayak_rental ? 'Yes' : 'No',
-                                            'Paddle Boats' => $approvedClaim->paddle_boats ? 'Yes' : 'No',
-                                            'Boat Ramp / Launch' => $approvedClaim->boat_ramp ? 'Yes' : 'No',
-                                            'Fishing Available' => $approvedClaim->fishing_available ? 'Yes' : 'No',
-                                        ];
-                                    @endphp
-
-                                    @foreach($marinaItems as $label => $value)
-                                        <div class="col-md-4 mb-4">
-                                            <div class="card custom-card h-100">
-                                                <div class="card-body">
-                                                    <h6 class="text-muted">{{ $label }}</h6>
-                                                    @if($value === 'Yes' || $value === 'No')
-                                                        <span class="{{ $value == 'Yes' ? 'yes-badge' : 'no-badge' }}">{{ $value }}</span>
-                                                    @else
+                                        @foreach($rvTentItems as $label => $value)
+                                            <div class="col-md-4 mb-4">
+                                                <div class="card custom-card h-100">
+                                                    <div class="card-body">
+                                                        <h6 class="text-muted">{{ $label }}</h6>
                                                         <p class="custom-value mb-0">{{ $value }}</p>
-                                                    @endif
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    @endforeach
+                                        @endforeach
+                                    </div>
+
+                                    {{-- Cabins & Rentals --}}
+                                    <h3 class="claim-section-title mt-5">Cabins & Rentals</h3>
+                                    <div class="row">
+                                        @php
+                                            $cabinItems = [
+                                                'Deluxe Cabins (AC & Bath)' => $approvedClaim->deluxe_cabins ?? '-',
+                                                'Primitive Cabins' => $approvedClaim->primitive_cabins ?? '-',
+                                                'Yurts / Glamping Tents' => $approvedClaim->yurts_glamping ?? '-',
+                                                'Other Rentals (describe)' => $approvedClaim->other_rentals ?? '-',
+                                            ];
+                                        @endphp
+
+                                        @foreach($cabinItems as $label => $value)
+                                            <div class="col-md-4 mb-4">
+                                                <div class="card custom-card h-100">
+                                                    <div class="card-body">
+                                                        <h6 class="text-muted">{{ $label }}</h6>
+                                                        <p class="custom-value mb-0">{{ $value }}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+
+                                    {{-- Waterfront & Marina --}}
+                                    <h3 class="claim-section-title mt-5">Waterfront & Marina</h3>
+                                    <div class="row">
+                                        @php
+                                            $marinaItems = [
+                                                'Boat Slips' => $approvedClaim->boat_slips ?? '-',
+                                                'Canoes / Kayaks for Rent' => $approvedClaim->canoe_kayak_rental ? 'Yes' : 'No',
+                                                'Paddle Boats' => $approvedClaim->paddle_boats ? 'Yes' : 'No',
+                                                'Boat Ramp / Launch' => $approvedClaim->boat_ramp ? 'Yes' : 'No',
+                                                'Fishing Available' => $approvedClaim->fishing_available ? 'Yes' : 'No',
+                                            ];
+                                        @endphp
+
+                                        @foreach($marinaItems as $label => $value)
+                                            <div class="col-md-4 mb-4">
+                                                <div class="card custom-card h-100">
+                                                    <div class="card-body">
+                                                        <h6 class="text-muted">{{ $label }}</h6>
+                                                        @if($value === 'Yes' || $value === 'No')
+                                                            <span class="{{ $value == 'Yes' ? 'yes-badge' : 'no-badge' }}">{{ $value }}</span>
+                                                        @else
+                                                            <p class="custom-value mb-0">{{ $value }}</p>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
                                 </div>
+
                             @endif
-                        </div>
-                    @endif
+                    </div>
                     <div class="tab-pane fade" id="map-tab-pane" role="tabpanel" aria-labelledby="map-tab">
                         <div id="map" style="height: 300px; width: 100%; border: 1px solid #ccc;"></div>
-                    </div>
-                    <div class="tab-pane fade" id="latest-insightes" role="tabpanel"
-                         aria-labelledby="latest-insightes-tab">
-                        <div class="max-w-6xl mx-auto">
-                            <div class="grid gap-8 md:grid-cols-2">
-                                @forelse($parks['rss_data'] as $item)
-                                    <div class="reviews-wrapper mb-3">
-                                        <div class="p-2 flex flex-col flex-1">
-                                            <!-- Title -->
-                                            <h3 class="text-base font-semibold text-gray-800 leading-snug mb-2">
-                                                <a href="{{ $item['link'] }}" target="_blank" class="hover:text-blue-700 hover:underline">
-                                                    {{ $item['title'] }}
-                                                </a>
-                                            </h3>
-                        
-                                            <!-- Meta Info -->
-                                            <div class="text-xs text-gray-500 mb-3 flex items-center space-x-2">
-                                                <span>By <span class="font-medium text-gray-700">{{ $item['author'] ?? 'Unknown' }}</span></span>
-                                                <span>&bull;</span>
-                                                <span>{{ \Carbon\Carbon::parse($item['pubDate'])->format('d M Y') }}</span>
-                                            </div>
-                        
-                                            <!-- Description -->
-                                            <div class="text-sm text-gray-700 mb-5 leading-relaxed">
-                                                {!! Str::limit(strip_tags($item['description']), 150, '...') !!}
-                                                <a href="{{ $item['link'] }}" target="_blank"
-                                                   class="inline-block bg-blue-600 text-muted text-sm font-medium rounded hover:bg-blue-700 transition duration-200">
-                                                    Read More
-                                                </a>
-                                            </div>
-                        
-                                            <!-- Buttons -->
-                                            <div class="mt-auto flex flex-wrap gap-2">
-                                                @if($item['comments'])
-                                                    <a href="{{ $item['comments'] }}" target="_blank"
-                                                       class="inline-block px-2 py-2 border border-blue-600 text-blue-600 text-sm font-medium rounded hover:bg-blue-50 transition duration-200">
-                                                        Read Comments
-                                                    </a>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </div>
-                                @empty
-                                    <div class="col-span-2 text-center text-gray-500 text-sm">No items found in the feed.</div>
-                                @endforelse
-                            </div>
-                        </div>
-
                     </div>
                 </div>
             </div>
@@ -720,7 +673,7 @@
             });
         });
     </script>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {

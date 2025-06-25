@@ -7,13 +7,9 @@
                     <span class="logo-dark">RVParkHQ</span>
                 </a>
             </div>
-            <!--End: Logo-->
-            <!--Navigation Resposnive Trigger-->
             <div id="mainMenu-trigger">
                 <a class="lines-button x"><span class="lines"></span></a>
             </div>
-            <!--end: Navigation Resposnive Trigger-->
-            <!--Navigation-->
             <div id="mainMenu">
                 <div class="container">
                     <nav>
@@ -23,11 +19,14 @@
                             <li><a href="{{ route('rv-park.about') }}">About</a></li>
                             <li><a href="{{ route('rv-park.service') }}">Services</a></li>
                             <li><a href="{{ route('rv-park.contact') }}">Contact</a></li>
+                            <li>
+                                <a id="btn-search" href="#"> <i class="icon-search"></i></a>
+                            </li>
                         </ul>
                     </nav>
                 </div>
             </div>
-            <!--end: Navigation-->
         </div>
     </div>
+    @include('frontend.pages.layouts.partials.search')
 </header>

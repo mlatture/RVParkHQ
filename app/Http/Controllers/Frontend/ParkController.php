@@ -22,7 +22,7 @@ class ParkController extends Controller
 
     public function index(Request $request)
     {
-        $filters = $request->only(['country', 'state', 'city', 'states']);
+        $filters = $request->only(['country', 'state', 'city', 'states', 'global_search']);
         $data['parks'] = $this->parkService->getFilteredParks($filters);
 
         return view('frontend.pages.park.index', $data);

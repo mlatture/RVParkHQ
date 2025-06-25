@@ -21,4 +21,6 @@ Route::name('rv-park.')->group(function () {
     Route::post('/email/subscribe', [SubscriberController::class, 'store'])->name('email.subscribe');
     Route::get('/confirm-email', [SubscriberController::class, 'index'])->name('email-confirm.index');
     Route::post('/confirm-subscribe', [SubscriberController::class, 'conformSubscribe'])->name('confirm-subscribe.store');
+    
+    Route::get('/blogs/{slug}', [\App\Http\Controllers\frontend\BlogController::class, 'show'])->name('blogs.show');
 });
