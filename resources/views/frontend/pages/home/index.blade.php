@@ -33,7 +33,8 @@
                 <div class="slide-captions text-center text-light">
                     <h2 class="text-small">For Campground Owners</h2>
                     <p>Claim your listing, get more bookings, and grow with smart tools</p>
-                    <div><a href="{{ route('rv-park.home') }}" class="btn btn-primary scroll-to">Claim Your Park</a></div>
+                    <div><a href="{{ route('rv-park.suggest.park') }}" class="btn btn-primary scroll-to">Claim Your Park</a>
+                    </div>
                     </span>
                 </div>
             </div>
@@ -48,7 +49,7 @@
             </div>
             <div class="row" data-animate="animate__fadeInUp">
                 <div class="col-lg-12">
-                    <img class="img-fluid" src="{{ asset('assets/images/audio-bg.jpg') }}" alt="Welcome to RV Park">
+                    <img class="img-fluid" src="{{ asset('assets/images/selfipic.png') }}" alt="Welcome to RV Park">
                 </div>
             </div>
         </div>
@@ -58,14 +59,15 @@
             <div class="heading-text heading-section text-center mb-5">
                 <h2 class="fw-bold">What We Do for Campers</h2>
                 <p class="lead text-muted">
-                    Discover amazing places to stay — with powerful tools to help you search, compare, and plan your next adventure.
+                    Discover amazing places to stay — with powerful tools to help you search, compare, and plan your
+                    next adventure.
                 </p>
             </div>
             <div class="row g-4">
                 <!-- Feature Box Start -->
                 <div class="col-md-6 col-lg-4">
                     <div class="bg-white rounded-4 shadow-sm p-4 h-100 text-center">
-                        <div class="fs-2 mb-3">🔍</div>
+                        <div class="fs-2 mb-3"><i class="fas fa-search-location fa-2x text-primary"></i></div>
                         <h5 class="fw-semibold mb-2">Search Made Simple</h5>
                         <p class="text-muted">Filter parks by pet policy, hookups, amenities, RV size, or tent-only options.</p>
                     </div>
@@ -73,7 +75,7 @@
                 <!-- Feature Box -->
                 <div class="col-md-6 col-lg-4">
                     <div class="bg-white rounded-4 shadow-sm p-4 h-100 text-center">
-                        <div class="fs-2 mb-3">🗺</div>
+                        <div class="fs-2 mb-3"><i class="fas fa-map-marked-alt fa-2x text-success"></i></div>
                         <h5 class="fw-semibold mb-2">Browse by State or Region</h5>
                         <p class="text-muted">Explore parks from coast to coast — easily sorted by location.</p>
                     </div>
@@ -81,7 +83,7 @@
                 <!-- Feature Box -->
                 <div class="col-md-6 col-lg-4">
                     <div class="bg-white rounded-4 shadow-sm p-4 h-100 text-center">
-                        <div class="fs-2 mb-3">⭐️</div>
+                        <div class="fs-2 mb-3"><i class="fas fa-star fa-2x text-warning"></i></div>
                         <h5 class="fw-semibold mb-2">Real Reviews & Ratings</h5>
                         <p class="text-muted">Read what other campers are saying before you book your next stay.</p>
                     </div>
@@ -89,7 +91,7 @@
                 <!-- Feature Box -->
                 <div class="col-md-6 col-lg-4">
                     <div class="bg-white rounded-4 shadow-sm p-4 h-100 text-center">
-                        <div class="fs-2 mb-3">📷</div>
+                        <div class="fs-2 mb-3"><i class="fas fa-camera-retro fa-2x text-danger"></i></div>
                         <h5 class="fw-semibold mb-2">Photos You Can Trust</h5>
                         <p class="text-muted">Claimed listings include verified images so you know what to expect.</p>
                     </div>
@@ -97,7 +99,7 @@
                 <!-- Feature Box -->
                 <div class="col-md-6 col-lg-4">
                     <div class="bg-white rounded-4 shadow-sm p-4 h-100 text-center">
-                        <div class="fs-2 mb-3">🧭</div>
+                        <div class="fs-2 mb-3"><i class="fas fa-location-arrow fa-2x text-info"></i></div>
                         <h5 class="fw-semibold mb-2">One-Click Driving Directions</h5>
                         <p class="text-muted">Get directions instantly via Google Maps or Waze — no app login required.</p>
                     </div>
@@ -105,7 +107,7 @@
                 <!-- Feature Box -->
                 <div class="col-md-6 col-lg-4">
                     <div class="bg-white rounded-4 shadow-sm p-4 h-100 text-center">
-                        <div class="fs-2 mb-3">📬</div>
+                        <div class="fs-2 mb-3"><i class="fas fa-envelope-open-text fa-2x text-secondary"></i></div>
                         <h5 class="fw-semibold mb-2">Campground News & Deals</h5>
                         <p class="text-muted">Get updates, travel ideas, and last-minute offers delivered to your inbox.</p>
                     </div>
@@ -131,7 +133,8 @@
                                 <i class="fas fa-chart-line"></i>
                             </div>
                             <h5 class="fw-semibold">Smart Insights Weekly</h5>
-                            <p class="text-muted">Get automatic traffic reports, booking data, and local event alerts emailed every Monday.</p>
+                            <p class="text-muted">Get automatic traffic reports, booking data, and local event alerts
+                                emailed every Monday.</p>
                         </div>
                     </div>
                 </div>
@@ -144,7 +147,8 @@
                                 <i class="fas fa-link"></i>
                             </div>
                             <h5 class="fw-semibold">Boost Visibility with Backlinks</h5>
-                            <p class="text-muted">Add a website link to your listing and get up to 5 photo slots to drive traffic and SEO.</p>
+                            <p class="text-muted">Add a website link to your listing and get up to 5 photo slots to
+                                drive traffic and SEO.</p>
                         </div>
                     </div>
                 </div>
@@ -157,7 +161,8 @@
                                 <i class="fas fa-images"></i>
                             </div>
                             <h5 class="fw-semibold">Showcase Your Park</h5>
-                            <p class="text-muted">Claimed listings include up to 10 photos, event info, and a full park description.</p>
+                            <p class="text-muted">Claimed listings include up to 10 photos, event info, and a full park
+                                description.</p>
                         </div>
                     </div>
                 </div>
@@ -183,7 +188,8 @@
                                 <i class="fas fa-comments"></i>
                             </div>
                             <h5 class="fw-semibold">Get Reviews, Build Trust</h5>
-                            <p class="text-muted">Verified campers can leave reviews — you can respond and feature the best ones.</p>
+                            <p class="text-muted">Verified campers can leave reviews — you can respond and feature the
+                                best ones.</p>
                         </div>
                     </div>
                 </div>
@@ -209,7 +215,8 @@
                                 <i class="fas fa-tools"></i>
                             </div>
                             <h5 class="fw-semibold">Upgrade Anytime</h5>
-                            <p class="text-muted">Use WebDaVinci Flow for premium booking tools, rate optimization, and AI-powered tips.</p>
+                            <p class="text-muted">Use WebDaVinci Flow for premium booking tools, rate optimization, and
+                                AI-powered tips.</p>
                         </div>
                     </div>
                 </div>
@@ -222,7 +229,8 @@
                                 <i class="fas fa-shield-alt"></i>
                             </div>
                             <h5 class="fw-semibold">Secure Claim Process</h5>
-                            <p class="text-muted">Claim your listing instantly if your email matches — or get verified by an admin.</p>
+                            <p class="text-muted">Claim your listing instantly if your email matches — or get verified
+                                by an admin.</p>
                         </div>
                     </div>
                 </div>
@@ -235,7 +243,8 @@
                                 <i class="fas fa-envelope-open-text"></i>
                             </div>
                             <h5 class="fw-semibold">Guest Emails Feature You</h5>
-                            <p class="text-muted">Be featured in Tuesday guest newsletters when you claim your listing. Alert guests of deals.</p>
+                            <p class="text-muted">Be featured in Tuesday guest newsletters when you claim your listing.
+                                Alert guests of deals.</p>
                         </div>
                     </div>
                 </div>
@@ -257,7 +266,8 @@
                             <i class="fas fa-map-marked-alt fa-3x"></i>
                         </div>
                         <div class="counter">
-                            <span data-speed="2000" data-refresh-interval="50" data-to="2312" data-from="1000" data-seperator="true">2312</span>
+                            <span data-speed="2000" data-refresh-interval="50" data-to="2312" data-from="1000"
+                                  data-seperator="true">2312</span>
                         </div>
                         <div class="seperator seperator-small"></div>
                         <p>Campgrounds Indexed</p>
@@ -271,7 +281,8 @@
                             <i class="fas fa-user-check fa-3x"></i>
                         </div>
                         <div class="counter">
-                            <span data-speed="2200" data-refresh-interval="50" data-to="580" data-from="200" data-seperator="true">580</span>
+                            <span data-speed="2200" data-refresh-interval="50" data-to="580" data-from="200"
+                                  data-seperator="true">580</span>
                         </div>
                         <div class="seperator seperator-small"></div>
                         <p>Claimed Parks</p>
@@ -285,7 +296,8 @@
                             <i class="fas fa-star fa-3x"></i>
                         </div>
                         <div class="counter">
-                            <span data-speed="2500" data-refresh-interval="40" data-to="1420" data-from="500" data-seperator="true">1420</span>
+                            <span data-speed="2500" data-refresh-interval="40" data-to="1420" data-from="500"
+                                  data-seperator="true">1420</span>
                         </div>
                         <div class="seperator seperator-small"></div>
                         <p>Verified Reviews Collected</p>
@@ -299,7 +311,8 @@
                             <i class="fas fa-envelope-open-text fa-3x"></i>
                         </div>
                         <div class="counter">
-                            <span data-speed="2700" data-refresh-interval="50" data-to="6005" data-from="1000" data-seperator="true">6005</span>
+                            <span data-speed="2700" data-refresh-interval="50" data-to="6005" data-from="1000"
+                                  data-seperator="true">6005</span>
                         </div>
                         <div class="seperator seperator-small"></div>
                         <p>Guest Emails Delivered</p>
@@ -311,180 +324,129 @@
     </section>
     @if($blogs->count() > 0)
         <section class="content background-grey">
-        <div class="container">
-            <div class="heading-text heading-section">
-                <h2>From the Campfire to the Control Room</h2>
-                <span class="lead">
+            <div class="container">
+                <div class="heading-text heading-section">
+                    <h2>From the Campfire to the Control Room</h2>
+                    <span class="lead">
                 Travel stories, campground reviews, and marketing tips for owners — updated weekly.
             </span>
-            </div>
+                </div>
 
-            <div id="blog" class="grid-layout post-3-columns m-b-30" data-item="post-item">
-                @foreach($blogs as $blog)
-                    <div class="post-item border">
-                        <div class="post-item-wrap">
-                            <div class="post-image">
-                                <a href="{{ route('rv-park.blogs.show', $blog->slug) }}">
-                                    <img alt="{{ $blog->title }}" src="{{ asset('storage/' . $blog->thumbnail) }}">
-                                </a>
-                                <span class="post-meta-category">
+                <div id="blog" class="grid-layout post-3-columns m-b-30" data-item="post-item">
+                    @foreach($blogs as $blog)
+                        <div class="post-item border">
+                            <div class="post-item-wrap">
+                                <div class="post-image">
+                                    <a href="{{ route('rv-park.blogs.show', $blog->slug) }}">
+                                        <img alt="{{ $blog->title }}" src="{{ asset('storage/' . $blog->thumbnail) }}">
+                                    </a>
+                                    <span class="post-meta-category">
                                 <a href="#">{{ ucfirst($blog->status) }}</a>
                             </span>
-                            </div>
-                            <div class="post-item-description">
+                                </div>
+                                <div class="post-item-description">
                             <span class="post-meta-date">
                                 <i class="fa fa-calendar-o"></i>
                                 {{ \Carbon\Carbon::parse($blog->published_at)->format('M d, Y') }}
                             </span>
-                                <span class="post-meta-comments">
+                                    <span class="post-meta-comments">
                                 <i class="fa fa-user"></i>
                                 {{ $blog->user->name ?? 'Admin' }}
                             </span>
-                                <h2>
-                                    <a href="{{ route('rv-park.blogs.show', $blog->slug) }}">
-                                        {{ $blog->title }}
+                                    <h2>
+                                        <a href="{{ route('rv-park.blogs.show', $blog->slug) }}">
+                                            {{ $blog->title }}
+                                        </a>
+                                    </h2>
+                                    <p>{{ Str::limit($blog->excerpt, 150) }}</p>
+                                    <a href="{{ route('rv-park.blogs.show', $blog->slug) }}" class="item-link">
+                                        Read More <i class="icon-chevron-right"></i>
                                     </a>
-                                </h2>
-                                <p>{{ Str::limit($blog->excerpt, 150) }}</p>
-                                <a href="{{ route('rv-park.blogs.show', $blog->slug) }}" class="item-link">
-                                    Read More <i class="icon-chevron-right"></i>
-                                </a>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </section>
+    @endif
+    <section class="p-t-60 p-b-60" style="background: linear-gradient(135deg, #f4f7fa, #ffffff);">
+        <div class="container">
+            <div class="heading-text heading-section text-center">
+                <h4 class="text-dark mb-2">Trusted by Companies and Parks That Care About Growth</h4>
+            </div>
+            <div class="heading-text heading-section text-center">
+                <p class="lead text-muted">Trusted by Companies and Parks That Care About Growth</p>
+            </div>
+
+            <div class="row mt-5 justify-content-center">
+                <!-- Card 1 -->
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100 border-0 shadow-sm p-4 text-center bg-white rounded-4 transition-3d-hover">
+                        <div class="icon mb-3 display-4">🏕️</div>
+                        <h5 class="fw-bold text-dark">Kayuta Lake Campground</h5>
+                        <p class="text-muted small mb-0">Our first full-service client</p>
+                    </div>
+                </div>
+                <!-- Card 2 -->
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100 border-0 shadow-sm p-4 text-center bg-white rounded-4 transition-3d-hover">
+                        <div class="icon mb-3 display-4">🛠️</div>
+                        <h5 class="fw-bold text-dark">WebDaVinci</h5>
+                        <p class="text-muted small mb-0">Platform & Software Development</p>
+                    </div>
+                </div>
+                <!-- Card 3 -->
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100 border-0 shadow-sm p-4 text-center bg-white rounded-4 transition-3d-hover">
+                        <div class="icon mb-3 display-4">🌐</div>
+                        <h5 class="fw-bold text-dark">Sola Digital</h5>
+                        <p class="text-muted small mb-0">Technology Integration Partner</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="background-grey">
+        <div class="container">
+            <div class="heading-text heading-section text-center">
+                <h2>MEET OUR TEAM</h2>
+                <p>RVParkHQ is powered by WebDaVinci - a distributed team of developers, designers, and campground
+                    marketers building tools that help parks thrive.</p>
+            </div>
+
+            <div class="row team-members">
+                @foreach($team as $member)
+                    <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="team-member">
+                            <div class="team-image position-relative">
+                                <img src="{{ asset( $member['image']) }}" class="img-fluid rounded"
+                                     alt="{{ $member['name'] }}">
+                                <span class="flag-badge">{{ $member['flag'] }}</span>
+                            </div>
+                            <div class="team-desc text-center">
+                                <h4>{{ $member['name'] }}</h4>
+                                <span>{{ $member['role'] }}</span>
+                                <p>{{ $member['country'] }}</p>
+                                <div class="align-center mt-2">
+                                    <a class="btn btn-xs btn-slide btn-light" href="mailto:{{ $member['email'] }}">
+                                        <i class="icon-mail"></i>
+                                        <span>Email</span>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 @endforeach
             </div>
-        </div>
-    </section>
-    @endif
-    <section class="background-grey">
-        <div class="container">
-            <div class="heading-text heading-section text-center">
-                <h2>MEET OUR TEAM</h2>
-                <p>Lorem ipsum dolor sit amet, consecte adipiscing elit. Suspendisse condimentum porttitor cursumus.
-                </p>
-            </div>
-            <div class="row team-members">
-                <div class="col-lg-3">
-                    <div class="team-member">
-                        <div class="team-image">
-                            <img src="assets/images/team/6.jpg">
-                        </div>
-                        <div class="team-desc">
-                            <h3>Alea Smith</h3>
-                            <span>Software Developer</span>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing tristique hendrerit laoreet. </p>
-                            <div class="align-center">
-                                <a class="btn btn-xs btn-slide btn-light" href="#">
-                                    <i class="fab fa-facebook-f"></i>
-                                    <span>Facebook</span>
-                                </a>
-                                <a class="btn btn-xs btn-slide btn-light" href="#" data-width="100">
-                                    <i class="fab fa-twitter"></i>
-                                    <span>Twitter</span>
-                                </a>
-                                <a class="btn btn-xs btn-slide btn-light" href="#" data-width="118">
-                                    <i class="fab fa-instagram"></i>
-                                    <span>Instagram</span>
-                                </a>
-                                <a class="btn btn-xs btn-slide btn-light" href="mailto:#" data-width="80">
-                                    <i class="icon-mail"></i>
-                                    <span>Mail</span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="team-member">
-                        <div class="team-image">
-                            <img src="assets/images/team/7.jpg">
-                        </div>
-                        <div class="team-desc">
-                            <h3>Ariol Doe</h3>
-                            <span>Software Developer</span>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing tristique hendrerit laoreet. </p>
-                            <div class="align-center">
-                                <a class="btn btn-xs btn-slide btn-light" href="#">
-                                    <i class="fab fa-facebook-f"></i>
-                                    <span>Facebook</span>
-                                </a>
-                                <a class="btn btn-xs btn-slide btn-light" href="#" data-width="100">
-                                    <i class="fab fa-twitter"></i>
-                                    <span>Twitter</span>
-                                </a>
-                                <a class="btn btn-xs btn-slide btn-light" href="#" data-width="118">
-                                    <i class="fab fa-instagram"></i>
-                                    <span>Instagram</span>
-                                </a>
-                                <a class="btn btn-xs btn-slide btn-light" href="mailto:#" data-width="80">
-                                    <i class="icon-mail"></i>
-                                    <span>Mail</span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="team-member">
-                        <div class="team-image">
-                            <img src="assets/images/team/8.jpg">
-                        </div>
-                        <div class="team-desc">
-                            <h3>Emma Ross</h3>
-                            <span>Software Developer</span>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing tristique hendrerit laoreet. </p>
-                            <div class="align-center">
-                                <a class="btn btn-xs btn-slide btn-light" href="#">
-                                    <i class="fab fa-facebook-f"></i>
-                                    <span>Facebook</span>
-                                </a>
-                                <a class="btn btn-xs btn-slide btn-light" href="#" data-width="100">
-                                    <i class="fab fa-twitter"></i>
-                                    <span>Twitter</span>
-                                </a>
-                                <a class="btn btn-xs btn-slide btn-light" href="#" data-width="118">
-                                    <i class="fab fa-instagram"></i>
-                                    <span>Instagram</span>
-                                </a>
-                                <a class="btn btn-xs btn-slide btn-light" href="mailto:#" data-width="80">
-                                    <i class="icon-mail"></i>
-                                    <span>Mail</span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="team-member">
-                        <div class="team-image">
-                            <img src="assets/images/team/9.jpg">
-                        </div>
-                        <div class="team-desc">
-                            <h3>Victor Loda</h3>
-                            <span>Software Developer</span>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing tristique hendrerit laoreet. </p>
-                            <div class="align-center">
-                                <a class="btn btn-xs btn-slide btn-light" href="#">
-                                    <i class="fab fa-facebook-f"></i>
-                                    <span>Facebook</span>
-                                </a>
-                                <a class="btn btn-xs btn-slide btn-light" href="#" data-width="100">
-                                    <i class="fab fa-twitter"></i>
-                                    <span>Twitter</span>
-                                </a>
-                                <a class="btn btn-xs btn-slide btn-light" href="#" data-width="118">
-                                    <i class="fab fa-instagram"></i>
-                                    <span>Instagram</span>
-                                </a>
-                                <a class="btn btn-xs btn-slide btn-light" href="mailto:#" data-width="80">
-                                    <i class="icon-mail"></i>
-                                    <span>Mail</span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
+            <!-- Final Note -->
+            <div class="text-center mt-5">
+                <h5 class="text-muted">
+                    Need help claiming your park or updating your listing? Reach out to any of our Partner Success team
+                    members.
+                </h5>
             </div>
         </div>
     </section>

@@ -9,7 +9,6 @@ use App\Models\OverPass;
 use App\Models\Park;
 use App\Models\ClaimPark;
 use App\Models\Amenity;
-use App\Models\ParkEditRequest;
 use App\Services\OpenAIService;
 use App\Services\ParkService;
 use Illuminate\Http\Request;
@@ -92,13 +91,14 @@ class ParkController extends Controller
         $park = Park::with('amenities')->findOrFail($id);
         $user = auth()->user();
         if (!$user->hasRole('Superadmin')) {
-            $hasApprovedRequest = ParkEditRequest::where('park_id', $park->id)
-                ->where('owner_id', $user->id)
+            $hasClaimedPark = ClaimPark::where('park_id', $park->id)
+                ->where('user_id', $user->id)
                 ->where('status', 'approved')
                 ->exists();
-
-            if (!$hasApprovedRequest) {
-                return redirect()->route('admin.parks.index')->with('error', 'You do not have permission to edit this park.');
+                
+            if (!$hasClaimedPark) {
+                return redirect()->route('admin.parks.index')
+                    ->with('error', 'Unauthorized access. You do not have permission to access this park.');
             }
         }
         $amenities = Amenity::select('id', 'amenity', 'category', 'blackicon', 'whiteicon')->get();

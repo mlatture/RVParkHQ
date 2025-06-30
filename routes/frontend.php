@@ -23,4 +23,8 @@ Route::name('rv-park.')->group(function () {
     Route::post('/confirm-subscribe', [SubscriberController::class, 'conformSubscribe'])->name('confirm-subscribe.store');
     
     Route::get('/blogs/{slug}', [\App\Http\Controllers\frontend\BlogController::class, 'show'])->name('blogs.show');
+    Route::get('/blogs', [\App\Http\Controllers\frontend\BlogController::class, 'index'])->name('blogs.index');
+
+    Route::get('/suggest-park', [\App\Http\Controllers\Frontend\SuggestController::class, 'index'])->name('suggest.park');
+    Route::post('/suggest-park', [\App\Http\Controllers\Frontend\SuggestController::class, 'store'])->name('suggest.park.store');
 });

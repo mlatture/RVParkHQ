@@ -122,12 +122,12 @@ class PermissionService
                 ],
             ],
             [
-                'group_name' => 'park-request',
+                'group_name' => 'suggest-park',
                 'permissions' => [
-                    'park-request.view',
-                    'park-request.create',
-                    'park-request.edit',
-                    'park-request.delete',
+                    'suggest-park.view',
+                    'suggest-park.create',
+                    'suggest-park.edit',
+                    'suggest-park.delete',
                 ],
             ],
             [

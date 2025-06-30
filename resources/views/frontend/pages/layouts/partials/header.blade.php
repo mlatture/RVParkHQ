@@ -17,6 +17,7 @@
                             <li><a href="{{ route('rv-park.home') }}">Home</a></li>
                             <li><a href="{{ route('rv-park.park') }}">Parks</a></li>
                             <li><a href="{{ route('rv-park.about') }}">About</a></li>
+                            <li><a href="{{ route('rv-park.blogs.index') }}">Blogs</a></li>
                             <li><a href="{{ route('rv-park.service') }}">Services</a></li>
                             <li><a href="{{ route('rv-park.contact') }}">Contact</a></li>
                             <li>

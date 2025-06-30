@@ -116,6 +116,7 @@
                             <li><a href="{{ route('rv-park.home') }}">Home</a></li>
                             <li><a href="{{ route('rv-park.park') }}">Parks</a></li>
                             <li><a href="{{ route('rv-park.about') }}">About</a></li>
+                            <li><a href="{{ route('rv-park.blogs.index') }}">Blogs</a></li>
                             <li><a href="{{ route('rv-park.service') }}">Services</a></li>
                             <li><a href="{{ route('rv-park.contact') }}">Contact</a></li>
                         </ul>
@@ -127,7 +128,7 @@
                         <p class="mb-3 text-white">Join our mailing list for top camping tips, exclusive discounts, and nearby park alerts.</p>
                         <form class="footer-subscribe d-flex flex-wrap" method="POST" action="{{ route('rv-park.email.subscribe') }}">
                             @csrf
-                            <input type="email" name="email" placeholder="Enter your email" required />
+                            <input aria-label="" type="email" name="email" placeholder="Enter your email" required />
                             <button type="submit">Subscribe</button>
                         </form>
                     </div>

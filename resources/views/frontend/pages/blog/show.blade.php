@@ -57,7 +57,7 @@
         <div class="container text-center">
             <h3 class="fw-bold">Enjoyed this post?</h3>
             <p class="mb-4">Check out more insights, guides, and stories on our blog.</p>
-            <a href="{{ route('rv-park.home') }}" class="btn btn-primary px-4 py-2">Explore More Blogs</a>
+            <a href="{{ route('rv-park.blogs.index') }}" class="btn btn-primary px-4 py-2">Explore More Blogs</a>
         </div>
     </section>
 @endsection

@@ -18,7 +18,7 @@ use App\Http\Controllers\Backend\TranslationController;
 use App\Http\Controllers\Backend\UserLoginAsController;
 use App\Http\Controllers\Backend\LocaleController;
 use App\Http\Controllers\Backend\AmenityController;
-use App\Http\Controllers\Backend\ParkEditRequestController;
+use App\Http\Controllers\Backend\SuggestController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -87,9 +87,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth']], 
 
     Route::resource('amenities', AmenityController::class);
 
-    Route::resource('park-request', ParkEditRequestController::class);
+    Route::resource('suggest-park', SuggestController::class);
 
-    Route::post('park-edit-requests/{park}/suggest', [ParkEditRequestController::class, 'suggest'])->name('park_edit_requests.suggest');
+    Route::post('park-edit-requests/{park}/suggest', [SuggestController::class, 'suggest'])->name('park_edit_requests.suggest');
+    Route::get('suggestion', [SuggestController::class, 'suggest'])->name('suggest.parks');
     Route::get('/subscribers', [\App\Http\Controllers\Backend\SubscriberController::class, 'index'])->name('subscribers.index');
 
     Route::get('/claim-park/{id}', [ParkController::class, 'applyClamPark'])->name('claim.park.apply');

@@ -21,7 +21,6 @@
 <body>
 
 <div class="body-inner">
-    @include('frontend.pages.layouts.partials.header')
     @if(session('success'))
         <script>
             Swal.fire({
@@ -34,6 +33,7 @@
             });
         </script>
     @endif
+    @include('frontend.pages.layouts.partials.header')
     @yield('content')
     @include('frontend.pages.layouts.partials.footer')
 </div>
