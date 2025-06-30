@@ -19,7 +19,7 @@ class UserSeeder extends Seeder
         User::insert([
             [
                 'name' => 'Super Admin',
-                'email' => 'superadmin@example.com',
+                'email' => 'mark@rvparkhq.com',
                 'username' => 'superadmin',
                 'type' => 'admin',
                 'password' => Hash::make('12345678'),
