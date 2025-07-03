@@ -192,36 +192,14 @@
                 <ul>
                     <li>{{ request()->segment(1) }}</li>
                     <li>
-                        <a href="{{ route('rv-park.park') }}">
-                            {{ ucfirst(request()->segment(2)) }}
+                        <a href="{{ route('rv-park.all-parks') }}">
+                            {{request()->segment(2) }}
                         </a>
                     </li>
 
-                    @if(!empty($parks->country))
-                        <li>
-                            <a href="{{ route('rv-park.park', ['country' => $parks->country]) }}">
-                                {{ Str::slug($parks->country) }}
-                            </a>
-                        </li>
-                    @endif
-
-                    @if(!empty($parks->state))
-                        <li>
-                            <a href="{{ route('rv-park.park', ['state' => $parks->state]) }}">
-                                {{ Str::slug($parks->state) }}
-                            </a>
-                        </li>
-                    @endif
-
-                    @if(!empty($parks->city))
-                        <li>
-                            <a href="{{ route('rv-park.park', ['city' => $parks->city]) }}">
-                                {{ Str::slug($parks->city) }}
-                            </a>
-                        </li>
-                    @endif
-
-                    <li>{{  Str::slug($parks->name) }}</li>
+                    <li>{{ request()->segment(3) }}</li>
+                   
+                    <li class="active">{{  Str::slug($parks->name) }}</li>
 
                 </ul>
             </div>

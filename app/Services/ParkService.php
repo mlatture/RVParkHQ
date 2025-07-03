@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Models\Amenity;
 use App\Models\Park;
 use App\Models\Review;
 
@@ -54,6 +55,20 @@ class ParkService
         return [
             'parks' => Park::query()->filter($filters)->paginate($perPage)->withQueryString(),
             'states' => Park::select('state')->distinct()->orderBy('state')->get(),
+            'amenities' => Amenity::select('id', 'amenity', 'category', 'blackicon', 'whiteicon')->get(),
+            'siteFields' => [
+                'sites_50amp_full' => '50 Amp Full Hookup Sites',
+                'sites_30amp_full' => '30 Amp Full Hookup Sites',
+                'sites_30amp_water_electric' => '30 Amp Water & Electric Sites',
+                'sites_50amp_water_electric' => '50 Amp Water & Electric Sites',
+                'sites_30amp_electric' => '30 Amp Electric Only Sites',
+                'sites_50amp_electric' => '50 Amp Electric Only Sites',
+                'sites_dry_camping' => 'No Hookup RV Sites (Dry Camping)',
+                'tent_sites_utilities' => 'Tent Sites (with utilities)',
+                'tent_sites_primitive' => 'Tent Sites (primitive)',
+                'seasonal_sites' => 'Seasonal RV Sites',
+                'group_campsites' => 'Group Campsites',
+            ],
         ];
     }
 }

@@ -22,9 +22,13 @@ class ParkController extends Controller
 
     public function index(Request $request)
     {
-        $filters = $request->only(['country', 'state', 'city', 'states', 'global_search']);
-        $data['parks'] = $this->parkService->getFilteredParks($filters);
-
+        if(!empty($request->segment('4'))) {
+            $filters['state'] = $request->segment('4');
+            $data['parks'] = $this->parkService->getFilteredParks($filters);    
+        } else {
+            $filters = $request->only(['country', 'state', 'city', 'states', 'global_search']);
+            $data['parks'] = $this->parkService->getFilteredParks($filters);   
+        }
         return view('frontend.pages.park.index', $data);
     }
 
@@ -81,5 +85,11 @@ class ParkController extends Controller
             'park_id' => $topParkReview->park_id,
             'date' => now(),
         ]);
+    }
+    
+    public function parkCountry()
+    {
+        $states = Park::select('state', 'color')->distinct()->orderBy('state')->get();
+        return view('frontend.pages.park.state', compact('states'));
     }
 }

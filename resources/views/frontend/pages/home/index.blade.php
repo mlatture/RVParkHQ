@@ -2,45 +2,54 @@
 
 @section('content')
     <div id="slider" class="inspiro-slider slider-fullscreen dots-creative" data-fade="true">
+        
+        <!-- SLIDE 1 -->
         <div class="slide kenburns" data-bg-video="assets/video/explore.mp4">
             <div class="bg-overlay"></div>
             <div class="container">
                 <div class="slide-captions text-center text-light">
-                    <h1 data-caption-animate="zoom-out">WELCOME TO THE RV Park</h1>
-                    {{--                    <p>Say hello to the smartest and most flexible bootstrap template. Polo is an powerful template that can build any type of websites, and quite possibly the only one you will ever need.</p>--}}
-                    <div><a href="{{ route('rv-park.home') }}" class="btn btn-primary scroll-to">Explore more</a></div>
-                    </span>
+                    <h2 data-caption-animate="zoom-out">Find the Perfect Campground for Your Next Adventure.</h2>
+                    <p class="text-small">From rustic sites to resort-style RV parks -  we’ve got you covered.</p>
+                    <div>
+                        <a href="{{ route('rv-park.home') }}" class="btn btn-primary scroll-to">Start Your Search</a>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="slide" data-bg-video="assets/video/pexels-waves.mp4">
+        <!-- SLIDE 2 -->
+        <div class="slide" data-bg-video="assets/video/pexels-waves.mp4"></div>
+
+        <!-- SLIDE 3 -->
+        <div class="slide kenburns" data-bg-video="assets/video/explore.mp4">
             <div class="bg-overlay"></div>
             <div class="container">
-                <div class="slide-captions text-start text-light">
-                    <!-- Captions -->
-                    <h1>220+ Parks</h1>
-                    <p class="text-small">WELCOME TO THE RV Park</p>
-                    <div><a href="{{ route('rv-park.home') }}" class="btn btn-primary scroll-to">Explore more</a></div>
-                    <!-- end: Captions -->
+                <div class="slide-captions text-center text-light">
+                    <h1>Explore 10+ Campgrounds Across the USA</h1>
+                    <p class="text-small">Pet-friendly, big-rig ready, tent-only, and everything in between</p>
+                    <div>
+                        <a href="{{ route('rv-park.park-country') }}" class="btn btn-primary scroll-to">Browse by State</a>
+                    </div>
                 </div>
             </div>
         </div>
-
+        
+        <!-- SLIDE 4 -->
         <div class="slide kenburns" data-bg-video="assets/video/explore.mp4">
             <div class="bg-overlay"></div>
             <div class="container">
                 <div class="slide-captions text-center text-light">
                     <h2 class="text-small">For Campground Owners</h2>
                     <p>Claim your listing, get more bookings, and grow with smart tools</p>
-                    <div><a href="{{ route('rv-park.suggest.park') }}" class="btn btn-primary scroll-to">Claim Your Park</a>
+                    <div>
+                        <a href="{{ route('rv-park.suggest.park') }}" class="btn btn-primary scroll-to">Claim Your Park</a>
                     </div>
-                    </span>
                 </div>
             </div>
         </div>
         <!-- end: Slide 2 -->
     </div>
+    
     <section id="welcome" class="p-b-0">
         <div class="container">
             <div class="heading-text heading-section text-center m-b-40" data-animate="animate__fadeInUp">
@@ -404,49 +413,6 @@
                         <p class="text-muted small mb-0">Technology Integration Partner</p>
                     </div>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="background-grey">
-        <div class="container">
-            <div class="heading-text heading-section text-center">
-                <h2>MEET OUR TEAM</h2>
-                <p>RVParkHQ is powered by WebDaVinci - a distributed team of developers, designers, and campground
-                    marketers building tools that help parks thrive.</p>
-            </div>
-
-            <div class="row team-members">
-                @foreach($team as $member)
-                    <div class="col-lg-3 col-md-6 mb-4">
-                        <div class="team-member">
-                            <div class="team-image position-relative">
-                                <img src="{{ asset( $member['image']) }}" class="img-fluid rounded"
-                                     alt="{{ $member['name'] }}">
-                                <span class="flag-badge">{{ $member['flag'] }}</span>
-                            </div>
-                            <div class="team-desc text-center">
-                                <h4>{{ $member['name'] }}</h4>
-                                <span>{{ $member['role'] }}</span>
-                                <p>{{ $member['country'] }}</p>
-                                <div class="align-center mt-2">
-                                    <a class="btn btn-xs btn-slide btn-light" href="mailto:{{ $member['email'] }}">
-                                        <i class="icon-mail"></i>
-                                        <span>Email</span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-
-            <!-- Final Note -->
-            <div class="text-center mt-5">
-                <h5 class="text-muted">
-                    Need help claiming your park or updating your listing? Reach out to any of our Partner Success team
-                    members.
-                </h5>
             </div>
         </div>
     </section>

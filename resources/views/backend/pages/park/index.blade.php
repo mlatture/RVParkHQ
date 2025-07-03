@@ -62,6 +62,9 @@
                             <th class="p-2 bg-gray-50 dark:bg-gray-800 dark:text-white text-left px-5">{{ __('Name') }}</th>
                             <th class="p-2 bg-gray-50 dark:bg-gray-800 dark:text-white text-left px-5">{{ __('Email') }}</th>
                             <th class="p-2 bg-gray-50 dark:bg-gray-800 dark:text-white text-left px-5">{{ __('Status') }}</th>
+                            @if(auth()->user()->hasRole('Owner'))
+                                <th class="p-2 bg-gray-50 dark:bg-gray-800 dark:text-white text-left px-5">{{ __('Info') }}</th>
+                            @endif
                             @if(auth()->user()->can('park.edit') || auth()->user()->can('park.delete'))
                                 <th class="p-2 bg-gray-50 dark:bg-gray-800 dark:text-white text-left px-5">{{ __('Action') }}</th>
                             @endif
@@ -84,14 +87,108 @@
                                         {{ ucfirst($park->status) }}
                                     </span>
                                 </td>
+{{--                                <td class="flex px-5 py-4 sm:px-6 text-center gap-1">--}}
+{{--                                    @if($user->hasRole('Superadmin'))--}}
+{{--                                        --}}{{-- Superadmin: Full access --}}
+{{--                                        <a data-tooltip-target="tooltip-edit-park-{{ $park->id }}"--}}
+{{--                                           class="btn-default !p-3" href="{{ route('admin.parks.edit', $park->id) }}">--}}
+{{--                                            <i class="bi bi-pencil text-sm"></i>--}}
+{{--                                        </a>--}}
+
+{{--                                        <form action="{{ route('admin.parks.destroy', $park->id) }}" method="POST" style="display:inline-block;">--}}
+{{--                                            @csrf--}}
+{{--                                            @method('DELETE')--}}
+{{--                                            <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">--}}
+{{--                                                <i class="bi bi-trash text-sm"></i>--}}
+{{--                                            </button>--}}
+{{--                                        </form>--}}
+
+{{--                                    @elseif($user->hasRole('Owner'))--}}
+{{--                                        @php--}}
+{{--                                            $userAppliedClaim = $park->claim_parks()--}}
+{{--                                                ->where('user_id', $user->id)--}}
+{{--                                                ->where('park_id', $park->id)--}}
+{{--                                                ->first();--}}
+
+{{--                                            $approvedClaim = $park->claim_parks()->where('status', 'approved')->first();--}}
+{{--                                            $pendingClaim = $park->claim_parks()->where('status', 'pending')->first();--}}
+{{--                                        @endphp--}}
+
+{{--                                        --}}{{-- CASE: Claimed by someone else --}}
+{{--                                        @if($approvedClaim && $approvedClaim->user_id !== auth()->id())--}}
+{{--                                            <span class="text-danger fw-bold">This park is already claimed by its owner.</span>--}}
+
+{{--                                            --}}{{-- CASE: Claimed by current user and approved --}}
+{{--                                        @elseif($approvedClaim && $approvedClaim->user_id === auth()->id())--}}
+{{--                                            <a class="btn-default !p-3" href="{{ route('admin.parks.edit', $park->id) }}">--}}
+{{--                                                <i class="bi bi-pencil text-sm"></i>--}}
+{{--                                            </a>--}}
+
+{{--                                            --}}{{-- CASE: Claim requested by current user but not yet approved --}}
+{{--                                        @elseif($userAppliedClaim && $userAppliedClaim->status === 'pending')--}}
+{{--                                            <span class="text-warning">Claim Requested</span>--}}
+
+{{--                                            --}}{{-- CASE: Another user has requested claim --}}
+{{--                                        @elseif($pendingClaim && $pendingClaim->user_id !== auth()->id())--}}
+{{--                                            <span class="text-warning">--}}
+{{--                                                {{ $pendingClaim->user->name }} has submitted a claim request for this park.--}}
+{{--                                            </span>--}}
+{{--                                            <a class="!p-3 btn btn-primary btn-sm" href="{{ route('admin.claim.park.apply', encrypt($park->id)) }}">--}}
+{{--                                                <i class="bi bi-hand-index-thumb-fill"></i>--}}
+{{--                                            </a>--}}
+
+{{--                                            --}}{{-- CASE: Not yet claimed --}}
+{{--                                        @else--}}
+{{--                                            <a class="!p-3 btn btn-primary btn-sm" href="{{ route('admin.claim.park.apply', encrypt($park->id)) }}">--}}
+{{--                                                <i class="bi bi-hand-index-thumb-fill"></i>--}}
+{{--                                            </a>--}}
+{{--                                        @endif--}}
+{{--                                    @endif--}}
+
+{{--                                </td>--}}
+                                {{-- Column for message --}}
+                                <td class="px-5 py-4 sm:px-6 text-center">
+                                    @if($user->hasRole('Owner'))
+                                        @php
+                                            $userAppliedClaim = $park->claim_parks()->where('user_id', $user->id)->first();
+                                            $approvedClaim = $park->claim_parks()->where('status', 'approved')->first();
+                                            $pendingClaim = $park->claim_parks()->where('status', 'pending')->first();
+                                        @endphp
+
+                                        @if($approvedClaim && $approvedClaim->user_id !== auth()->id())
+                                            <span class="text-danger fw-bold">This park is already claimed by its owner.</span>
+                                        @elseif($userAppliedClaim && $userAppliedClaim->status === 'pending')
+                                            <span class="text-warning">Claim Requested</span>
+                                        @elseif($pendingClaim && $pendingClaim->user_id !== auth()->id())
+                                            <span class="text-warning">{{ $pendingClaim->user->name }} has submitted a claim request.</span>
+                                        @endif
+                                    @endif
+                                </td>
+
+                                {{-- Column for buttons --}}
                                 <td class="flex px-5 py-4 sm:px-6 text-center gap-1">
-                                    @if($user->hasRole('Superadmin'))
-                                        {{-- Superadmin: Full access --}}
-                                        <a data-tooltip-target="tooltip-edit-park-{{ $park->id }}"
-                                           class="btn-default !p-3" href="{{ route('admin.parks.edit', $park->id) }}">
+                                    @if($user->hasRole('Owner'))
+                                        {{-- Case: Current user is the approved owner --}}
+                                        @if($approvedClaim && $approvedClaim->user_id === auth()->id())
+                                            <a class="btn-default !p-3" href="{{ route('admin.parks.edit', $park->id) }}">
+                                                <i class="bi bi-pencil text-sm"></i>
+                                            </a>
+
+                                            {{-- Case: Claim not yet approved --}}
+                                        @elseif(!$approvedClaim)
+                                            {{-- Show button to all except the user who already submitted the claim --}}
+                                            @if(!$userAppliedClaim)
+                                                <a class="!p-3 btn btn-primary btn-sm" href="{{ route('admin.claim.park.apply', encrypt($park->id)) }}">
+                                                    <i class="bi bi-hand-index-thumb-fill"></i>
+                                                </a>
+                                            @endif
+                                        @endif
+
+                                    @elseif($user->hasRole('Superadmin'))
+                                        {{-- Superadmin full access --}}
+                                        <a class="btn-default !p-3" href="{{ route('admin.parks.edit', $park->id) }}">
                                             <i class="bi bi-pencil text-sm"></i>
                                         </a>
-
                                         <form action="{{ route('admin.parks.destroy', $park->id) }}" method="POST" style="display:inline-block;">
                                             @csrf
                                             @method('DELETE')
@@ -99,37 +196,6 @@
                                                 <i class="bi bi-trash text-sm"></i>
                                             </button>
                                         </form>
-
-                                    @elseif($user->hasRole('Owner'))
-                                        @php
-                                            $userAppliedClaim = $park->claim_parks()
-                                                ->where('user_id', $user->id)
-                                                ->where('park_id', $park->id)
-                                                ->first();
-
-                                            $approvedClaim = $park->claim_parks()->where('status', 'approved')->first();
-                                        @endphp
-
-                                        {{-- CASE: Claimed by someone else --}}
-                                        @if($approvedClaim && $approvedClaim->user_id !== auth()->id())
-                                            <span class="text-danger fw-bold">This park is already claimed by its owner.</span>
-
-                                            {{-- CASE: Claimed by current user and approved --}}
-                                        @elseif($approvedClaim && $approvedClaim->user_id === auth()->id())
-                                            <a class="btn-default !p-3" href="{{ route('admin.parks.edit', $park->id) }}">
-                                                <i class="bi bi-pencil text-sm"></i>
-                                            </a>
-
-                                            {{-- CASE: Claim requested by current user but not yet approved --}}
-                                        @elseif($userAppliedClaim && $userAppliedClaim->status === 'pending')
-                                            <span class="text-warning">Claim Requested</span>
-
-                                            {{-- CASE: Not yet claimed --}}
-                                        @else
-                                            <a class="!p-3 btn btn-primary btn-sm" href="{{ route('admin.claim.park.apply', encrypt($park->id)) }}">
-                                                <i class="bi bi-hand-index-thumb-fill"></i>
-                                            </a>
-                                        @endif
                                     @endif
                                 </td>
 

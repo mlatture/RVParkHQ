@@ -192,11 +192,9 @@ class ParkController extends Controller
         }
 
         $park = Park::findorFail(decrypt($id));
-        $claim_check = ClaimPark::where('park_id', $park->id)->whereIn('status', ['pending', 'approved'])->first();
-
-        if ($claim_check)
-        {
-            return redirect()->back()->with('error', 'A claim for this park is already pending or approved.');
+        $claim_check = ClaimPark::where('park_id', $park->id)->where('status', 'approved')->first();
+        if ($claim_check) {
+            return redirect()->back()->with('error', 'A claim for this park is already approved.');
         }
 
         return view('backend.pages.park.applyClamPark', compact('park'));

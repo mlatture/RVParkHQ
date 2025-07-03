@@ -61,4 +61,16 @@ class Park extends Model
     {
         return $this->hasMany(ClaimPark::class, 'park_id');
     }
+    
+    protected static function boot()
+    {
+        parent::boot();
+        static::creating(function ($park) {
+            do {
+                $randomColor = sprintf("#%06X", mt_rand(0, 0xFFFFFF));
+            } while (self::where('color', $randomColor)->exists());
+
+            $park->color = $randomColor;
+        });
+    }
 }
