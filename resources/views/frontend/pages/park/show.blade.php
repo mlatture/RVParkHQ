@@ -539,7 +539,7 @@
         </div>
     </section>
 
-    <section>
+    <section id="write-review">
         <div class="container">
             <div class="row card p-4 shadow-md rounded-lg border border-light">
                 <div class="col-lg-12">
@@ -680,6 +680,15 @@
                     }, 300); // ensure resizing is triggered after tab animation
                 }
             });
+        });
+        
+        document.addEventListener("DOMContentLoaded", function () {
+            if (window.location.pathname.includes("/reviews/write")) {
+                const el = document.getElementById("write-review");
+                if (el) {
+                    el.scrollIntoView({ behavior: "smooth", block: "start" });
+                }
+            }
         });
     </script>
 @endsection

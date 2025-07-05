@@ -12,6 +12,12 @@ return [
     | any other location as required by the application or its packages.
     |
     */
+    
+    'fb_pixel_id' => env('FB_PIXEL_ID'),
+    
+    'fb_pixel_access_token' => env('FB_PIXEL_ACCESS_TOKEN'),
+    
+    'fb_pixel_base_url' => env('FB_PIXEL_BASE_URL'),
 
     'name' => env('APP_NAME', 'Laravel'),
 
@@ -194,6 +200,7 @@ return [
         Spatie\Permission\PermissionServiceProvider::class,
         TorMorten\Eventy\EventServiceProvider::class,
         TorMorten\Eventy\EventBladeServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -260,6 +267,7 @@ return [
          * Package Aliases
          */
         'Eventy' => TorMorten\Eventy\Facades\Events::class,
+        'Image' => Intervention\Image\Facades\Image::class,
     ],
 
 ];

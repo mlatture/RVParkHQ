@@ -53,6 +53,43 @@
         </div>
 
         <div class="space-y-6">
+            
+            <div class="bg-white shadow-lg rounded-lg border border-gray-200 p-6 mb-8">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-lg font-semibold text-gray-800">Review Badge Embed Code</h2>
+                        <button onclick="copyReviewBadgeCode()"
+                            class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md transition">
+                            Copy Code
+                        </button>
+                </div>
+            
+                <div class="">
+                    <textarea id="review-badge-code" rows="8" readonly spellcheck="false"
+                      class="w-full text-center text-sm font-mono text-gray-800 bg-gray-100 border border-gray-300 rounded-md p-4 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                        <a href="https://rvparkhq.com/en-us/parks/{{ $park->slug_path }}/reviews/write" target="_blank">
+                          <img src="https://rvparkhq.com/badges/{{ $park->slug }}/review-badge.png" alt="Review Our Park on RVParkHQ" />
+                        </a>
+                        <script>
+                          fetch("https://rvparkhq.com/api/hits/{{ $park->slug }}", { method: "POST" });
+                        </script>
+                    </textarea>
+                </div>
+            
+                <p id="copy-msg" class="text-green-600 text-sm mt-3 hidden transition-opacity duration-300">✅ Code copied to clipboard!</p>
+            
+                <div class="mt-6">
+                    <button onclick="togglePreview()" class="text-sm text-blue-600 hover:underline">
+                        Show/Hide Preview
+                    </button>
+                    <div id="embed-preview" class="mt-4 border-t border-gray-200 pt-4 flex justify-center items-center">
+                      <a href="https://rvparkhq.com/en-us/parks/{{ $park->slug_path }}/reviews/write" target="_blank">
+                        <img src="https://rvparkhq.com/badges/{{ $park->slug }}/review-badge.png" alt="Review Our Park on RVParkHQ" class="w-36 h-36 object-contain"/>
+                      </a>
+                    </div>
+                </div>
+            </div>
+
             <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
                 <div class="px-5 py-4 sm:px-6 sm:py-5">
                     <h3 class="text-base font-medium text-gray-800 dark:text-white/90">{{ __('Update Park Information') }}</h3>
@@ -550,5 +587,27 @@
                 }
             }).trigger('change');
         });
+    </script>
+    <script>
+      function copyReviewBadgeCode() {
+        const textarea = document.getElementById("review-badge-code");
+        textarea.select();
+        textarea.setSelectionRange(0, 99999);
+        document.execCommand("copy");
+    
+        const msg = document.getElementById("copy-msg");
+        msg.classList.remove("hidden");
+        msg.style.opacity = 1;
+    
+        setTimeout(() => {
+          msg.style.opacity = 0;
+          setTimeout(() => msg.classList.add("hidden"), 300);
+        }, 2000);
+      }
+    
+      function togglePreview() {
+        const preview = document.getElementById("embed-preview");
+        preview.classList.toggle("hidden");
+      }
     </script>
 @endsection

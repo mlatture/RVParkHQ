@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Backend\OverPassController;
+use App\Http\Controllers\Api\TrackingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,3 +33,4 @@ Route::get('/translations/{lang}', function (string $lang) {
 });
 
 Route::post('import-campgrounds', [OverPassController::class, 'fetchCampgroundsByState']);
+Route::post('/hits/{slug}', [TrackingController::class, 'track']);

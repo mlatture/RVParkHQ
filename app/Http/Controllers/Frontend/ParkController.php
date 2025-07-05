@@ -8,6 +8,7 @@ use App\Models\{Park, Review, WinnerPark};
 use App\Services\Frontend\ReviewService;
 use App\Services\ParkService;
 use Illuminate\Http\Request;
+use Intervention\Image\Facades\Image;
 
 class ParkController extends Controller
 {
@@ -91,5 +92,69 @@ class ParkController extends Controller
     {
         $states = Park::select('state', 'color')->distinct()->orderBy('state')->get();
         return view('frontend.pages.park.state', compact('states'));
+    }
+    
+    public function generateBadge($slug) {
+        $park = Park::whereSlug($slug)->firstOrFail();
+        $awards = $park->winnerParks;
+        //$awards = ['2025' => 'Gold', '2026' => 'Silver'];
+        
+        
+        // $img = Image::canvas(768, 768, '#ffffff');
+
+        // // // Load shield image or draw one (optional)
+        // $shield = Image::make(public_path('images/blank_sheild.png'))
+        //     ->resize(700, 700)
+        //     ->opacity(100)
+        //     ->brightness(10);
+    
+        // $img->insert($shield, 'center');
+        
+        $img = Image::canvas(300, 300, [0, 0, 0, 0]);
+        
+        $shield = Image::make(public_path('images/blank_sheild.png'))
+            ->resize(280, 280, function ($constraint) {
+                $constraint->aspectRatio();
+                $constraint->upsize();
+            });
+    
+        // STEP 3: Insert shield centered
+        $img->insert($shield, 'center');
+        
+        $img->text('Review Us', 150, 130, function ($font) {
+            $font->file(public_path('fonts/OpenSans-Bold.ttf'));
+            $font->size(18);
+            $font->color('#ffffff');
+            $font->align('center');
+        });
+        
+        $img->text('On', 150, 155, function ($font) {
+            $font->file(public_path('fonts/OpenSans-Bold.ttf'));
+            $font->size(16);
+            $font->color('#ffffff');
+            $font->align('center');
+        });
+    
+        $img->text('RVParkHQ', 150, 185, function ($font) {
+            $font->file(public_path('fonts/OpenSans-Bold.ttf'));
+            $font->size(18);
+            $font->color('#000000');
+            $font->align('center');
+        });
+    
+        if($awards->count() > 0) {
+            $y = 80;
+            foreach ($awards as $year => $level) {
+                $img->text("🏅 $year $level", 300, $y, function ($font) {
+                    $font->file(public_path('fonts/OpenSans-Regular.ttf'));
+                    $font->size(18);
+                    $font->color('#666666');
+                    $font->align('center');
+                });
+                $y += 20;
+            }   
+        }
+        
+        return $img->response('png');
     }
 }

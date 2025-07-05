@@ -18,6 +18,8 @@ Route::name('rv-park.')->group(function () {
         Route::get('/usa', 'parkCountry')->name('park-country');
         Route::get('/{country}/{state}', 'index')->name('park');
         Route::get('{slug_path}', 'show')->name('park-show');
+        
+        Route::get('{slug_path}/reviews/write', 'show')->name('park-show');
     });
 
     Route::post('/email/subscribe', [SubscriberController::class, 'store'])->name('email.subscribe');
@@ -29,4 +31,6 @@ Route::name('rv-park.')->group(function () {
 
     Route::get('/suggest-park', [\App\Http\Controllers\Frontend\SuggestController::class, 'index'])->name('suggest.park');
     Route::post('/suggest-park', [\App\Http\Controllers\Frontend\SuggestController::class, 'store'])->name('suggest.park.store');
+    
+    Route::get('/badges/{slug}/review-badge.png', [ParkController::class, 'generateBadge']);
 });
