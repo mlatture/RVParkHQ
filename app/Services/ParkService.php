@@ -52,8 +52,42 @@ class ParkService
     
     public function getFilteredParks(array $filters, int $perPage = 12): array
     {
+        $parks = Park::query()->filter($filters)->with(['claim_parks' => function($query) {
+            $query->where('status', 'approved');
+        }])->paginate($perPage)->withQueryString();
+
+        // Add site availability data to each park from approved claim
+        $parks->getCollection()->transform(function($park) {
+            $approvedClaim = $park->claim_parks->first();
+            $siteFields = [
+                'sites_50amp_full',
+                'sites_30amp_full',
+                'sites_30amp_water_electric',
+                'sites_50amp_water_electric',
+                'sites_30amp_electric',
+                'sites_50amp_electric',
+                'sites_dry_camping',
+                'tent_sites_utilities',
+                'tent_sites_primitive',
+                'seasonal_sites',
+                'group_campsites'
+            ];
+            if ($approvedClaim) {
+                // Add site availability fields to the park object
+                foreach ($siteFields as $field) {
+                    $park->$field = $approvedClaim->$field ?? 0;
+                }
+            } else {
+                // Set default values if no approved claim
+                foreach ($siteFields as $field) {
+                    $park->$field = 0;
+                }
+            }
+            return $park;
+        });
+
         return [
-            'parks' => Park::query()->filter($filters)->paginate($perPage)->withQueryString(),
+            'parks' => $parks,
             'states' => Park::select('state')->distinct()->orderBy('state')->get(),
             'amenities' => Amenity::select('id', 'amenity', 'category', 'blackicon', 'whiteicon')->get(),
             'siteFields' => [

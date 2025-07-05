@@ -30,13 +30,29 @@ class Park extends Model
             $city = ucwords(str_replace('-', ' ', $filters['city']));
             $query->where('city', 'like', "%{$city}%");
         }
-        if (!empty($filters['states'])) {
-            $query->where('state', 'like', "%{$filters['states']}%");
-        }
-        
+
         if (!empty($filters['global_search'])) {
-            $global_search = ucwords(str_replace('-', ' ', $filters['global_search']));
-            $query->where('name', 'like', "%{$global_search}%");
+            $search = ucwords(str_replace('-', ' ', $filters['global_search']));
+            $query->where('name', 'like', "%{$search}%");
+        }
+
+        // Amenity filter
+        if (!empty($filters['amenities']) && is_array($filters['amenities'])) {
+            $query->whereHas('amenities', function($q) use ($filters) {
+                $q->whereIn('amenities.id', $filters['amenities']);
+            });
+        }
+
+        if (!empty($filters['site_availability']) && is_array($filters['site_availability'])) {
+            $query->whereHas('claim_parks', function ($q) use ($filters) {
+                $q->where('status', 'approved');
+
+                foreach ($filters['site_availability'] as $field => $minValue) {
+                    if (!empty($minValue)) {
+                        $q->where($field, '>=', (int)$minValue);
+                    }
+                }
+            });
         }
 
         return $query;

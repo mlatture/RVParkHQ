@@ -26,7 +26,7 @@ class ParkController extends Controller
             $filters['state'] = $request->segment('4');
             $data['parks'] = $this->parkService->getFilteredParks($filters);    
         } else {
-            $filters = $request->only(['country', 'state', 'city', 'states', 'global_search']);
+            $filters = $request->only(['country', 'state', 'city', 'states', 'global_search', 'site_availability', 'amenities']);
             $data['parks'] = $this->parkService->getFilteredParks($filters);   
         }
         return view('frontend.pages.park.index', $data);

@@ -149,8 +149,7 @@
             writing-mode: horizontal-tb;
         }
         
-        .fixed-advanced-filter-btn:hover,
-        .fixed-advanced-filter-btn:focus {
+        .fixed-advanced-filter-btn:hover {
             background: #e0e0e0;
             color: #1e2022;
             box-shadow: 0 10px 36px rgba(24, 80, 200, 0.16);
@@ -236,37 +235,55 @@
                         <div class="p-40 p-t-60 p-xs-20">
                             <h3><i class="bi bi-funnel"></i> Advanced Filters</h3>
                             <form id="advancedFilterForm" class="form-grey-fields" onsubmit="return false;">
+                                <div class="mb-5">
+                                    <h5 class="mb-3 text-muted">
+                                        <i class="bi bi-plug text-primary fs-5 me-2"></i> Filter by Site Availability
+                                    </h5>
+                                    <div class="row">
+                                        @foreach ($parks['siteFields'] as $field => $label)
+                                            @php
+                                                // Automatically extract number from field name
+                                                preg_match('/(\d+)/', $field, $matches);
+                                                $numericValue = $matches[1] ?? 0;
+                                            @endphp
+                                            <div class="col-md-6 mb-3">
+                                                <div class="form-check border rounded-3 shadow-sm bg-white px-3 py-2">
+                                                    <input class="form-check-input custom-check mt-0"
+                                                           type="checkbox"
+                                                           id="{{ $field }}"
+                                                           name="site_availability[{{ $field }}]"
+                                                           value="{{ $numericValue }}">
+                                                    <label class="form-check-label text-dark small mb-0 ms-2" for="{{ $field }}">
+                                                        {{ $label }}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
 
+                                {{-- ✅ Amenities --}}
                                 @if ($parks['amenities'])
                                     <div class="mb-5">
                                         <h5 class="mb-3 text-muted">
                                             <i class="bi bi-tools me-2 text-primary fs-5"></i> Amenities
                                         </h5>
-
                                         @foreach($parks['amenities']->groupBy('category') as $category => $items)
                                             <div class="mb-4 p-4 rounded-3 border ">
                                                 <div class="fw-semibold mb-3 text-uppercase text-dark">
                                                     <i class="bi bi-folder-fill text-secondary me-2"></i>{{ $category }}
                                                 </div>
-
                                                 <div class="row">
                                                     @foreach($items as $amenity)
                                                         <div class="col-md-4 col-sm-6 mb-3">
-                                                            <div
-                                                                class="form-check border rounded-3 shadow-sm bg-white px-3 py-2 d-flex align-items-center gap-2 hover-shadow transition">
-
-                                                                {{-- Checkbox --}}
+                                                            <div class="form-check border rounded-3 shadow-sm bg-white px-3 py-2 d-flex align-items-center gap-2 hover-shadow transition">
                                                                 <input class="form-check-input custom-check mt-0"
                                                                        type="checkbox"
                                                                        id="amenity_{{ $amenity->id }}"
                                                                        name="amenities[]"
                                                                        value="{{ $amenity->id }}"
                                                                     {{ is_array(request('amenities')) && in_array($amenity->id, request('amenities')) ? 'checked' : '' }}>
-
-                                                                {{-- Label --}}
-                                                                <label
-                                                                    class="form-check-label text-dark small mb-0 ms-2"
-                                                                    for="amenity_{{ $amenity->id }}">
+                                                                <label class="form-check-label text-dark small mb-0 ms-2" for="amenity_{{ $amenity->id }}">
                                                                     {{ $amenity->amenity }}
                                                                 </label>
                                                             </div>
@@ -277,37 +294,9 @@
                                         @endforeach
                                     </div>
                                 @endif
-
-
-                                {{-- Site Availability --}}
-                                <div class="mt-4">
-                                    <h5 class="mb-3"><i class="bi bi-plug"></i> Filter by Site Availability</h5>
-
-                                    <div class="row">
-                                        @foreach ($parks['siteFields'] as $field => $label)
-                                            <div class="col-md-6 mb-4">
-                                                <label for="{{ $field }}" class="form-label text-muted fw-semibold">
-                                                    {{ __($label) }}
-                                                </label>
-                                                <input
-                                                    type="number"
-                                                    min="0"
-                                                    name="{{ $field }}"
-                                                    id="{{ $field }}"
-                                                    value="{{ request($field, '') }}"
-                                                    class="form-control site-input only-positive"
-                                                    placeholder="e.g. 5 or more"
-                                                >
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                </div>
-
-                                {{-- Unique Apply Button --}}
+                                {{-- Submit Button --}}
                                 <div class="form-group mt-4">
-                                    <button
-                                        class="btn btn-gradient-apply w-100 d-flex align-items-center justify-content-center gap-2"
-                                        type="submit">
+                                    <button class="btn btn-gradient-apply w-100 d-flex align-items-center justify-content-center gap-2" type="submit">
                                         <i class="bi bi-funnel-fill fs-5"></i>
                                         <span class="fw-semibold">Apply Filters</span>
                                     </button>
@@ -404,141 +393,116 @@
     </section>
     <script>
         $(document).ready(function () {
-            $('#state-form').on('submit', function (e) {
-                e.preventDefault();
-                const state = $('#state-select').val();
-                const base = "{{ url('/en-us/parks/usa') }}";
-
-                if (state) {
-                    window.location.href = `${base}/${state}`;
-                } else {
-                    window.location.href = base;
-                }
-            });
-        });
-
-        document.addEventListener('DOMContentLoaded', function () {
-            document.getElementById('advancedFilterForm').addEventListener('submit', function (e) {
+            $('#advancedFilterForm').on('submit', function (e) {
                 e.preventDefault();
 
-                var name = (document.getElementById('filterName') || {value: ''}).value.toLowerCase();
-                var city = (document.getElementById('filterCity') || {value: ''}).value.toLowerCase();
-                var state = (document.getElementById('filterState') || {value: ''}).value.toLowerCase();
+                let name = ($('#filterName').val() || '').toLowerCase();
+                let city = ($('#filterCity').val() || '').toLowerCase();
+                let state = ($('#filterState').val() || '').toLowerCase();
 
-                // Amenities
-                var selectedAmenities = Array.from(document.querySelectorAll('input[name="amenities[]"]:checked')).map(cb => cb.value);
+                // Get selected amenities
+                let selectedAmenities = $('input[name="amenities[]"]:checked').map(function () {
+                    return this.value;
+                }).get();
 
-                // Site fields
-                var siteFields = @json(array_keys($parks['siteFields']));
-                var siteFieldValues = {};
-                siteFields.forEach(function (field) {
-                    var el = document.getElementById(field);
-                    if (el && el.value) siteFieldValues[field] = parseInt(el.value);
+                // Get selected site availability values as an object
+                let selectedSiteFields = {};
+                $('input[name^="site_availability["]:checked').each(function () {
+                    let match = $(this).attr('name').match(/\[([^\]]+)\]/);
+                    if (match) {
+                        let field = match[1];
+                        selectedSiteFields[field] = parseInt($(this).val()) || 0;
+                    }
                 });
 
-                var parks = document.querySelectorAll('.park-item');
-                var anyVisible = false;
-                parks.forEach(function (park) {
-                    var parkName = (park.getAttribute('data-name') || '').toLowerCase();
-                    var parkCity = (park.getAttribute('data-city') || '').toLowerCase();
-                    var parkState = (park.getAttribute('data-state') || '').toLowerCase();
-                    var parkAmenities = (park.getAttribute('data-amenities') || '').split(',');
-                    var show = true;
+                console.log("Selected Site Availability Fields:", selectedSiteFields);
+
+                // Debug: Log park data for first few parks
+                $('.park-item').each(function(index) {
+                    if (index < 3) { // Only log first 3 parks to avoid spam
+                        let park = $(this);
+                        console.log(`Park ${index + 1}:`, {
+                            name: park.data('name'),
+                            sites_50amp_full: park.data('sites_50amp_full'),
+                            sites_30amp_full: park.data('sites_30amp_full'),
+                            sites_30amp_water_electric: park.data('sites_30amp_water_electric')
+                        });
+                    }
+                });
+
+                let anyVisible = false;
+
+                $('.park-item').each(function () {
+                    let park = $(this);
+                    let parkAmenities = (park.data('amenities') || '').toString().split(',');
+
+                    let show = true;
+
+                    // Text match filters
                     if (name && !parkName.includes(name)) show = false;
                     if (city && !parkCity.includes(city)) show = false;
                     if (state && !parkState.includes(state)) show = false;
-                    // Amenities filter (all selected must be present)
-                    if (selectedAmenities.length > 0 && !selectedAmenities.every(aid => parkAmenities.includes(aid))) show = false;
-                    // Site fields filter
-                    for (var field in siteFieldValues) {
-                        var parkVal = parseInt(park.getAttribute('data-' + field) || '0');
-                        if (isNaN(parkVal) || parkVal < siteFieldValues[field]) show = false;
+
+                    // Amenity check (must include all selected)
+                    if (selectedAmenities.length > 0) {
+                        let hasAllAmenities = selectedAmenities.every(aid => parkAmenities.includes(aid));
+                        if (!hasAllAmenities) show = false;
                     }
-                    park.style.display = show ? '' : 'none';
+
+
+                $.each(selectedSiteFields, function (field, requiredVal) {
+                    let parkVal = parseInt(park.data(field)) || 0;
+                    console.log(`Checking ${field}: Park has ${parkVal}, Required: ${requiredVal}`);
+                    if (parkVal < requiredVal) {
+                        console.log(`Park ${park.data('name')} filtered out: ${field} insufficient`);
+                        show = false;
+                    }
+                });
+
+                    park.toggle(show);
                     if (show) anyVisible = true;
-                });
+                })
 
-                // No Parks Found message
-                var noParksDivId = 'noParksFoundMsg';
-                var existingMsg = document.getElementById(noParksDivId);
+                // No Parks Found Message
+                const noParksMsgID = '#noParksFoundMsg';
+                $(noParksMsgID).remove();
+
                 if (!anyVisible) {
-                    if (!existingMsg) {
-                        var msg = document.createElement('div');
-                        msg.id = noParksDivId;
-                        msg.className = 'grid-item w-100 d-flex justify-content-center';
-                        msg.innerHTML = `<div class="park-card text-center border border-warning rounded shadow-sm p-4" style="max-width: 400px;">
-                            <h5 class="text-warning mb-2">
-                                <i class="bi bi-exclamation-circle"></i> No Parks Found
-                            </h5>
-                            <p class="text-muted mb-0">
-                                We couldn't find any parks matching your selection.
-                            </p>
-                        </div>`;
-                        var grid = document.querySelector('.grid-layout.grid-5-columns');
-                        if (grid) grid.appendChild(msg);
-                    }
-                } else {
-                    if (existingMsg) existingMsg.remove();
+                    $('.grid-layout.grid-5-columns').css({
+                      'margin': '',
+                      'position': '',
+                      'height': ''
+                    });
+                    $('.grid-layout.grid-5-columns').append(`
+                <div id="noParksFoundMsg" class="grid-item w-100 d-flex justify-content-center">
+                    <div class="park-card text-center border border-warning rounded shadow-sm p-4" style="max-width: 400px;">
+                        <h5 class="text-warning mb-2">
+                            <i class="bi bi-exclamation-circle"></i> No Parks Found
+                        </h5>
+                        <p class="text-muted mb-0">We couldn't find any parks matching your selection.</p>
+                    </div>
+                </div>`);
                 }
-                // Modal band karne ke liye .mfp-close par click trigger karo
-                var mfpClose = document.querySelector('.mfp-close');
-                if (mfpClose) mfpClose.click();
-            });
-        });
 
-        function resetParkFilters() {
-            // Text fields
-            var textFields = ['filterName', 'filterCity', 'filterState'];
-            textFields.forEach(function (id) {
-                var el = document.getElementById(id);
-                if (el) el.value = '';
+                // Close modal
+                $('.mfp-close').trigger('click');
             });
-            // Amenities checkboxes
-            document.querySelectorAll('input[name="amenities[]"]').forEach(function (cb) {
-                cb.checked = false;
-            });
-            // Site fields
-            var siteFields = @json(array_keys($parks['siteFields']));
-            siteFields.forEach(function (field) {
-                var el = document.getElementById(field);
-                if (el) el.value = '';
-            });
-            // Sab parks wapas show karo
-            document.querySelectorAll('.park-item').forEach(function (park) {
-                park.style.display = '';
-            });
-            // No Parks Found message ko remove karo
-            var existingMsg = document.getElementById('noParksFoundMsg');
-            if (existingMsg) existingMsg.remove();
-            // Modal band karne ke liye .mfp-close par click trigger karo
-            var mfpClose = document.querySelector('.mfp-close');
-            if (mfpClose) mfpClose.click();
-        }
 
-        document.addEventListener('DOMContentLoaded', function () {
-            const inputs = document.querySelectorAll('.only-positive');
+            // Reset filters
+            window.resetParkFilters = function () {
+                $('#filterName, #filterCity, #filterState').val('');
+                $('input[name="amenities[]"]').prop('checked', false);
+                $('input[name^="site_availability["]').prop('checked', false);
 
-            inputs.forEach(input => {
-                // Prevent typing "-" or "e"
-                input.addEventListener('keydown', function (e) {
-                    if (e.key === '-' || e.key === 'e') {
-                        e.preventDefault();
-                    }
+                $('.grid-layout.grid-5-columns').css({
+                  'margin': '0px -20px -20px 0px',
+                  'position': 'relative',
+                  'height': '1098.91px'
                 });
-
-                // Prevent pasting negative numbers
-                input.addEventListener('paste', function (e) {
-                    const paste = (e.clipboardData || window.clipboardData).getData('text');
-                    if (paste.includes('-') || paste.includes('e')) {
-                        e.preventDefault();
-                    }
-                });
-
-                // Reset negative values on input
-                input.addEventListener('input', function () {
-                    if (this.value < 0) this.value = 0;
-                });
-            });
+                $('.park-item').show();
+                $('#noParksFoundMsg').remove();
+                $('.mfp-close').trigger('click');
+            };
         });
     </script>
 @endsection
