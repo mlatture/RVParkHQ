@@ -2,13 +2,19 @@
 
 use App\Http\Controllers\Frontend\ParkController;
 use App\Http\Controllers\Frontend\SubscriberController;
-
+use App\Http\Controllers\Frontend\AdvertiseController;
+use App\Http\Controllers\Frontend\HomeController;
+use App\Http\Controllers\Frontend\TeamController;
+use App\Http\Controllers\Frontend\ServiceController;
+use App\Http\Controllers\Frontend\ContactController;
+use App\Http\Controllers\Frontend\BlogController;
+use App\Http\Controllers\Frontend\SuggestController;
 
 Route::name('rv-park.')->group(function () {
-    Route::get('/', [\App\Http\Controllers\Frontend\HomeController::class, 'index'])->name('home');
-    Route::get('/our-team', [\App\Http\Controllers\Frontend\TeamController::class, 'index'])->name('team');
-    Route::get('/services', [\App\Http\Controllers\Frontend\ServiceController::class, 'index'])->name('service');
-    Route::get('/contact', [\App\Http\Controllers\Frontend\ContactController::class, 'index'])->name('contact');
+    Route::get('/', [HomeController::class, 'index'])->name('home');
+    Route::get('/our-team', [TeamController::class, 'index'])->name('team');
+    Route::get('/services', [ServiceController::class, 'index'])->name('service');
+    Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 
     Route::prefix('en-us/parks')->controller(ParkController::class)->group(function () {
         Route::get('/', 'index')->name('all-parks');
@@ -22,15 +28,23 @@ Route::name('rv-park.')->group(function () {
         Route::get('{slug_path}/reviews/write', 'show')->name('park-show');
     });
 
-    Route::post('/email/subscribe', [SubscriberController::class, 'store'])->name('email.subscribe');
-    Route::get('/confirm-email', [SubscriberController::class, 'index'])->name('email-confirm.index');
-    Route::post('/confirm-subscribe', [SubscriberController::class, 'conformSubscribe'])->name('confirm-subscribe.store');
-    
-    Route::get('/blogs/{slug}', [\App\Http\Controllers\Frontend\BlogController::class, 'show'])->name('blogs.show');
-    Route::get('/blogs', [\App\Http\Controllers\Frontend\BlogController::class, 'index'])->name('blogs.index');
-
-    Route::get('/suggest-park', [\App\Http\Controllers\Frontend\SuggestController::class, 'index'])->name('suggest.park');
-    Route::post('/suggest-park', [\App\Http\Controllers\Frontend\SuggestController::class, 'store'])->name('suggest.park.store');
-    
     Route::get('/badges/{slug}/review-badge.png', [ParkController::class, 'generateBadge']);
+
+    Route::controller(SubscriberController::class)->group(function () {
+        Route::post('/email/subscribe', 'store')->name('email.subscribe');
+        Route::get('/confirm-email', 'index')->name('email-confirm.index');
+        Route::post('/confirm-subscribe', 'conformSubscribe')->name('confirm-subscribe.store'); 
+    });
+    
+    Route::controller(BlogController::class)->group(function () {
+        Route::get('/blogs/{slug}', 'show')->name('blogs.show');
+        Route::get('/blogs', 'index')->name('blogs.index');
+    });
+    
+    Route::controller(SuggestController::class)->group(function () {
+        Route::get('/suggest-park', 'index')->name('suggest.park');
+        Route::post('/suggest-park', 'store')->name('suggest.park.store');
+    });
+    
+    Route::get('/advertise', [AdvertiseController::class, 'index'])->name('advertise.index');
 });
