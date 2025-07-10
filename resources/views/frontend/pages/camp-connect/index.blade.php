@@ -73,7 +73,7 @@
             <div class="p-countdown-show"><a href="#CampConnect" data-lightbox="inline" class="btn btn-dark btn-lg px-5 py-2 rounded-pill shadow-sm">📧 Preview a CampConnect Newsletter</a></div>
         </div>
         <div id="CampConnect" class="modal no-padding" data-delay="3000" style="max-width: 780px;">
-            <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-dialog modal-dialog-centered modal-xl p-3">
                 <div class="klc-newsletter-wrapper border-0 rounded-3 shadow-lg">
 
                     <div class="klc-header">
