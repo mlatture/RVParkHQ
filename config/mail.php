@@ -12,6 +12,7 @@ return [
     | and used as needed; however, this mailer will be used by default.
     |
     */
+    'notification_email' => env('NOTIFICATION_EMAIL', 'fallback@example.com'),
 
     'default' => env('MAIL_MAILER', 'smtp'),
 

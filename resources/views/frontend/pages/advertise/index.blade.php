@@ -162,30 +162,34 @@
                     <div class="card shadow-sm border-0" id="contact-form">
                         <div class="card-body p-4">
                             <h3 class="mb-4">Ready to Advertise?</h3>
-                            <form>
+                            <form action="{{ route('rv-park.advertise.store') }}" method="post">
+                                @csrf
+
                                 <div class="row">
                                     <div class="col-md-6 col-12 mb-3">
-                                        <label for="name" class="form-label">Name</label>
-                                        <input type="text" class="form-control" id="name" placeholder="Enter your full name" required>
+                                        <label for="name" class="form-label">Name *</label>
+                                        <input type="text" name="name" class="form-control" id="name" placeholder="Enter your full name" required>
                                     </div>
                                     <div class="col-md-6 col-12 mb-3">
                                         <label for="company" class="form-label">Company</label>
-                                        <input type="text" class="form-control" id="company" placeholder="Enter your company name" required>
+                                        <input type="text" name="company" class="form-control" id="company" placeholder="Enter your company name">
                                     </div>
                                 </div>
+
                                 <div class="row">
                                     <div class="col-md-6 col-12 mb-3">
-                                        <label for="email" class="form-label">Email</label>
-                                        <input type="email" class="form-control" id="email" placeholder="Your email address" required>
+                                        <label for="email" class="form-label">Email *</label>
+                                        <input type="email" name="email" class="form-control" id="email" placeholder="Your email address" required>
                                     </div>
                                     <div class="col-md-6 col-12 mb-3">
-                                        <label for="phone" class="form-label">Phone</label>
-                                        <input type="tel" class="form-control" id="phone" placeholder="Your phone number">
+                                        <label for="phone" class="form-label">Phone *</label>
+                                        <input type="tel" name="phone" class="form-control" id="phone" placeholder="Your phone number" required>
                                     </div>
                                 </div>
+
                                 <div class="mb-3">
-                                    <label for="interest" class="form-label">Advertising Interest</label>
-                                    <select class="form-select" id="interest">
+                                    <label for="interest" class="form-label">Advertising Interest *</label>
+                                    <select class="form-select" name="interest" id="interest" required>
                                         <option value="">Select an option</option>
                                         <option value="featured">Featured Listing</option>
                                         <option value="banner">Banner Ads</option>
@@ -195,10 +199,12 @@
                                         <option value="other">Other</option>
                                     </select>
                                 </div>
+
                                 <div class="mb-3">
                                     <label for="message" class="form-label">Message</label>
-                                    <textarea class="form-control" id="message" rows="4" placeholder="Tell us about your advertising needs"></textarea>
+                                    <textarea class="form-control" name="message" id="message" rows="4" placeholder="Tell us about your advertising needs"></textarea>
                                 </div>
+
                                 <button type="submit" class="btn btn-primary btn-lg mt-3">Submit Inquiry</button>
                             </form>
                         </div>

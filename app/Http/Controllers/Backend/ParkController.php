@@ -150,6 +150,8 @@ class ParkController extends Controller
 
         $park->update($data);
         $park->amenities()->sync($request->amenities);
+        
+        Mail::to(config('mail.notification_email'))->send(new \App\Mail\ParkUpdatedMail($park, auth()->user()));
 
         return redirect()->route('admin.parks.index')->with('success', 'Park updated successfully.');
     }
@@ -328,7 +330,7 @@ class ParkController extends Controller
             'status' => 'pending'
         ]);
 
-        Mail::to("mark@latture.com")->send(new ClaimParkConfirmationMail($claim));
+        Mail::to(config('mail.notification_email'))->send(new ClaimParkConfirmationMail($claim));
 
         return redirect()->route('admin.parks.index')
             ->with('success', 'Park claim submitted successfully!');

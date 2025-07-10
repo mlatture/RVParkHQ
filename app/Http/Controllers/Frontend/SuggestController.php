@@ -32,7 +32,8 @@ class SuggestController extends Controller
         ]);
 
         SuggestPark::create($validated);
-        Mail::to('mark@latture.com')->send(new SuggestMail((object)$validated));
+        
+        Mail::to(config('mail.notification_email'))->send(new SuggestMail((object)$validated));
 
         return redirect()->route('rv-park.home')->with([
             'icon' => 'success',

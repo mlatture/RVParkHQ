@@ -19,6 +19,11 @@
                             <li><a href="{{ route('rv-park.team') }}">Our Team</a></li>
                             <li><a href="{{ route('rv-park.blogs.index') }}">Blogs</a></li>
                             <li><a href="{{ route('rv-park.advertise.index') }}">Advertise</a></li>
+                            <li class="dropdown"><a href="#">Park Owners</a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="{{ route('rv-park.CampConnect.index') }}">Camp Connect</a></li>
+                                </ul>
+                            </li>
                             <li><a href="{{ route('rv-park.service') }}">Services</a></li>
                             <li><a href="{{ route('rv-park.contact') }}">Contact</a></li>
                             <li>

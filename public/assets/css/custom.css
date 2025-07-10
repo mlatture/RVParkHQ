@@ -220,3 +220,166 @@
     border-radius: 50px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
+
+.klc-newsletter-wrapper { 
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+.klc-header { /* Replaces .newsletter-header */
+    background: linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%); /* Green gradient */
+    color: white;
+    padding: 30px 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+.klc-header h4 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    margin-bottom: 5px;
+    font-size: 1.8rem;
+}
+.klc-header p {
+    opacity: 0.9;
+}
+.klc-header .sun-icon {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 3rem;
+    color: rgba(255, 255, 255, 0.3);
+    transform: rotate(20deg);
+}
+.klc-content-section { /* Replaces .content-section */
+    padding: 25px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #eee;
+}
+.klc-content-section h5 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 15px;
+}
+.klc-highlight-card { /* Replaces .highlight-card */
+    background-color: #e0f2f7; /* Light blue for info */
+    border-left: 5px solid #00BCD4; /* Cyan border */
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 15px;
+    font-size: 0.9rem;
+    color: #212121;
+}
+.klc-event-list li { /* Replaces .event-list li */
+    margin-bottom: 8px;
+}
+.klc-btn-primary { /* Replaces .btn-brand-primary */
+    background-color: #FF7043; /* Orange button */
+    border-color: #FF7043;
+    color: white;
+    transition: all 0.3s ease;
+}
+.klc-btn-primary:hover {
+    background-color: #F4511E;
+    border-color: #F4511E;
+    transform: translateY(-2px);
+}
+.klc-weather-card { /* Replaces .weather-card */
+    background-color: #F9FBE7; /* Light yellow for weather */
+    border-radius: 8px;
+    padding: 20px;
+    border: 1px solid #DCE775;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+}
+.klc-weather-item { /* Replaces .weather-item */
+    flex: 1 1 calc(33% - 10px); /* 3 items per row on larger screens */
+    min-width: 120px; /* Ensure they don't get too small */
+    text-align: center;
+    margin: 5px;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    transition: transform 0.2s ease;
+}
+.klc-weather-item:hover {
+    transform: translateY(-3px);
+}
+.klc-weather-item .icon {
+    font-size: 1.8rem;
+    margin-bottom: 5px;
+}
+.klc-reward-card { /* Replaces .reward-card */
+    background-color: #E8F5E9; /* Lighter green for reward */
+    border-left: 5px solid #4CAF50; /* Green border */
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+    position: relative;
+}
+.klc-reward-card h6 {
+    color: #2E7D32; /* Darker green */
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+}
+.klc-reward-card .code-display {
+    background-color: #DDEEEF;
+    padding: 8px 12px;
+    border-radius: 5px;
+    font-weight: bold;
+    color: #00796B;
+    display: inline-block;
+    margin-top: 10px;
+    letter-spacing: 1px;
+}
+.klc-btn-reward { /* Replaces .btn-reward */
+    background-color: #4CAF50;
+    border-color: #4CAF50;
+    transition: all 0.3s ease;
+}
+.klc-btn-reward:hover {
+    background-color: #388E3C;
+    border-color: #388E3C;
+    transform: translateY(-2px);
+}
+.klc-tip-section { /* Replaces .tip-section */
+    background-color: #FFFDE7; /* Very light yellow */
+    border-left: 5px solid #FFEB3B; /* Yellow border */
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+}
+.klc-partner-section { /* Replaces .partner-section */
+    background-color: #E3F2FD; /* Light blue */
+    border-left: 5px solid #2196F3; /* Blue border */
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+}
+.klc-footer-links a { /* Replaces .footer-links a */
+    color: #6c757d;
+    text-decoration: none;
+    margin: 0 8px;
+    transition: color 0.2s ease;
+}
+.klc-footer-links a:hover {
+    color: #000;
+}
+
+/* Responsive adjustments - also using prefixed classes */
+@media (max-width: 768px) {
+    .klc-weather-item {
+        flex: 1 1 calc(50% - 10px); /* 2 items per row on medium screens */
+    }
+}
+@media (max-width: 576px) {
+    .klc-weather-item {
+        flex: 1 1 100%; /* 1 item per row on small screens */
+    }
+}

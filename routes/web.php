@@ -19,6 +19,7 @@ use App\Http\Controllers\Backend\UserLoginAsController;
 use App\Http\Controllers\Backend\LocaleController;
 use App\Http\Controllers\Backend\AmenityController;
 use App\Http\Controllers\Backend\SuggestController;
+use App\Http\Controllers\Backend\AdvertiseController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -102,6 +103,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth']], 
     Route::delete('/claim/{id}', [ClaimController::class, 'destroy'])->name('claim.destroy');
     
     Route::resource('blogs', BlogController::class);
+    Route::resource('/advertise', AdvertiseController::class);
 });
 
 /**

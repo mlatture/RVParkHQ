@@ -128,7 +128,9 @@ class SuggestController extends Controller
         $validated['user_email'] = auth()->user()->email;
 
         SuggestPark::create($validated);
-        Mail::to('mark@latture.com')->send(new SuggestMail((object)$validated));
+        
+        Mail::to(config('mail.notification_email'))->send(new SuggestMail((object)$validated));
+        
         return redirect()->route('admin.parks.index')->with([
             'icon' => 'success',
             'success' => 'Thank you! Your suggested park has been submitted.'

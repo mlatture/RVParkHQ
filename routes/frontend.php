@@ -9,6 +9,7 @@ use App\Http\Controllers\Frontend\ServiceController;
 use App\Http\Controllers\Frontend\ContactController;
 use App\Http\Controllers\Frontend\BlogController;
 use App\Http\Controllers\Frontend\SuggestController;
+use App\Http\Controllers\Frontend\CampConnectController;
 
 Route::name('rv-park.')->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -46,5 +47,10 @@ Route::name('rv-park.')->group(function () {
         Route::post('/suggest-park', 'store')->name('suggest.park.store');
     });
     
-    Route::get('/advertise', [AdvertiseController::class, 'index'])->name('advertise.index');
+    Route::controller(AdvertiseController::class)->group(function () {
+        Route::get('/advertise', 'index')->name('advertise.index');
+        Route::post('/advertise/store', 'store')->name('advertise.store'); 
+    });
+    
+    Route::get('/CampConnect', [CampConnectController::class, 'index'])->name('CampConnect.index');
 });

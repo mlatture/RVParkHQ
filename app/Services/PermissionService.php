@@ -153,6 +153,14 @@ class PermissionService
                     'blogs.delete',
                 ],
             ],
+            [
+                'group_name' => 'advertise',
+                'permissions' => [
+                    'advertise.view',
+                    'advertise.edit',
+                    'advertise.delete',
+                ],
+            ],
         ];
 
         return $permissions;

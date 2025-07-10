@@ -205,6 +205,15 @@ class AdminMenuService
                 'priority' => 1,
             ]);
         }
+        
+        $this->addMenuItem([
+            'label' => __('Advertise'),
+            'icon' => 'dashboard.svg',
+            'route' => route('admin.advertise.index'),
+            'active' => Route::is('admin.advertise.index'),
+            'id' => 'advertise',
+            'priority' => 1,
+        ]);
 
 //        $this->addMenuItem([
 //            'label' => __('Modules'),
