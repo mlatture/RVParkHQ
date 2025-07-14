@@ -2,11 +2,13 @@
 
 @section('content')
 
-    <section id="page-title" class="text-light" data-bg-parallax="{{asset('assets/images/slider/revolution/polo-homepage/dummy.png')}}">
+    <section id="page-title" class="text-light"
+             data-bg-parallax="{{asset('assets/images/slider/revolution/polo-homepage/dummy.png')}}">
         <div class="container">
             <div class="page-title text-center py-5 my-5 animate__animated animate__fadeInUp">
                 <h1 class="display-3 fw-bold mb-3 text-gradient">Amplify Your Reach</h1>
-                <p class="lead mt-3 mx-auto" style="max-width: 700px;">Connect with thousands of passionate outdoor enthusiasts actively searching for campgrounds and RV experiences.</p>
+                <p class="lead mt-3 mx-auto" style="max-width: 700px;">Connect with thousands of passionate outdoor
+                    enthusiasts actively searching for campgrounds and RV experiences.</p>
                 <div class="d-flex justify-content-center gap-3 mt-4">
                     <a href="#ad-solutions" class="btn btn-primary btn-lg px-4 py-3 btn-glow">Explore Options</a>
                     <a href="#contact-form" class="btn btn-outline-light btn-lg px-4 py-3">Get Started</a>
@@ -19,9 +21,32 @@
     <section class="py-5 bg-white position-relative z-index-1">
         <div class="container">
             <div class="text-center mb-5">
-                <span class="badge bg-primary-soft text-primary mb-3">WHY ADVERTISE WITH US</span>
+                <div class="d-flex justify-content-center bg-light py-4">
+                    <div id="adImageBox" class="position-relative text-center border rounded shadow-sm bg-white"
+                         style="max-width: 750px; width: 100%;">
+
+                        <button
+                            class="position-absolute top-0 end-0 btn btn-sm bg-white text-dark border rounded-circle m-2 shadow-sm"
+                            style="width: 30px; height: 30px; font-weight: bold; z-index: 1055;"
+                            onclick="hideImageAd()">×
+                        </button>
+
+                        <div class="text-start small text-muted px-3 pt-4">
+                            <i class="fa fa-info-circle me-1"></i> Sponsored Ad
+                        </div>
+
+                        <a href="https://www.webdavinci.com/" target="_blank">
+                            <img src="{{ asset('assets/images/ads/729x91.png') }}"
+                                 alt="Advertisement"
+                                 class="img-fluid rounded shadow-sm border border-secondary m-3">
+                        </a>
+                    </div>
+                </div>
+
+                <span class="badge bg-primary-soft text-primary m-3">WHY ADVERTISE WITH US</span>
                 <h2 class="mb-3 display-5 fw-bold">Targeted Exposure That Converts</h2>
-                <p class="text-muted mx-auto" style="max-width: 700px;">Our platform delivers your message directly to engaged campers and park owners actively making decisions.</p>
+                <p class="text-muted mx-auto" style="max-width: 700px;">Our platform delivers your message directly to
+                    engaged campers and park owners actively making decisions.</p>
             </div>
 
             <div class="row g-4">
@@ -32,7 +57,8 @@
                                 <i class="bi bi-people"></i>
                             </div>
                             <h3 class="h4 fw-bold mt-4">Premium Audience</h3>
-                            <p class="text-muted">Access thousands of high-intent campers planning their next adventure.</p>
+                            <p class="text-muted">Access thousands of high-intent campers planning their next
+                                adventure.</p>
                             <ul class="value-list">
                                 <li>RV owners</li>
                                 <li>Family campers</li>
@@ -85,7 +111,8 @@
             <div class="text-center mb-5">
                 <span class="badge bg-primary-soft text-primary mb-3">ADVERTISING SOLUTIONS</span>
                 <h2 class="mb-3 display-5 fw-bold">Custom Campaigns for Your Goals</h2>
-                <p class="text-muted mx-auto" style="max-width: 700px;">Select the advertising format that aligns with your marketing objectives.</p>
+                <p class="text-muted mx-auto" style="max-width: 700px;">Select the advertising format that aligns with
+                    your marketing objectives.</p>
             </div>
 
             <!-- Featured Listings -->
@@ -102,7 +129,8 @@
                             <p class="lead mb-4">Elevate your campground above competitors with premium placement.</p>
                             <ul class="solution-features">
                                 <li><i class="bi bi-check-circle-fill text-primary"></i> Priority in search results</li>
-                                <li><i class="bi bi-check-circle-fill text-primary"></i> Featured badge for credibility</li>
+                                <li><i class="bi bi-check-circle-fill text-primary"></i> Featured badge for credibility
+                                </li>
                                 <li><i class="bi bi-check-circle-fill text-primary"></i> Double the photo capacity</li>
                                 <li><i class="bi bi-check-circle-fill text-primary"></i> Regional spotlight options</li>
                             </ul>
@@ -117,7 +145,8 @@
                         </div>
                     </div>
                     <div class="col-lg-6 d-none d-lg-flex align-items-center justify-content-center bg-white">
-                        <img src="{{ asset('assets/images/ads/301x251.png') }}" class="img-fluid p-4" alt="Featured Listing Preview">
+                        <img src="{{ asset('assets/images/ads/301x251.png') }}" class="img-fluid p-4"
+                             alt="Featured Listing Preview">
                     </div>
                 </div>
             </div>
@@ -138,16 +167,23 @@
                             <div class="ad-format-tabs mb-4">
                                 <ul class="nav nav-tabs" id="bannerAdTabs" role="tablist">
                                     <li class="nav-item" role="presentation">
-                                        <button class="nav-link active" id="homepage-tab" data-bs-toggle="tab" data-bs-target="#homepage" type="button">Homepage</button>
+                                        <button class="nav-link active" id="homepage-tab" data-bs-toggle="tab"
+                                                data-bs-target="#homepage" type="button">Homepage
+                                        </button>
                                     </li>
                                     <li class="nav-item" role="presentation">
-                                        <button class="nav-link" id="search-tab" data-bs-toggle="tab" data-bs-target="#search" type="button">Search Results</button>
+                                        <button class="nav-link" id="search-tab" data-bs-toggle="tab"
+                                                data-bs-target="#search" type="button">Search Results
+                                        </button>
                                     </li>
                                     <li class="nav-item" role="presentation">
-                                        <button class="nav-link" id="blog-tab" data-bs-toggle="tab" data-bs-target="#blog" type="button">Blog</button>
+                                        <button class="nav-link" id="blog-tab" data-bs-toggle="tab"
+                                                data-bs-target="#blog" type="button">Blog
+                                        </button>
                                     </li>
                                 </ul>
-                                <div class="tab-content p-3 border border-top-0 rounded-bottom bg-white" id="bannerAdTabsContent">
+                                <div class="tab-content p-3 border border-top-0 rounded-bottom bg-white"
+                                     id="bannerAdTabsContent">
                                     <div class="tab-pane fade show active" id="homepage" role="tabpanel">
                                         <div class="d-flex justify-content-between align-items-center mb-3">
                                             <span>728×90 Leaderboard</span>
@@ -187,8 +223,12 @@
                     <div class="col-lg-6 d-none d-lg-flex align-items-center justify-content-center bg-white">
                         <div class="p-4 text-center">
                             <div class="banner-ad-preview mb-4">
-                                <img src="{{ asset('assets/images/ads/729x91.png') }}" class="img-fluid rounded-3 shadow-sm mb-2" style="max-width: 250px;" alt="728x90 Banner">
-                                <img src="{{ asset('assets/images/ads/970x250.png') }}" class="img-fluid rounded-3 shadow-sm" style="max-width: 250px;" alt="970x250 Banner">
+                                <img src="{{ asset('assets/images/ads/729x91.png') }}"
+                                     class="img-fluid rounded-3 shadow-sm mb-2" style="max-width: 250px;"
+                                     alt="728x90 Banner">
+                                <img src="{{ asset('assets/images/ads/970x250.png') }}"
+                                     class="img-fluid rounded-3 shadow-sm" style="max-width: 250px;"
+                                     alt="970x250 Banner">
                             </div>
                             <p class="small text-muted">All standard IAB sizes supported</p>
                         </div>
@@ -207,14 +247,17 @@
                                 </div>
                                 <h3 class="mb-0 fw-bold ms-3">Sponsored Content</h3>
                             </div>
-                            <p class="lead mb-4">Share your expertise through native content that engages our audience.</p>
+                            <p class="lead mb-4">Share your expertise through native content that engages our
+                                audience.</p>
                             <ul class="solution-features">
                                 <li><i class="bi bi-check-circle-fill text-purple"></i> Blog articles ($100-$200)</li>
                                 <li><i class="bi bi-check-circle-fill text-purple"></i> Product reviews ($150-$300)</li>
                                 <li><i class="bi bi-check-circle-fill text-purple"></i> Guest posts ($75-$150)</li>
                             </ul>
                             <div class="mt-4">
-                                <img src="{{ asset('assets/images/ads/600x200.png') }}" class="img-fluid rounded-3 border border-white border-3 shadow-sm" alt="Sponsored Content Example">
+                                <img src="{{ asset('assets/images/ads/600x200.png') }}"
+                                     class="img-fluid rounded-3 border border-white border-3 shadow-sm"
+                                     alt="Sponsored Content Example">
                             </div>
                             <a href="#contact-form" class="btn btn-purple mt-4">Create Content</a>
                         </div>
@@ -237,7 +280,9 @@
                                 <li><i class="bi bi-check-circle-fill text-danger"></i> Inline mention ($25/send)</li>
                             </ul>
                             <div class="mt-4">
-                                <img src="{{ asset('assets/images/ads/600x200.png') }}" class="img-fluid rounded-3 border border-white border-3 shadow-sm" alt="Newsletter Example">
+                                <img src="{{ asset('assets/images/ads/600x200.png') }}"
+                                     class="img-fluid rounded-3 border border-white border-3 shadow-sm"
+                                     alt="Newsletter Example">
                             </div>
                             <a href="#contact-form" class="btn btn-danger mt-4">Book Newsletter Spot</a>
                         </div>
@@ -274,7 +319,8 @@
                         </div>
                     </div>
                     <div class="col-lg-6 d-none d-lg-flex align-items-center justify-content-center bg-white">
-                        <img src="{{ asset('assets/images/ads/600x100.png') }}" class="img-fluid p-4" alt="Category Sponsorship Preview">
+                        <img src="{{ asset('assets/images/ads/600x100.png') }}" class="img-fluid p-4"
+                             alt="Category Sponsorship Preview">
                     </div>
                 </div>
             </div>
@@ -297,13 +343,16 @@
                                 <i class="bi bi-quote"></i>
                             </div>
                             <div class="d-flex align-items-center mb-4">
-                                <img src="https://ui-avatars.com/api/?name=Sarah+Johnson&background=random" class="rounded-circle me-3" width="60" height="60" alt="Sarah Johnson">
+                                <img src="https://ui-avatars.com/api/?name=Sarah+Johnson&background=random"
+                                     class="rounded-circle me-3" width="60" height="60" alt="Sarah Johnson">
                                 <div>
                                     <h5 class="mb-0 fw-bold">Sarah Johnson</h5>
                                     <span class="text-muted">Mountain View Campground</span>
                                 </div>
                             </div>
-                            <p class="mb-0">"Our bookings increased by 30% within three months of advertising. The targeted exposure to serious campers was exactly what we needed during our expansion."</p>
+                            <p class="mb-0">"Our bookings increased by 30% within three months of advertising. The
+                                targeted exposure to serious campers was exactly what we needed during our
+                                expansion."</p>
                         </div>
                         <div class="card-footer bg-primary-soft border-0">
                             <div class="d-flex align-items-center">
@@ -325,13 +374,15 @@
                                 <i class="bi bi-quote"></i>
                             </div>
                             <div class="d-flex align-items-center mb-4">
-                                <img src="https://ui-avatars.com/api/?name=Mike+Rodriguez&background=random" class="rounded-circle me-3" width="60" height="60" alt="Mike Rodriguez">
+                                <img src="https://ui-avatars.com/api/?name=Mike+Rodriguez&background=random"
+                                     class="rounded-circle me-3" width="60" height="60" alt="Mike Rodriguez">
                                 <div>
                                     <h5 class="mb-0 fw-bold">Mike Rodriguez</h5>
                                     <span class="text-muted">RV Adventure Gear</span>
                                 </div>
                             </div>
-                            <p class="mb-0">"The newsletter ads drove more traffic to our site than any other channel. We saw a 15% conversion rate from clicks to purchases - outstanding ROI!"</p>
+                            <p class="mb-0">"The newsletter ads drove more traffic to our site than any other channel.
+                                We saw a 15% conversion rate from clicks to purchases - outstanding ROI!"</p>
                         </div>
                         <div class="card-footer bg-primary-soft border-0">
                             <div class="d-flex align-items-center">
@@ -353,13 +404,15 @@
                                 <i class="bi bi-quote"></i>
                             </div>
                             <div class="d-flex align-items-center mb-4">
-                                <img src="https://ui-avatars.com/api/?name=Emily+Chen&background=random" class="rounded-circle me-3" width="60" height="60" alt="Emily Chen">
+                                <img src="https://ui-avatars.com/api/?name=Emily+Chen&background=random"
+                                     class="rounded-circle me-3" width="60" height="60" alt="Emily Chen">
                                 <div>
                                     <h5 class="mb-0 fw-bold">Emily Chen</h5>
                                     <span class="text-muted">Solar RV Solutions</span>
                                 </div>
                             </div>
-                            <p class="mb-0">"As a category sponsor, we've established ourselves as the go-to solar provider for RV owners. The exclusive positioning has been invaluable."</p>
+                            <p class="mb-0">"As a category sponsor, we've established ourselves as the go-to solar
+                                provider for RV owners. The exclusive positioning has been invaluable."</p>
                         </div>
                         <div class="card-footer bg-primary-soft border-0">
                             <div class="d-flex align-items-center">
@@ -384,7 +437,8 @@
             <div class="row align-items-center">
                 <div class="col-lg-8">
                     <h2 class="display-5 fw-bold mb-3">Ready to Grow Your Business?</h2>
-                    <p class="lead mb-4">Join dozens of successful brands reaching thousands of outdoor enthusiasts every day.</p>
+                    <p class="lead mb-4">Join dozens of successful brands reaching thousands of outdoor enthusiasts
+                        every day.</p>
                     <div class="d-flex align-items-center">
                         <i class="bi bi-check-circle-fill text-success me-3 fs-4"></i>
                         <span>No long-term contracts</span>
@@ -401,6 +455,38 @@
         </div>
     </section>
 
+    <div class="container my-4">
+        <div id="adImageBox2"
+             class="card border-0 shadow-sm rounded-4 position-relative text-center px-4 py-5 bg-white"
+             style="max-width: 700px; margin: auto;">
+
+            <button class="position-absolute top-0 end-0 btn btn-sm bg-white text-dark border rounded-circle m-2 shadow-sm"
+                    style="width: 30px; height: 30px; font-weight: bold; z-index: 1055;"
+                    onclick="hideImage()">×
+            </button>
+
+            <div class="text-start small text-muted mb-4">
+                <i class="fa fa-info-circle me-1"></i> Sponsored Ad
+            </div>
+
+            <div class="mb-4">
+                <a href="https://book.kayuta.com/" target="_blank" class="d-block ad-hover">
+                    <img src="{{ asset('assets/images/ads/301x251.png') }}"
+                         class="img-fluid rounded border shadow-sm"
+                         style="max-width: 100%; height: auto;" alt="Top Ad">
+                </a>
+            </div>
+
+            <div>
+                <a href="https://book.kayuta.com/" target="_blank" class="d-block ad-hover">
+                    <img src="{{ asset('assets/images/ads/600x100.png') }}"
+                         class="img-fluid rounded border shadow-sm"
+                         style="max-width: 100%; width: 300px; height: auto; object-fit: cover;" alt="Bottom Ad">
+                </a>
+            </div>
+        </div>
+    </div>
+
     <!-- Contact Form -->
     <section id="contact-form" class="py-5 bg-light">
         <div class="container">
@@ -412,7 +498,8 @@
                                 <div class="p-4 p-xl-5 d-flex flex-column justify-content-between h-100">
                                     <div>
                                         <h3 class="fw-bold mb-4">Let's Create Your Campaign</h3>
-                                        <p class="mb-4">Fill out this form and our advertising team will contact you within 24 hours to discuss the best options for your business.</p>
+                                        <p class="mb-4">Fill out this form and our advertising team will contact you
+                                            within 24 hours to discuss the best options for your business.</p>
 
                                         <div class="contact-info-item mb-3">
                                             <div class="d-flex align-items-center">
@@ -453,36 +540,45 @@
                             <div class="col-lg-7 bg-white">
                                 <div class="p-4 p-xl-5">
                                     <h3 class="fw-bold mb-4">Get Started Today</h3>
-                                    <form action="{{ route('rv-park.advertise.store') }}" method="post" class="needs-validation" novalidate>
+                                    <form action="{{ route('rv-park.advertise.store') }}" method="post"
+                                          class="needs-validation" novalidate>
                                         @csrf
 
                                         <div class="row g-3 mb-4">
                                             <div class="col-md-6">
-                                                <label for="name" class="form-label">Full Name <span class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" id="name" name="name" placeholder="Your name" required>
+                                                <label for="name" class="form-label">Full Name <span
+                                                        class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" id="name" name="name"
+                                                       placeholder="Your name" required>
                                                 <div class="invalid-feedback">Please enter your name.</div>
                                             </div>
                                             <div class="col-md-6">
                                                 <label for="company" class="form-label">Company Name</label>
-                                                <input type="text" class="form-control" id="company" name="company" placeholder="Your business">
+                                                <input type="text" class="form-control" id="company" name="company"
+                                                       placeholder="Your business">
                                             </div>
                                         </div>
 
                                         <div class="row g-3 mb-4">
                                             <div class="col-md-6">
-                                                <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
-                                                <input type="email" class="form-control" id="email" name="email" placeholder="you@example.com" required>
+                                                <label for="email" class="form-label">Email <span
+                                                        class="text-danger">*</span></label>
+                                                <input type="email" class="form-control" id="email" name="email"
+                                                       placeholder="you@example.com" required>
                                                 <div class="invalid-feedback">Please enter a valid email.</div>
                                             </div>
                                             <div class="col-md-6">
-                                                <label for="phone" class="form-label">Phone <span class="text-danger">*</span></label>
-                                                <input type="tel" class="form-control" id="phone" name="phone" placeholder="(123) 456-7890" required>
+                                                <label for="phone" class="form-label">Phone <span
+                                                        class="text-danger">*</span></label>
+                                                <input type="tel" class="form-control" id="phone" name="phone"
+                                                       placeholder="(123) 456-7890" required>
                                                 <div class="invalid-feedback">Please enter your phone number.</div>
                                             </div>
                                         </div>
 
                                         <div class="mb-4">
-                                            <label for="interest" class="form-label">Advertising Interest <span class="text-danger">*</span></label>
+                                            <label for="interest" class="form-label">Advertising Interest <span
+                                                    class="text-danger">*</span></label>
                                             <select class="form-select" id="interest" name="interest" required>
                                                 <option value="" selected disabled>Select an option</option>
                                                 <option value="featured">Featured Listings</option>
@@ -497,11 +593,14 @@
 
                                         <div class="mb-4">
                                             <label for="message" class="form-label">Tell Us About Your Goals</label>
-                                            <textarea class="form-control" id="message" name="message" rows="4" placeholder="What would you like to achieve with your advertising campaign?"></textarea>
+                                            <textarea class="form-control" id="message" name="message" rows="4"
+                                                      placeholder="What would you like to achieve with your advertising campaign?"></textarea>
                                         </div>
 
                                         <div class="d-grid">
-                                            <button type="submit" class="btn btn-primary btn-lg fw-bold py-3">Submit Inquiry</button>
+                                            <button type="submit" class="btn btn-primary btn-lg fw-bold py-3">Submit
+                                                Inquiry
+                                            </button>
                                         </div>
                                     </form>
                                 </div>
@@ -535,6 +634,47 @@
         </div>
     </div>
 
+    <div id="adNotify" class="modal-strip cookie-notify background-dark" style="display: block;">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-4 text-center mb-3 mb-lg-0">
+                    <img src="{{ asset('assets/images/ads/600x200.png') }}"
+                         class="img-fluid rounded-3 border border-white border-3 shadow-sm"
+                         style="width: 200px; height: auto;">
+                </div>
+                <div class="col-lg-5 text-sm-center sm-center sm-m-b-10 m-t-5 text-light">
+                    This advertisement is brought to you by our sponsors to keep the site free.
+                    <a href="https://book.kayuta.com/" target="_blank" class="text-light">
+                        <span>Learn more <i class="fa fa-info-circle"></i></span>
+                    </a>
+                </div>
+                <div class="col-lg-3 text-end sm-text-center sm-center">
+                    <button type="button" class="btn btn-rounded btn-light btn-outline btn-sm m-r-10 modal-close">
+                        Decline
+                    </button>
+                    <button type="button" class="btn btn-rounded btn-light btn-sm modal-confirm">Got it!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function hideImageAd() {
+            const ad = document.getElementById('adImageBox');
+            ad.style.display = 'none';
+
+            setTimeout(() => {
+                ad.style.display = 'block';
+            }, 10000);
+        }
+        function hideImage() {
+            const ad = document.getElementById('adImageBox2');
+            ad.style.display = 'none';
+
+            setTimeout(() => {
+                ad.style.display = 'block';
+            }, 10000);
+        }
+    </script>
 @endsection
 
 @push('styles')
@@ -558,12 +698,29 @@
             --light: #f8f9fa;
         }
 
-        .bg-primary-soft { background-color: var(--primary-soft); }
-        .bg-success-soft { background-color: var(--success-soft); }
-        .bg-info-soft { background-color: var(--info-soft); }
-        .bg-warning-soft { background-color: var(--warning-soft); }
-        .bg-danger-soft { background-color: var(--danger-soft); }
-        .bg-purple-soft { background-color: var(--purple-soft); }
+        .bg-primary-soft {
+            background-color: var(--primary-soft);
+        }
+
+        .bg-success-soft {
+            background-color: var(--success-soft);
+        }
+
+        .bg-info-soft {
+            background-color: var(--info-soft);
+        }
+
+        .bg-warning-soft {
+            background-color: var(--warning-soft);
+        }
+
+        .bg-danger-soft {
+            background-color: var(--danger-soft);
+        }
+
+        .bg-purple-soft {
+            background-color: var(--purple-soft);
+        }
 
         .text-gradient {
             background: linear-gradient(90deg, var(--primary), var(--info));
@@ -590,7 +747,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.4));
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.4));
             z-index: 0;
         }
 
@@ -606,7 +763,7 @@
 
         .value-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 20px 30px rgba(0,0,0,0.1) !important;
+            box-shadow: 0 20px 30px rgba(0, 0, 0, 0.1) !important;
         }
 
         .value-icon {
@@ -689,7 +846,7 @@
 
         /* Ad Format Tabs */
         .ad-format-tabs .nav-tabs {
-            border-bottom: 2px solid rgba(0,0,0,0.1);
+            border-bottom: 2px solid rgba(0, 0, 0, 0.1);
         }
 
         .ad-format-tabs .nav-tabs .nav-link {
@@ -745,14 +902,20 @@
 
         /* Buttons */
         .btn-glow {
-            box-shadow: 0 0 15px rgba(67,97,238,0.5);
+            box-shadow: 0 0 15px rgba(67, 97, 238, 0.5);
             animation: pulseGlow 2s infinite;
         }
 
         @keyframes pulseGlow {
-            0% { box-shadow: 0 0 15px rgba(67,97,238,0.5); }
-            50% { box-shadow: 0 0 25px rgba(67,97,238,0.8); }
-            100% { box-shadow: 0 0 15px rgba(67,97,238,0.5); }
+            0% {
+                box-shadow: 0 0 15px rgba(67, 97, 238, 0.5);
+            }
+            50% {
+                box-shadow: 0 0 25px rgba(67, 97, 238, 0.8);
+            }
+            100% {
+                box-shadow: 0 0 15px rgba(67, 97, 238, 0.5);
+            }
         }
 
         .btn-purple {
@@ -834,7 +997,7 @@
         });
 
         // Animate elements when they come into view
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const animatedElements = document.querySelectorAll('.value-card, .ad-solution-card, .testimonial-card');
 
             const observer = new IntersectionObserver((entries) => {
@@ -865,11 +1028,11 @@
         }
 
         // Add click handlers to ad preview images
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // For featured listing
             const featuredImg = document.querySelector('.featured-listing-mockup img');
             if (featuredImg) {
-                featuredImg.addEventListener('click', function() {
+                featuredImg.addEventListener('click', function () {
                     showAdPreview(
                         'Featured Listing Example',
                         '300×250 Medium Rectangle',
@@ -882,7 +1045,7 @@
             // For banner ads
             const bannerAds = document.querySelectorAll('.banner-ad-preview img');
             bannerAds.forEach(ad => {
-                ad.addEventListener('click', function() {
+                ad.addEventListener('click', function () {
                     const size = this.alt.includes('728x90') ? '728×90 Leaderboard' :
                         this.alt.includes('970x250') ? '970×250 Billboard' :
                             this.alt.includes('300x250') ? '300×250 Medium Rectangle' :
@@ -906,7 +1069,7 @@
             // For other ad types
             const otherAds = document.querySelectorAll('.ad-solution-card img:not(.banner-ad-preview img)');
             otherAds.forEach(ad => {
-                ad.addEventListener('click', function() {
+                ad.addEventListener('click', function () {
                     let title = 'Ad Example';
                     let size = 'Standard Size';
                     let price = 'Contact for pricing';

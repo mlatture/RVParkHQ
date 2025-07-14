@@ -64,7 +64,7 @@ Under his leadership, WebDaVinci has developed AI-driven chatbots, integrated bo
                 'role' => 'Design / Partner Success – RVParkHQ / WebDaVinci',
                 'country' => 'Pakistan',
                 'flag' => '🇵🇰',
-                'image' => 'images/team/Jakir.png',
+                'image' => 'images/team/jakir.jpg',
                 'email' => 'jakir@webdavinci.com',
                 'bio' => "Hi, I'm Jakir — a passionate Web Developer, Graphic Designer, and Data Entry Expert. With years of hands-on experience, I bring creative design, clean code, and accurate data handling to help businesses grow online. Let's build something great together!"
             ],
