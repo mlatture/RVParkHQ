@@ -39,7 +39,7 @@ class SuggestController extends Controller
         $editRequest->status = $request->status;
         $editRequest->save();
 
-        if (in_array($editRequest->status, ['approved', 'rejected'])) {
+        if (in_array($request->status, ['approved', 'rejected'])) {
             $park = Park::where('name', $editRequest->park_name)->first();
             if ($park) {
                 Mail::to($editRequest->user_email)->send(new SuggestStatusChangeMail($park, $editRequest->status));
@@ -57,7 +57,6 @@ class SuggestController extends Controller
                     $slug .= '-' . ($slugCount + 1);
                 }
 
-                // Slug path build logic
                 $slugPath = implode('-', array_filter([
                     Str::slug($editRequest->country),
                     Str::slug($editRequest->state),
@@ -88,8 +87,7 @@ class SuggestController extends Controller
             }
         }
 
-        return redirect()->route('admin.suggest-park.index')
-            ->with('success', 'Suggest Park status updated successfully.');
+        return redirect()->route('admin.suggest-park.index')->with('success', 'Suggest Park status updated successfully.');
     }
 
     public function destroy($id)
@@ -97,8 +95,7 @@ class SuggestController extends Controller
         $editRequest = SuggestPark::findOrFail($id);
         $editRequest->delete();
 
-        return redirect()->route('admin.suggest-park.index')
-            ->with('success', 'Suggest Park deleted successfully.');
+        return redirect()->route('admin.suggest-park.index')->with('success', 'Suggest Park deleted successfully.');
     }
 
     public function suggest()
@@ -116,12 +113,16 @@ class SuggestController extends Controller
             'park_name'      => 'required|string|max:255',
             'city'           => 'required|string|max:255',
             'state'          => 'required|string|max:100',
-            'country'        => 'required|string|max:100',
             'zip'            => 'nullable|string|max:20',
             'website_url'    => 'nullable|url|max:255',
-            'social_url'     => 'nullable|url|max:255',
-            'email'          => 'nullable|email|max:255',
+            'email'             => 'required|email|max:255|unique:suggest_park,email',
             'phone'          => 'nullable|string|max:20',
+            'user_name'      => 'required|string|max:255',
+            'user_email'     => 'required|email|max:255',
+            'submitted_by'     => 'required',
+            'address_line_1'     => 'required|string|max:255',
+            'address_line_2'     => 'nullable|string|max:255',
+            'description'     => 'nullable|string|max:1000',
         ]);
 
         $validated['user_name'] = auth()->user()->name;

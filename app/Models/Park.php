@@ -78,6 +78,11 @@ class Park extends Model
         return $this->hasMany(ClaimPark::class, 'park_id');
     }
     
+    public function favorites()
+    {
+        return $this->hasMany(Favorite::class);
+    }
+    
     protected static function boot()
     {
         parent::boot();

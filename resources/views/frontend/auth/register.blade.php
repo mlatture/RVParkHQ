@@ -1,0 +1,62 @@
+<div id="modalRegister" class="modal no-padding" data-delay="3000" style="max-width: 580px;">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="p-40 p-t-60 p-xs-20">
+            <h3 class="mb-4">Register a New Account</h3>
+    
+            <form class="form-grey-fields" method="POST" action="{{ route('modal.register') }}">
+                @csrf
+                @if ($errors->has('name') || $errors->has('email') || $errors->has('password'))
+                    <div class="alert alert-danger">
+                        @foreach ($errors->all() as $error)
+                            <div>{{ $error }}</div>
+                        @endforeach
+                    </div>
+                @endif
+    
+                <div class="row">
+                    <div class="form-group mb-3 col-md-6">
+                        <label for="name" class="form-label">Full Name</label>
+                        <input type="text" name="name" id="name" class="form-control" placeholder="Your Full Name" required value="{{ old('name') }}">
+                    </div>
+                    <div class="form-group mb-3 col-md-6">
+                        <label for="email" class="form-label">Email Address</label>
+                        <input type="email" name="email" id="email" class="form-control" placeholder="you@example.com" required value="{{ old('email') }}">
+                    </div>
+                    <div class="form-group mb-3 col-md-6">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" name="password" id="password" class="form-control" placeholder="Create Password" required>
+                    </div>
+                    <div class="form-group mb-3 col-md-6">
+                        <label for="password_confirmation" class="form-label">Confirm Password</label>
+                        <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" placeholder="Re-type Password" required>
+                    </div>
+                </div>
+    
+                <div class="text-start mb-3">
+                    <button type="submit" class="btn btn-primary w-100">Register</button>
+                </div>
+            </form>
+    
+            <p class="text-start mb-0">
+                Already have an account?
+                <a href="#modalLogin" data-lightbox="inline">Login Here</a>
+            </p>
+        </div>
+        </div>
+    </div>
+</div>
+<script>
+    // Auto-open register modal if there are register errors
+    @if ($errors->has('name') || $errors->has('email') || $errors->has('password'))
+        document.addEventListener('DOMContentLoaded', function() {
+            if (window.jQuery && $.magnificPopup) {
+                $.magnificPopup.open({ items: { src: '#modalRegister' }, type: 'inline' });
+            } else if (window.lightbox) {
+                lightbox.open('#modalRegister');
+            } else {
+                document.getElementById('modalRegister').style.display = 'block';
+            }
+        });
+    @endif
+</script>

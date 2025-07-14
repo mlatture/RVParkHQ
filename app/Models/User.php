@@ -54,6 +54,16 @@ class User extends Authenticatable
     {
         return $this->hasMany(ActionLog::class, 'action_by');
     }
+    
+    public function favorites()
+    {
+        return $this->hasMany(Favorite::class);
+    }
+
+    public function hasFavoritedPark($parkId)
+    {
+        return $this->favorites()->where('park_id', $parkId)->exists();
+    }
 
     /**
      * Send the password reset notification.

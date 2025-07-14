@@ -124,6 +124,12 @@
                     </div>
                 </div>
                 <div class="col-md-5">
+                    
+                    <div class="mb-3">
+                        <p class="mb-2 text-white fw-bold">Don’t see your favorite park?</p>
+                        <a href="{{ route('rv-park.suggest.park') }}" class="btn btn-warning text-dark btn-sm">Suggest a Campground</a>
+                    </div>
+                    
                     <div class="widget">
                         <div class="widget-title">Subscribe for Camping Tips</div>
                         <p class="mb-3 text-white">Join our mailing list for top camping tips, exclusive discounts, and nearby park alerts.</p>

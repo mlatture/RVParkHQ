@@ -187,7 +187,15 @@
         .p-4 {
             padding: 2rem !important;
         }
-
+        
+         .heart-icon {
+            transition: fill 0.2s, stroke 0.2s, transform 0.15s;
+        }
+        
+        .favorite-heart.active .heart-icon {
+            transform: scale(1.15);
+            transition: transform 0.15s;
+        }
     </style>
     
 @section('content')
@@ -317,6 +325,7 @@
             <div class="shop container">
                 <div class="grid-layout grid-5-columns" data-item="grid-item">
                     @forelse($parks['parks'] as $park)
+                        @php $user = Auth::user(); @endphp
                         <div class="grid-item park-item"
                              data-name="{{ $park->name }}"
                              data-city="{{ $park->city }}"
@@ -327,7 +336,7 @@
                             @endforeach
                         >
                             <div class="park-card">
-                                <div class="park-image-container">
+                                <div class="park-image-container position-relative">
                                     {{-- State Badge --}}
                                     @if($park->state)
                                         <div class="state-badge">
@@ -343,6 +352,18 @@
                                                  title="Winner - {{ \Carbon\Carbon::parse($winner->date)->year }}"/>
                                         @endforeach
                                     </div>
+                                    
+                                    {{-- Heart Icon for Favorites --}}
+                                    @auth
+                                        @php $isFavorited = $user->hasFavoritedPark($park->id); @endphp
+                                        <span class="favorite-heart" data-park-id="{{ $park->id }}" style="position:absolute;top:14px;right:14px;z-index:10;cursor:pointer;">
+                                            @if($isFavorited)
+                                                <svg class="heart-icon" width="28" height="28" viewBox="0 0 24 24" fill="#e74c3c" stroke="#e74c3c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21C12 21 4 13.36 4 8.5C4 5.42 6.42 3 9.5 3C11.24 3 12.91 3.81 14 5.08C15.09 3.81 16.76 3 18.5 3C21.58 3 24 5.42 24 8.5C24 13.36 16 21 16 21H12Z"></path></svg>
+                                            @else
+                                                <svg class="heart-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#e74c3c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21C12 21 4 13.36 4 8.5C4 5.42 6.42 3 9.5 3C11.24 3 12.91 3.81 14 5.08C15.09 3.81 16.76 3 18.5 3C21.58 3 24 5.42 24 8.5C24 13.36 16 21 16 21H12Z"></path></svg>
+                                            @endif
+                                        </span>
+                                    @endauth
                                     
                                     @php
                                         $imagePath = $park->main_image_url;
@@ -503,6 +524,41 @@
                 $('#noParksFoundMsg').remove();
                 $('.mfp-close').trigger('click');
             };
+        });
+    
+        $(document).ready(function() {
+            // Use event delegation for dynamically updated hearts
+            $(document).on('click', '.favorite-heart', function(e) {
+                e.preventDefault();
+                var heart = $(this);
+                var parkId = heart.data('park-id');
+                var isFavorited = heart.find('svg[fill="#e74c3c"]').length > 0;
+                var url = isFavorited ? '{{ route('rv-park.park.unfavorite') }}' : '{{ route('rv-park.park.favorite') }}';
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data: {
+                        park_id: parkId,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        if (response.status === 'favorited') {
+                            heart.html('<svg class="heart-icon" width="28" height="28" viewBox="0 0 24 24" fill="#e74c3c" stroke="#e74c3c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21C12 21 4 13.36 4 8.5C4 5.42 6.42 3 9.5 3C11.24 3 12.91 3.81 14 5.08C15.09 3.81 16.76 3 18.5 3C21.58 3 24 5.42 24 8.5C24 13.36 16 21 16 21H12Z"></path></svg>');
+                            heart.addClass('active');
+                            setTimeout(function(){ heart.removeClass('active'); }, 150);
+                        } else if (response.status === 'unfavorited') {
+                            heart.html('<svg class="heart-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#e74c3c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21C12 21 4 13.36 4 8.5C4 5.42 6.42 3 9.5 3C11.24 3 12.91 3.81 14 5.08C15.09 3.81 16.76 3 18.5 3C21.58 3 24 5.42 24 8.5C24 13.36 16 21 16 21H12Z"></path></svg>');
+                            heart.addClass('active');
+                            setTimeout(function(){ heart.removeClass('active'); }, 150);
+                        }
+                    },
+                    error: function(xhr) {
+                        if(xhr.status === 401) {
+                            alert('Please login to favorite parks.');
+                        }
+                    }
+                });
+            });
         });
     </script>
 @endsection

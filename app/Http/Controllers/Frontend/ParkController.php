@@ -4,11 +4,15 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Frontend\ParkRequest;
-use App\Models\{Park, Review, WinnerPark};
+use App\Models\Park;
+use App\Models\Review;
+use App\Models\WinnerPark;
+use App\Models\Favorite;
 use App\Services\Frontend\ReviewService;
 use App\Services\ParkService;
 use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
+use Illuminate\Support\Facades\Auth;
 
 class ParkController extends Controller
 {
@@ -92,6 +96,26 @@ class ParkController extends Controller
     {
         $states = Park::select('state', 'color')->distinct()->orderBy('state')->get();
         return view('frontend.pages.park.state', compact('states'));
+    }
+    
+    public function favoritePark(Request $request)
+    {
+        $request->validate(['park_id' => 'required|exists:parks,id']);
+        $user = Auth::user();
+        $parkId = $request->park_id;
+        if (!$user->favorites()->where('park_id', $parkId)->exists()) {
+            $user->favorites()->create(['park_id' => $parkId]);
+        }
+        return response()->json(['status' => 'favorited']);
+    }
+    
+    public function unfavoritePark(Request $request)
+    {
+        $request->validate(['park_id' => 'required|exists:parks,id']);
+        $user = Auth::user();
+        $parkId = $request->park_id;
+        $user->favorites()->where('park_id', $parkId)->delete();
+        return response()->json(['status' => 'unfavorited']);
     }
     
     public function generateBadge($slug) {

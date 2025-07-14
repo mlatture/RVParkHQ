@@ -10,6 +10,9 @@ use App\Http\Controllers\Frontend\ContactController;
 use App\Http\Controllers\Frontend\BlogController;
 use App\Http\Controllers\Frontend\SuggestController;
 use App\Http\Controllers\Frontend\CampConnectController;
+use App\Http\Controllers\Frontend\Auth\FrontendLoginController;
+use App\Http\Controllers\Frontend\Auth\FrontendRegisterController;
+use App\Http\Controllers\Frontend\ProfileController;
 
 Route::name('rv-park.')->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -53,4 +56,22 @@ Route::name('rv-park.')->group(function () {
     });
     
     Route::get('/CampConnect', [CampConnectController::class, 'index'])->name('CampConnect.index');
+    
+    Route::middleware('auth')->group(function () {
+        Route::post('/park/favorite', [ParkController::class, 'favoritePark'])->name('park.favorite');
+        Route::post('/park/unfavorite', [ParkController::class, 'unfavoritePark'])->name('park.unfavorite');
+    });
+    
+    Route::controller(ProfileController::class)->group(function () {
+        Route::get('/profile/dashboard', 'dashboard')->name('profile.dashboard');
+        Route::get('/profile/favourites', 'favourites')->name('profile.favourites');
+        Route::get('/profiles/edit', 'edit')->name('profiles.edit');
+        Route::post('/profile/update', 'update')->name('profiles.update');
+        Route::post('/modal-profile-update', 'modalProfileUpdate')->name('modal.profile.update');
+    });
 });
+
+
+Route::post('/modal-login', [FrontendLoginController::class, 'loginModal'])->name('modal.login');
+Route::post('/modal-register', [FrontendRegisterController::class, 'registerModal'])->name('modal.register');
+Route::get('/frontend-verify/{id}/{hash}', [FrontendRegisterController::class, 'verify'])->name('frontend.verification.verify');

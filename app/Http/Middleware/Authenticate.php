@@ -13,11 +13,22 @@ class Authenticate extends Middleware
      * @param  \Illuminate\Http\Request  $request
      * @return string|null
      */
-    protected function redirectTo($request)
+    // protected function redirectTo($request)
+    // {
+    //     // If the request does not expect JSON, redirect to the appropriate login page.
+    //     if (! $request->expectsJson()) {
+    //         return route('admin.login');
+    //     }
+    // }
+    
+     protected function redirectTo($request)
     {
-        // If the request does not expect JSON, redirect to the appropriate login page.
         if (! $request->expectsJson()) {
-            return route('admin.login');
+            if ($request->is('admin') || $request->is('admin/*')) {
+                return route('admin.login');
+            }
+
+            return route('rv-park.home');
         }
     }
 }

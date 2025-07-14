@@ -21,14 +21,16 @@ class SuggestController extends Controller
             'park_name'      => 'required|string|max:255',
             'city'           => 'required|string|max:255',
             'state'          => 'required|string|max:100',
-            'country'        => 'required|string|max:100',
             'zip'            => 'nullable|string|max:20',
             'website_url'    => 'nullable|url|max:255',
-            'social_url'     => 'nullable|url|max:255',
-            'email'          => 'nullable|email|max:255',
+            'email'             => 'required|email|max:255|unique:suggest_park,email',
             'phone'          => 'nullable|string|max:20',
             'user_name'      => 'required|string|max:255',
             'user_email'     => 'required|email|max:255',
+            'submitted_by'     => 'required',
+            'address_line_1'     => 'required|string|max:255',
+            'address_line_2'     => 'nullable|string|max:255',
+            'description'     => 'nullable|string|max:1000',
         ]);
 
         SuggestPark::create($validated);
@@ -37,7 +39,7 @@ class SuggestController extends Controller
 
         return redirect()->route('rv-park.home')->with([
             'icon' => 'success',
-            'success' => 'Thank you! Your suggestion park has been submitted.'
+            'success' => 'Thanks! We’ll review your submission and add the park soon.'
         ]);
     }
 }

@@ -45,12 +45,9 @@
                     <form action="{{ route('admin.suggest-park.update', $suggest->id) }}" method="POST" class="space-y-8">
                         @csrf
                         @method('PUT')
-
-                        {{-- 🟢 Status Section --}}
                         <div>
                             <h5 class="text-lg font-semibold text-gray-700 dark:text-white mb-2">🟢 Status</h5>
-                            <select name="status" id="status"
-                                    class="form-control" required>
+                            <select name="status" id="status" class="form-control" required>
                                 @foreach (['pending', 'approved', 'rejected'] as $status)
                                     <option value="{{ $status }}" {{ $suggest->status === $status ? 'selected' : '' }}>
                                         {{ ucfirst($status) }}
@@ -58,14 +55,41 @@
                                 @endforeach
                             </select>
                         </div>
-
-                        {{-- 🧾 Basic Information --}}
+                        <div>
+                            <h5 class="text-lg font-semibold text-gray-700 dark:text-white mb-3">👤 User Info</h5>
+                            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                                <div>
+                                    <label class="form-label">Submitted By</label>
+                                    <select name="submitted_by" class="form-control" required>
+                                        <option value="park_owner" {{ $suggest->submitted_by === 'park_owner' ? 'selected' : '' }}>Park Owner</option>
+                                        <option value="guest" {{ $suggest->submitted_by === 'guest' ? 'selected' : '' }}>Guest</option>
+                                        <option value="other" {{ $suggest->submitted_by === 'other' ? 'selected' : '' }}>Other</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="form-label">User Name</label>
+                                    <input type="text" name="user_name" value="{{ $suggest->user_name }}" class="form-control" required>
+                                </div>
+                                <div>
+                                    <label class="form-label">User Email</label>
+                                    <input type="email" name="user_email" value="{{ $suggest->user_email }}" class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
                         <div>
                             <h5 class="text-lg font-semibold text-gray-700 dark:text-white mb-3">🧾 Basic Information</h5>
                             <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
                                 <div>
                                     <label class="form-label">Park Name</label>
                                     <input type="text" name="park_name" value="{{ $suggest->park_name }}" class="form-control" required>
+                                </div>
+                                <div>
+                                    <label class="form-label">Address Line 1</label>
+                                    <input type="text" name="address_line_1" value="{{ $suggest->address_line_1 }}" class="form-control" required>
+                                </div>
+                                <div>
+                                    <label class="form-label">Address Line 2</label>
+                                    <input type="text" name="address_line_2" value="{{ $suggest->address_line_2 }}" class="form-control">
                                 </div>
                                 <div>
                                     <label class="form-label">City</label>
@@ -76,27 +100,16 @@
                                     <input type="text" name="state" value="{{ $suggest->state }}" class="form-control" required>
                                 </div>
                                 <div>
-                                    <label class="form-label">Country</label>
-                                    <input type="text" name="country" value="{{ $suggest->country }}" class="form-control" required>
-                                </div>
-                                <div>
                                     <label class="form-label">ZIP / Postal Code</label>
                                     <input type="text" name="zip" value="{{ $suggest->zip }}" class="form-control">
                                 </div>
                             </div>
                         </div>
-
-                        {{-- 🌐 Online Presence --}}
                         <div>
-                            <h5 class="text-lg font-semibold text-gray-700 dark:text-white mb-3">🌐 Online Presence</h5>
                             <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
                                 <div>
                                     <label class="form-label">Website URL</label>
                                     <input type="url" name="website_url" value="{{ $suggest->website_url }}" class="form-control">
-                                </div>
-                                <div>
-                                    <label class="form-label">Facebook or Instagram URL</label>
-                                    <input type="url" name="social_url" value="{{ $suggest->social_url }}" class="form-control">
                                 </div>
                                 <div>
                                     <label class="form-label">Email Address</label>
@@ -108,29 +121,17 @@
                                 </div>
                             </div>
                         </div>
-
-                        {{-- 👤 User Info (Read-Only) --}}
                         <div>
-                            <h5 class="text-lg font-semibold text-gray-700 dark:text-white mb-3">👤 User Information</h5>
-                            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                                <div>
-                                    <label class="form-label">Submitted By</label>
-                                    <input type="text" value="{{ $suggest->user_name }}" class="form-control" readonly>
-                                </div>
-                                <div>
-                                    <label class="form-label">User Email</label>
-                                    <input type="email" value="{{ $suggest->user_email }}" class="form-control" readonly>
-                                </div>
+                            <div>
+                                <label class="form-label">Description</label>
+                                <textarea name="description" class="form-control" rows="4">{{ $suggest->description }}</textarea>
                             </div>
                         </div>
-
-                        {{-- Submit --}}
                         <div class="flex gap-4">
                             <button type="submit" class="btn-primary">Save</button>
                             <a href="{{ route('admin.suggest-park.index') }}" class="btn-default">Cancel</a>
                         </div>
                     </form>
-
                 </div>
             </div>
         </div>
