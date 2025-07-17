@@ -67,7 +67,7 @@
                     <textarea id="review-badge-code" rows="8" readonly spellcheck="false"
                       class="w-full text-center text-sm font-mono text-gray-800 bg-gray-100 border border-gray-300 rounded-md p-4 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
-                        <a href="https://rvparkhq.com/en-us/parks/{{ $park->slug_path }}/reviews/write" target="_blank">
+                        <a href="https://rvparkhq.com/en-us/parks/{{ $park->slug_path }}" target="_blank">
                           <img src="https://rvparkhq.com/badges/{{ $park->slug }}/review-badge.png" alt="Review Our Park on RVParkHQ" />
                         </a>
                         <script>

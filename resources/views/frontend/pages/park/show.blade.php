@@ -726,7 +726,7 @@
         });
         
         document.addEventListener("DOMContentLoaded", function () {
-            if (window.location.pathname.includes("/reviews/write")) {
+            if (window.location.pathname.includes("parks")) {
                 const el = document.getElementById("write-review");
                 if (el) {
                     el.scrollIntoView({ behavior: "smooth", block: "start" });

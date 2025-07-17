@@ -68,7 +68,6 @@ Route::name('rv-park.')->group(function () {
         Route::get('/profile/favourites', 'favourites')->name('profile.favourites');
         Route::get('/profiles/edit', 'edit')->name('profiles.edit');
         Route::post('/profile/update', 'update')->name('profiles.update');
-        Route::post('/modal-profile-update', 'modalProfileUpdate')->name('modal.profile.update');
     });
     
     Route::post('/claim-park', [ClaimController::class, 'store'])->name('claim-park.store');
@@ -79,3 +78,4 @@ Route::name('rv-park.')->group(function () {
 Route::post('/modal-login', [FrontendLoginController::class, 'loginModal'])->name('modal.login');
 Route::post('/modal-register', [FrontendRegisterController::class, 'registerModal'])->name('modal.register');
 Route::get('/frontend-verify/{id}/{hash}', [FrontendRegisterController::class, 'verify'])->name('frontend.verification.verify');
+Route::post('/modal-profile-update', [ProfileController::class, 'modalProfileUpdate'])->name('modal.profile.update');
