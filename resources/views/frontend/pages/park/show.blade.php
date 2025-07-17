@@ -2,6 +2,183 @@
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
+<style>
+    .star-rating {
+        direction: rtl;
+        display: inline-flex;
+        justify-content: flex-start;
+        gap: 0.3rem;
+    }
+
+    .star-rating input[type="radio"] {
+        display: none;
+    }
+
+    .star-rating label {
+        font-size: 1.75rem;
+        color: #ccc;
+        cursor: pointer;
+        transition: color 0.3s ease;
+    }
+
+    .star-rating input[type="radio"]:checked ~ label,
+    .star-rating label:hover,
+    .star-rating label:hover ~ label {
+        color: #ffc107;
+    }
+
+    .review-helper-text {
+        font-size: 0.9rem;
+        color: #6c757d;
+        margin-top: 0.4rem;
+    }
+
+    .additional-info-table {
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        overflow: hidden;
+    }
+
+    .additional-info-table td {
+        padding: 12px 16px;
+        vertical-align: middle;
+    }
+
+    .additional-info-table tr:nth-child(odd) {
+        background-color: #f9f9f9;
+    }
+
+    .info-label {
+        font-weight: 600;
+        color: #333;
+        width: 180px;
+    }
+
+    .info-value {
+        color: #555;
+    }
+
+    .info-icon {
+        width: 1.2rem;
+        margin-right: 8px;
+        color: #ffc107;
+    }
+
+    .reviews-wrapper {
+        background-color: #f9f9f9;
+        border-radius: 10px;
+        padding: 30px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+    }
+
+    .review-header {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 25px;
+        color: #333;
+    }
+
+    .review-card {
+        background: #fff;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        border-left: 4px solid #ffc107;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+    }
+
+    .review-card .avatar {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 2px solid #fff;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .review-meta {
+        font-size: 0.875rem;
+        color: #777;
+    }
+
+    .review-message {
+        font-size: 1rem;
+        color: #444;
+    }
+
+    .star-rating span {
+        font-size: 1.2rem;
+    }
+
+    .amenity-icon-img {
+        width: 150px;
+        height: 150px;
+        object-fit: contain;
+        background-color: #f8f9fa;
+        padding: 10px;
+        border-radius: 12px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+    }
+
+    .amenity-icon-img:hover {
+        transform: scale(1.05);
+    }
+
+    .claim-section-title {
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: #1d3557;
+        border-left: 5px solid #28a745;
+        padding-left: 15px;
+        margin-bottom: 1.8rem;
+    }
+
+    .custom-card {
+        background-color: #f9fdf9;
+        border: 1px solid #d4edda;
+        border-left: 6px solid #28a745;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+    }
+
+    .custom-card:hover {
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.05);
+        transform: scale(1.01);
+    }
+
+    .custom-card .card-body {
+        padding: 1.4rem 1.2rem;
+    }
+
+    .custom-value {
+        font-size: 1.3rem;
+        font-weight: bold;
+        color: #2d6a4f;
+    }
+
+    .text-muted {
+        font-size: 0.92rem;
+    }
+
+    .yes-badge {
+        background-color: #28a745;
+        color: white;
+        font-size: 0.85rem;
+        padding: 4px 10px;
+        border-radius: 20px;
+    }
+
+    .no-badge {
+        background-color: #dc3545;
+        color: white;
+        font-size: 0.85rem;
+        padding: 4px 10px;
+        border-radius: 20px;
+    }
+</style>
+
 @php
     use Illuminate\Support\Str;
 @endphp
