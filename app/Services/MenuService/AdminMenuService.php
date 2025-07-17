@@ -193,9 +193,19 @@ class AdminMenuService
             'priority' => 1,
             'permissions' => 'blogs.view'
         ]);
+        
+        $this->addMenuItem([
+            'label' => __('Advertise'),
+            'icon' => 'dashboard.svg',
+            'route' => route('admin.advertise.index'),
+            'active' => Route::is('admin.advertise.index'),
+            'id' => 'advertise',
+            'priority' => 1,
+            'permissions' => 'advertise.view'
+        ]);
 
 
-        if (auth()->user()->name == 'Owner') {
+        if (auth()->user()->hasRole('Owner')) {
             $this->addMenuItem([
                 'label' => __('Suggest Park'),
                 'icon' => 'dashboard.svg',

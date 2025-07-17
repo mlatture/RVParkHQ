@@ -24,7 +24,6 @@
                                     <li><a href="{{ route('rv-park.CampConnect.index') }}">Camp Connect</a></li>
                                 </ul>
                             </li>
-                            <li><a href="{{ route('rv-park.service') }}">Services</a></li>
                             <li><a href="{{ route('rv-park.contact') }}">Contact</a></li>
                             <li>
                                 <a id="btn-search" href="#"> <i class="icon-search"></i></a>

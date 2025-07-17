@@ -86,6 +86,15 @@ Under his leadership, WebDaVinci has developed AI-driven chatbots, integrated bo
                 'email' => 'dexter@webdavinci.com',
                 'bio' => 'Dexter serves as the finance and bookkeeping consultant for RVParkHQ and WebDaVinci, bringing a sharp eye for detail and a strategic mindset to the financial side of our operations. From managing budgets and tracking expenses to advising on pricing models and transaction flows, Dexter plays a critical role in keeping our business grounded and scalable. In addition to managing the numbers, Dexter consults on the financial design of our platform—helping shape how reservation payments, site lock fees, and reporting systems are structured for both park owners and guests. His insights ensure that the platform isn’t just smart—it makes fiscal sense, too. Thanks to Dexter, our ledgers are balanced, and our features are built with real-world financial workflows in mind.'
             ],
+            [
+                'name' => 'Ahfaz Malik',
+                'role' => 'Full Stack Developer / Bot Integration Specialist / Project Manager',
+                'country' => 'Pakistan',
+                'flag' => '🇵🇰',
+                'image' => 'images/team/ahfaz.jpg',
+                'email' => 'malikahfaz@webdavinci.com',
+                'bio' => "Hi, I'm Ahfaz — a seasoned Full Stack Developer with 6+ years of experience in backend technologies like Laravel, PHP, Node.js, and SQL. I’m also confident on the frontend, working with React, JavaScript, HTML, CSS, and AJAX. I've successfully delivered over 100 full-stack projects including e-commerce platforms, CMS, LMS, and POS systems. My expertise includes AI chatbot integration, RESTful APIs, and building scalable, secure architectures. Beyond coding, I actively lead projects, define scopes, manage teams, and ensure timely delivery with a solution-oriented mindset."
+            ],
         ];
 
         return view('frontend.pages.our-team.index', compact('team'));

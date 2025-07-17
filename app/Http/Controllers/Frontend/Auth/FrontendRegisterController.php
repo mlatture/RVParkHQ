@@ -29,32 +29,48 @@ class FrontendRegisterController extends Controller
     }
 
     /**
-     * Handle modal register request for frontend.
+     * Handle modal register request for frontend (now for claim park submission).
      */
     public function registerModal(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'park_name' => ['required', 'string', 'max:255'],
+            'park_url' => ['nullable', 'string', 'max:255'],
+            'address_line_1' => ['nullable', 'string', 'max:255'],
+            'address_line_2' => ['nullable', 'string', 'max:255'],
+            'city' => ['nullable', 'string', 'max:255'],
+            'state' => ['nullable', 'string', 'max:255'],
+            'zip' => ['nullable', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255'],
+            'phone' => ['nullable', 'string', 'max:255'],
+            'message' => ['nullable', 'string'],
+            'password' => ['required', 'string', 'min:6'],
         ]);
 
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
 
-        $user = User::create([
-            'name' => $request->name,
+        $token = \Str::random(40);
+
+        $submission = \App\Models\ClaimParkSubmission::create([
+            'park_name' => $request->park_name,
+            'park_url' => $request->park_url,
+            'address_line_1' => $request->address_line_1,
+            'address_line_2' => $request->address_line_2,
+            'city' => $request->city,
+            'state' => $request->state,
+            'zip' => $request->zip,
             'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'username' => $this->generateUsername($request->name, $request->email),
+            'phone' => $request->phone,
+            'message' => $request->message,
+            'password' => bcrypt($request->password),
+            'token' => $token,
         ]);
 
-        $verificationUrl = URL::temporarySignedRoute(
-            'frontend.verification.verify', now()->addMinutes(60), ['id' => $user->id, 'hash' => sha1($user->email)]
-        );
-        
-        Mail::to($user->email)->send(new FrontendVerifyEmail($user, $verificationUrl));
+        // Send verification email
+        \Mail::to($request->email)->send(new \App\Mail\ClaimParkVerifyMail($submission));
+
         return redirect()->route('rv-park.home')->with([
             'icon' => 'success',
             'success' => 'A verification email has been sent. Please verify before logging in.'

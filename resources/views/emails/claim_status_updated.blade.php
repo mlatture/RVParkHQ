@@ -8,7 +8,7 @@
 <div style="max-width: 600px; margin: auto; background-color: #ffffff; border-radius: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); padding: 30px;">
     <h2 style="color: #2c3e50;">Your Park Claim Status has been Updated</h2>
 
-    <p>Hello <strong>{{ $claimPark->user->name }}</strong>,</p>
+    <p>Hello <strong>{{ $claimPark->user->name ?? 'Sir/ Madam' }}</strong>,</p>
 
     <p>
         The status of your claim for the park <strong>{{ $claimPark->park->name }}</strong> has been updated.

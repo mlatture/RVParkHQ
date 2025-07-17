@@ -5,6 +5,8 @@ namespace App\Http\Controllers\backend;
 use App\Http\Controllers\Controller;
 use App\Mail\ClaimStatusUpdatedMail;
 use App\Models\ClaimPark;
+use App\Models\ClaimParkSubmission;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
@@ -33,8 +35,25 @@ class ClaimController extends Controller
 
         $claimPark = ClaimPark::findorFail($id);
         $claimPark->update(['status' => $validated['status']]);
+        if ($claimPark->status == 'approved') {
+            $user = User::where('email', $claimPark->contact_email)->first();
+            $ClaimParkSubmission = ClaimParkSubmission::where('email', $claimPark->contact_email)->first();
+            if (!$user) {
+                $user = User::create([
+                    'name' => explode('@', $claimPark->contact_email)[0],
+                    'username' => explode('@', $claimPark->contact_email)[0],
+                    'email' => $claimPark->contact_email,
+                    'phone' => $claimPark->contact_phone,
+                    'password' => $ClaimParkSubmission->password,
+                    'email_verified_at' => now(),
+                    'type' => 'owner',
+                ]);
+                $user->assignRole('owner');
+            }
+            $claimPark->update(['user_id' => $user->id]);
+        }
 
-        Mail::to($claimPark->user)->send(new ClaimStatusUpdatedMail($claimPark));
+        Mail::to($claimPark->contact_email)->send(new ClaimStatusUpdatedMail($claimPark));
 
         return redirect()->route('admin.claim.index')->with([
             'icon' => 'success',

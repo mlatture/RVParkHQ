@@ -113,7 +113,7 @@
                                     {{ __('User Email') }}
                                 </label>
                                 <div class="mt-1 p-2 bg-gray-100 rounded-md dark:bg-gray-800">
-                                    {{ $claimPark->user->email ?? 'N/A' }}
+                                    {{ $claimPark->user->email ?? $claimPark->contact_email }}
                                 </div>
                             </div>
                         </div>

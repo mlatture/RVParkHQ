@@ -62,7 +62,7 @@
                             <tr class="border-b border-gray-100 dark:border-gray-800">
                                 <td class="px-5 py-4 sm:px-6">{{ $index + 1 }}</td>
                                 <td class="px-5 py-4 sm:px-6">{{ $claimPark->park->name }}</td>
-                                <td class="px-5 py-4 sm:px-6">{{ $claimPark->user->email }}</td>
+                                <td class="px-5 py-4 sm:px-6">{{ $claimPark->user->email ?? $claimPark->contact_email }}</td>
                                 <td class="px-5 py-4 sm:px-6">
                                     @php
                                         $status = $claimPark->status;

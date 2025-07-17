@@ -9,6 +9,7 @@ class ServiceController extends Controller
 {
     public function index()
     {
+        return abort(404);
         return view('frontend.pages.services.index');
     }
 }

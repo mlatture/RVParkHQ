@@ -10,6 +10,7 @@ use App\Http\Controllers\Frontend\ContactController;
 use App\Http\Controllers\Frontend\BlogController;
 use App\Http\Controllers\Frontend\SuggestController;
 use App\Http\Controllers\Frontend\CampConnectController;
+use App\Http\Controllers\Frontend\ClaimController;
 use App\Http\Controllers\Frontend\Auth\FrontendLoginController;
 use App\Http\Controllers\Frontend\Auth\FrontendRegisterController;
 use App\Http\Controllers\Frontend\ProfileController;
@@ -69,6 +70,9 @@ Route::name('rv-park.')->group(function () {
         Route::post('/profile/update', 'update')->name('profiles.update');
         Route::post('/modal-profile-update', 'modalProfileUpdate')->name('modal.profile.update');
     });
+    
+    Route::post('/claim-park', [ClaimController::class, 'store'])->name('claim-park.store');
+    Route::get('/claim-park/verify/{token}', [ClaimController::class, 'verify']);
 });
 
 
