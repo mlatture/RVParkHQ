@@ -36,24 +36,19 @@
                             <input type="text" name="address_line_2" id="address_line_2" class="form-control" placeholder="Suite, Apt, etc.">
                         </div>
 
-                        <div class="form-group mb-3 col-12 col-md-4">
+                        <div class="form-group mb-3 col-12 col-md-6">
                             <label for="city" class="form-label">City</label>
                             <input type="text" name="city" id="city" class="form-control" placeholder="City">
                         </div>
 
-                        <div class="form-group mb-3 col-12 col-md-4">
+                        <div class="form-group mb-3 col-12 col-md-6">
                             <label for="state" class="form-label">State</label>
                             <input type="text" name="state" id="state" class="form-control" placeholder="State">
                         </div>
 
-                        <div class="form-group mb-3 col-12 col-md-4">
+                        <div class="form-group mb-3 col-12 col-md-6">
                             <label for="zip" class="form-label">Zip Code</label>
                             <input type="text" name="zip" id="zip" class="form-control" placeholder="Zip Code">
-                        </div>
-
-                        <div class="form-group mb-3 col-12 col-md-6">
-                            <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
-                            <input type="email" name="email" id="email" class="form-control" placeholder="you@example.com" required>
                         </div>
 
                         <div class="form-group mb-3 col-12 col-md-6">
@@ -65,14 +60,23 @@
                             <label for="message" class="form-label">Message (Optional)</label>
                             <textarea name="message" id="message" class="form-control" rows="3" placeholder="Write a short message (optional)"></textarea>
                         </div>
-
+                        
+                        <div class="col-12 mb-4">
+                            <h5 class="fw-bold mb-3">Set Your Credentials</h5>
+                        </div>
+                        
                         <div class="form-group mb-3 col-12 col-md-6">
-                            <label for="password" class="form-label">Password <small>(Set your login credentials)</small></label>
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" name="email" id="email" class="form-control" placeholder="you@example.com" required>
+                        </div>
+                        
+                        <div class="form-group mb-3 col-12 col-md-6">
+                            <label for="password" class="form-label">Password</label>
                             <input type="password" name="password" id="password" class="form-control" placeholder="Create a Password" required>
                         </div>
                     </div>
 
-                    <div class="text-start mb-3">
+                    <div class="text-start mb-3 mt-3">
                         <button type="submit" class="btn btn-primary w-100">Submit Claim</button>
                     </div>
                 </form>
