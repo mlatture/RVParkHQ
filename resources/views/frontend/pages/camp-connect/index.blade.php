@@ -73,7 +73,7 @@
             <div class="p-countdown-show"><a href="#CampConnect" data-lightbox="inline" class="btn btn-dark btn-lg px-5 py-2 rounded-pill shadow-sm">📧 Preview a CampConnect Newsletter</a></div>
         </div>
         <div id="CampConnect" class="modal no-padding" data-delay="3000" style="max-width: 780px;">
-            <div class="modal-dialog modal-dialog-centered modal-xl p-3">
+            <div class="modal-dialog modal-dialog-centered modal-xl">
                 <div class="klc-newsletter-wrapper border-0 rounded-3 shadow-lg">
 
                     <div class="klc-header">
@@ -108,41 +108,49 @@
                                 </div>
                             </div>
 
-                            <div class="klc-content-section pb-3">
-                                <h5 class="fw-semibold">🌤️ Your Kayuta Lake Forecast: Forestport, NY</h5>
-                                <div class="klc-weather-card">
-                                    <div class="klc-weather-item">
-                                        <span class="icon">🌞</span>
-                                        <p class="mb-0 small">Mon</p>
-                                        <p class="fw-bold mb-0">81°F</p>
-                                        <small class="text-muted">Mostly sunny</small>
-                                    </div>
-                                    <div class="klc-weather-item">
-                                        <span class="icon">🌤️</span>
-                                        <p class="mb-0 small">Tue</p>
-                                        <p class="fw-bold mb-0">78°F</p>
-                                        <small class="text-muted">Partly cloudy</small>
-                                    </div>
-                                    <div class="klc-weather-item">
-                                        <span class="icon">🌧️</span>
-                                        <p class="mb-0 small">Wed</p>
-                                        <p class="fw-bold mb-0">74°F</p>
-                                        <small class="text-muted">Thunderstorms</small>
-                                    </div>
-                                    <div class="klc-weather-item">
-                                        <span class="icon">🌤️</span>
-                                        <p class="mb-0 small">Thu</p>
-                                        <p class="fw-bold mb-0">77°F</p>
-                                        <small class="text-muted">Clearing</small>
-                                    </div>
-                                    <div class="klc-weather-item">
-                                        <span class="icon">☀️</span>
-                                        <p class="mb-0 small">Fri</p>
-                                        <p class="fw-bold mb-0">83°F</p>
-                                        <small class="text-muted">Perfect lake day!</small>
-                                    </div>
+                            <div class="klc-weather-card">
+                                <div class="klc-weather-item">
+                                    <span class="icon">🌞</span>
+                                    <p class="mb-0 small">Mon</p>
+                                    <p class="fw-bold mb-0">81°F</p>
+                                    <small class="text-muted">Mostly sunny</small>
                                 </div>
-                                <small class="text-muted mt-3 d-block text-center">🌧️ Add the **Sensible Weather Guarantee** at checkout – full refund if it rains!</small>
+                                <div class="klc-weather-item">
+                                    <span class="icon">🌤️</span>
+                                    <p class="mb-0 small">Tue</p>
+                                    <p class="fw-bold mb-0">78°F</p>
+                                    <small class="text-muted">Partly cloudy</small>
+                                </div>
+                                <div class="klc-weather-item">
+                                    <span class="icon">🌧️</span>
+                                    <p class="mb-0 small">Wed</p>
+                                    <p class="fw-bold mb-0">74°F</p>
+                                    <small class="text-muted">Thunderstorms</small>
+                                </div>
+                                <div class="klc-weather-item">
+                                    <span class="icon">🌤️</span>
+                                    <p class="mb-0 small">Thu</p>
+                                    <p class="fw-bold mb-0">77°F</p>
+                                    <small class="text-muted">Clearing</small>
+                                </div>
+                                <div class="klc-weather-item">
+                                    <span class="icon">☀️</span>
+                                    <p class="mb-0 small">Fri</p>
+                                    <p class="fw-bold mb-0">83°F</p>
+                                    <small class="text-muted">Perfect lake day!</small>
+                                </div>
+                                <div class="klc-weather-item">
+                                    <span class="icon">🌤️</span>
+                                    <p class="mb-0 small">Sat</p>
+                                    <p class="fw-bold mb-0">79°F</p>
+                                    <small class="text-muted">Partly sunny</small>
+                                </div>
+                                <div class="klc-weather-item">
+                                    <span class="icon">🌥️</span>
+                                    <p class="mb-0 small">Sun</p>
+                                    <p class="fw-bold mb-0">76°F</p>
+                                    <small class="text-muted">Overcast</small>
+                                </div>
                             </div>
 
                             <div class="klc-content-section klc-reward-card">
@@ -188,8 +196,5 @@
                 </div>
             </div>
         </div>
-
     </section>
-
-
 @endsection

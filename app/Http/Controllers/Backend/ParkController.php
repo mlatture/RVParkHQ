@@ -66,6 +66,7 @@ class ParkController extends Controller
         $park->website_url = $request->website_url ?? null;
         $park->status = $request->status ?? 'inactive';
         $park->is_featured = $request->is_featured == 1 ? true : false;
+        $park->request_park = $request->request_park == "on" ? 1 : 0;
 
         if ($request->hasFile('main_image_url')) {
             $path = $request->file('main_image_url')->store('parks', 'public');
@@ -131,6 +132,7 @@ class ParkController extends Controller
             'website_url' => $request->website_url,
             'status' => $request->status,
             'is_featured' => $request->is_featured,
+            'request_park' => $request->request_park == 'on' ? 1 : 0,
         ];
 
         if ($request->hasFile('main_image_url')) {

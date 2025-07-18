@@ -2,7 +2,7 @@
     <div class="header-inner">
         <div class="container">
             <div id="logo">
-                <a href="">
+                <a href="{{ url('/') }}">
                     <span class="logo-default">RVParkHQ</span>
                     <span class="logo-dark">RVParkHQ</span>
                 </a>
@@ -24,7 +24,7 @@
                                     <li><a href="{{ route('rv-park.CampConnect.index') }}">Camp Connect</a></li>
                                 </ul>
                             </li>
-                            <li><a href="{{ route('rv-park.contact') }}">Contact</a></li>
+                            <li><a href="mailto:info@rvparkhq.com">Contact</a></li>
                             <li>
                                 <a id="btn-search" href="#"> <i class="icon-search"></i></a>
                             </li>

@@ -208,7 +208,7 @@
             </div>
             <div class="breadcrumb">
                 <ul>
-                    <li>{{ request()->segment(1) }}</li>
+                    <li><a href="{{ route('rv-park.home') }}">Home</a></li>
                     <li>{{ request()->segment(2) }}</li>
                     @if(request()->segment(3))
                         <li><a href="{{ route('rv-park.park-country') }}">{{ request()->segment(3) }}</a></li>

@@ -177,7 +177,7 @@
                                             {{-- Case: Claim not yet approved --}}
                                         @elseif(!$approvedClaim)
                                             {{-- Show button to all except the user who already submitted the claim --}}
-                                            @if(!$userAppliedClaim)
+                                            @if(!$userAppliedClaim && $park->request_park == 1)
                                                 <a class="!p-3 btn btn-primary btn-sm" href="{{ route('admin.claim.park.apply', encrypt($park->id)) }}">
                                                     <i class="bi bi-hand-index-thumb-fill"></i>
                                                 </a>

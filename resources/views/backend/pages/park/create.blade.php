@@ -118,6 +118,16 @@
                                         value="Campground and RV Park" {{ old('type', 'Campground and RV Park') == 'Campground and RV Park' ? 'selected' : '' }}>{{ __('Campground and RV Park') }}</option>
                                 </select>
                             </div>
+                            
+                            <div class="flex items-center gap-3">
+                                <span class="text-sm font-medium text-gray-900 dark:text-white">Request a Park</span>
+
+                                <label for="requestParkSwitch" class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" id="requestParkSwitch" name="request_park" class="sr-only peer">
+                                    <div class="w-11 h-6 bg-gray-300 rounded-full peer-checked:bg-blue-600 transition-colors duration-300"></div>
+                                    <div class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform duration-300 peer-checked:translate-x-5"></div>
+                                </label>
+                            </div>
 
                             @if($amenities->count() > 0)
                                 <div class="sm:col-span-2">

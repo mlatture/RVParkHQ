@@ -118,7 +118,7 @@
                             <li><a href="{{ route('rv-park.team') }}">Our Team</a></li>
                             <li><a href="{{ route('rv-park.blogs.index') }}">Blogs</a></li>
                             <li><a href="{{ route('rv-park.advertise.index') }}">Advertise</a></li>
-                            <li><a href="{{ route('rv-park.contact') }}">Contact</a></li>
+                            <li><a href="mailto:info@rvparkhq.com">Contact</a></li>
                         </ul>
                     </div>
                 </div>

@@ -5,12 +5,12 @@
     <section id="page-title" class="text-light" data-bg-parallax="{{asset('assets/images/slider/revolution/polo-homepage/dummy.png')}}">
         <div class="container">
             <div class="page-title">
-                <h1>Suggest a Parks</h1>
+                <h1>Suggest a Park</h1>
             </div>
             <div class="breadcrumb">
                 <ul>
                     <li><a href="{{ route('rv-park.home') }}">Home</a></li>
-                    <li class="active">Suggest a Parks</li>
+                    <li class="active">Suggest a Park</li>
                 </ul>
             </div>
         </div>
@@ -105,7 +105,7 @@
                                 </div>
 
                                 <div class="form-group col-md-12 mt-3">
-                                    <label for="description">Description (Free text)</label>
+                                    <label for="description">Description</label>
                                     <textarea name="description" id="description" class="form-control" placeholder="Enter any additional park information or notes here..." rows="4"></textarea>
                                 </div>
                             </div>

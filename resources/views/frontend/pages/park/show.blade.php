@@ -356,27 +356,29 @@
                             </table>
                         </div>
                         
-                        <div class="claim-park-cta card shadow-sm border-0 p-3 mb-2" style="background: #f9fafb; border-radius: 12px;">
-                            <div class="d-flex align-items-center">
-                                <div class="me-3">
-                                    <i class="fas fa-map-marker-alt fa-2x text-primary"></i>
-                                </div>
-                                <div>
-                                    <div class="fw-bold mb-1" style="font-size: 1.1em;">Own this Park?</div>
-                                    <div style="font-size: 0.98em; color: #555;">
-                                        Claim your listing to add photos, update contact info, and showcase your park.
+                        @if($parks->request_park == 1)
+                            <div class="claim-park-cta card shadow-sm border-0 p-3 mb-2" style="background: #f9fafb; border-radius: 12px;">
+                                <div class="d-flex align-items-center">
+                                    <div class="me-3">
+                                        <i class="fas fa-map-marker-alt fa-2x text-primary"></i>
                                     </div>
-                                    <a href="#modalClaimPark"
-                                       data-lightbox="inline"
-                                       class="btn btn-primary btn-sm mt-2"
-                                       style="font-weight: 600; border-radius: 8px; box-shadow: 0 2px 6px rgba(60,132,206,0.08); transition: background 0.2s;"
-                                       onmouseover="this.style.background='#2563eb';"
-                                       onmouseout="this.style.background='';">
-                                        <i class="fas fa-lock"></i> Claim This Park
-                                    </a>
+                                    <div>
+                                        <div class="fw-bold mb-1" style="font-size: 1.1em;">Own this Park?</div>
+                                        <div style="font-size: 0.98em; color: #555;">
+                                            Claim your listing to add photos, update contact info, and showcase your park.
+                                        </div>
+                                        <a href="#modalClaimPark"
+                                           data-lightbox="inline"
+                                           class="btn btn-primary btn-sm mt-2"
+                                           style="font-weight: 600; border-radius: 8px; box-shadow: 0 2px 6px rgba(60,132,206,0.08); transition: background 0.2s;"
+                                           onmouseover="this.style.background='#2563eb';"
+                                           onmouseout="this.style.background='';">
+                                            <i class="fas fa-lock"></i> Claim This Park
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        @endif
                     </div>
                     
                     <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
