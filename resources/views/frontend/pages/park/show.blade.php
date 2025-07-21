@@ -231,7 +231,9 @@
                         <div class="product-title">
                             <h3>
                                 {{ ucfirst($parks->name) }}
-                                <small>({!! strip_tags($parks->short_description, '<b><i><u>') !!})</small>
+                                @if (!empty($parks->short_description))
+                                    <small>({!! strip_tags($parks->short_description, '<b><i><u>') !!})</small>
+                                @endif
                             </h3>
                         </div>
                         @if($parks->amenities->count() > 0)
@@ -727,13 +729,13 @@
             });
         });
         
-        document.addEventListener("DOMContentLoaded", function () {
-            if (window.location.pathname.includes("parks")) {
-                const el = document.getElementById("write-review");
-                if (el) {
-                    el.scrollIntoView({ behavior: "smooth", block: "start" });
-                }
-            }
-        });
+        // document.addEventListener("DOMContentLoaded", function () {
+        //     if (window.location.pathname.includes("parks")) {
+        //         const el = document.getElementById("write-review");
+        //         if (el) {
+        //             el.scrollIntoView({ behavior: "smooth", block: "start" });
+        //         }
+        //     }
+        // });
     </script>
 @endsection

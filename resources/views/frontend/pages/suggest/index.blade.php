@@ -38,7 +38,12 @@
                                     <label for="user_email">Your Email <span class="text-danger">*</span></label>
                                     <input type="email" name="user_email" class="form-control" placeholder="you@example.com" required>
                                 </div>
-
+                                
+                                <div class="form-group col-md-6">
+                                    <label for="user_phone">Your Phone</label>
+                                    <input type="tel" name="user_phone" class="form-control" placeholder="+1 123 456 7890">
+                                </div>
+                                
                                 <div class="form-group col-md-6">
                                     <label for="submitted_by">Submitted By <span class="text-danger">*</span></label>
                                     <select class="form-select" id="submitted_by" name="submitted_by" required>
@@ -48,6 +53,16 @@
                                         <option value="other">Other</option>
                                     </select>
                                 </div>
+                                
+                                <div class="form-group col-md-12 mb-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="user_sms_optin" id="user_sms_optin" checked>
+                                        <label class="form-check-label" for="user_sms_optin">
+                                            Yes, you may send SMS text messages
+                                        </label>
+                                    </div>
+                                </div>
+                                
                             </div>
 
                             <h5 class="fw-semibold mb-3 mt-3">🧾 Park Info</h5>
@@ -71,8 +86,8 @@
                                 </div>
 
                                 <div class="form-group col-md-6">
-                                    <label for="address_line_1">Address Line 2</label>
-                                    <input type="text" name="address_line_2" id="address_line_2" required class="form-control @error('address_line_2') is-invalid @enderror" placeholder="Enter Address Line 1">
+                                    <label for="address_line_2">Address Line 2</label>
+                                    <input type="text" name="address_line_2" id="address_line_2" class="form-control @error('address_line_2') is-invalid @enderror" placeholder="Enter Address Line 2">
                                     @error('address_line_2') <div class="text-danger mt-1">{{ $message }}</div> @enderror
                                 </div>
 
@@ -96,12 +111,21 @@
 
                                 <div class="form-group col-md-6 mt-3">
                                     <label for="website_url">Website URL</label>
-                                    <input type="url" name="website_url" class="form-control" placeholder="https://example.com">
+                                    <input type="text" name="website_url" class="form-control">
                                 </div>
 
                                 <div class="form-group col-md-6 mt-3">
                                     <label for="phone">Phone Number</label>
                                     <input type="tel" name="phone" class="form-control" placeholder="+1 123 456 7890">
+                                </div>
+                                
+                                <div class="form-group col-md-12 mb-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="park_sms_optin" id="park_sms_optin" checked>
+                                        <label class="form-check-label" for="park_sms_optin">
+                                            Yes, you may send SMS text messages
+                                        </label>
+                                    </div>
                                 </div>
 
                                 <div class="form-group col-md-12 mt-3">

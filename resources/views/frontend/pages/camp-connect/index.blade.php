@@ -1,7 +1,8 @@
 @extends('frontend.pages.layouts.app')
 
 @section('content')
-    <section id="page-title" data-bg-parallax="assets/images/parallax/5.jpg">
+    <section id="page-title" class="text-light"
+             data-bg-parallax="{{asset('assets/images/slider/revolution/polo-homepage/dummy.png')}}">
         <div class="container">
             <div class="page-title">
                 <h1>Camp Connect</h1>
