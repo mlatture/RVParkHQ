@@ -12,18 +12,21 @@ class AdvertiseController extends Controller
 {
     public function index(Request $request)
     {
+        $this->checkAuthorization(auth()->user(), ['advertise.view']);
         $advertise = AdInquiries::search($request->search)->paginate(10);
         return view('backend.pages.advertise.index', compact('advertise'));
     }
 
     public function edit($id)
     {
+        $this->checkAuthorization(auth()->user(), ['advertise.edit']);
         $advertise = AdInquiries::findOrFail($id);
         return view('backend.pages.advertise.edit', compact('advertise'));
     }
 
     public function update(Request $request, $id)
     {
+        $this->checkAuthorization(auth()->user(), ['advertise.edit']);
         $validated = $request->validate([
             'name'     => 'required|string|max:255',
             'company'  => 'nullable|string|max:255',
@@ -56,6 +59,7 @@ class AdvertiseController extends Controller
 
     public function destroy($id)
     {
+        $this->checkAuthorization(auth()->user(), ['advertise.delete']);
         $advertise = AdInquiries::findOrFail($id);
         $advertise->delete();
 

@@ -19,6 +19,8 @@ class BlogController extends Controller
 
     public function index(Request $request)
     {
+        $this->checkAuthorization(auth()->user(), ['blogs.view']);
+
         $blogs = Blog::with('user')
             ->filter($request->all())
             ->paginate(10);
@@ -28,11 +30,14 @@ class BlogController extends Controller
 
     public function create()
     {
+        $this->checkAuthorization(auth()->user(), ['blogs.create']);
         return view('backend.pages.blog.create');
     }
 
     public function store(BlogRequest $request)
     {
+        $this->checkAuthorization(auth()->user(), ['blogs.create']);
+
         $data = $request->only([
             'title', 'slug', 'excerpt', 'content', 'status', 'published_at'
         ]);
@@ -46,12 +51,16 @@ class BlogController extends Controller
 
     public function edit($id)
     {
+        $this->checkAuthorization(auth()->user(), ['blogs.edit']);
+
         $blog = Blog::findOrFail($id);
         return view('backend.pages.blog.edit', compact('blog'));
     }
 
     public function update(BlogRequest $request, Blog $blog)
     {
+        $this->checkAuthorization(auth()->user(), ['blogs.edit']);
+
         $data = $request->only(['title', 'slug', 'excerpt', 'content', 'status', 'published_at']);
 
         if ($request->hasFile('thumbnail')) {
@@ -65,6 +74,8 @@ class BlogController extends Controller
 
     public function destroy(Blog $blog)
     {
+        $this->checkAuthorization(auth()->user(), ['blogs.delete']);
+
         $this->blogService->delete($blog);
 
         return redirect()->route('admin.blogs.index')->with('success', 'Blog post deleted successfully!');

@@ -16,6 +16,8 @@ class SuggestController extends Controller
 {
     public function index(Request $request)
     {
+        $this->checkAuthorization(auth()->user(), ['suggest-park.view']);
+        
         $suggests = SuggestPark::search($request->search)
             ->orderBy('id', 'DESC')
             ->paginate(10);
@@ -25,12 +27,16 @@ class SuggestController extends Controller
 
     public function edit($id)
     {
+        $this->checkAuthorization(auth()->user(), ['suggest-park.edit']);
+        
         $suggest = SuggestPark::findOrFail($id);
         return view('backend.pages.suggest-park.edit', compact('suggest'));
     }
 
     public function update(Request $request, $id)
     {
+        $this->checkAuthorization(auth()->user(), ['suggest-park.edit']);
+        
         $request->validate([
             'status' => 'required|in:pending,approved,rejected',
         ]);
@@ -92,6 +98,8 @@ class SuggestController extends Controller
 
     public function destroy($id)
     {
+        $this->checkAuthorization(auth()->user(), ['suggest-park.delete']);
+        
         $editRequest = SuggestPark::findOrFail($id);
         $editRequest->delete();
 

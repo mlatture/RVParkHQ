@@ -161,6 +161,15 @@ class PermissionService
                     'advertise.delete',
                 ],
             ],
+            [
+                'group_name' => 'bills',
+                'permissions' => [
+                    'bills.view',
+                    'bills.create',
+                    'bills.edit',
+                    'bills.delete',
+                ],
+            ],
         ];
 
         return $permissions;

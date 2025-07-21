@@ -14,6 +14,8 @@ class ClaimController extends Controller
 {
     public function index(Request $request)
     {
+        $this->checkAuthorization(auth()->user(), ['claim_park.view']);
+        
         $claimParks = ClaimPark::with(['park', 'user'])
             ->filter($request->only(['park', 'user']))
             ->paginate(10);
@@ -23,12 +25,16 @@ class ClaimController extends Controller
 
     public function edit($id)
     {
+        $this->checkAuthorization(auth()->user(), ['claim_park.edit']);
+        
         $claimPark = ClaimPark::findorFail($id)->with(['park', 'user'])->first();
         return view('backend.pages.claimPark.edit', compact('claimPark'));
     }
 
     public function update(Request $request, $id)
     {
+        $this->checkAuthorization(auth()->user(), ['claim_park.edit']);
+        
         $validated = $request->validate([
             'status' => 'required|in:pending,approved,rejected,completed'
         ]);
@@ -63,6 +69,8 @@ class ClaimController extends Controller
 
     public function destroy($id)
     {
+        $this->checkAuthorization(auth()->user(), ['claim_park.delete']);
+        
         ClaimPark::findorFail($id)->delete();
 
         return redirect()->route('admin.claim.index')->with([

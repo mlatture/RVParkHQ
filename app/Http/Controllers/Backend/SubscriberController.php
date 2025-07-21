@@ -10,6 +10,8 @@ class SubscriberController extends Controller
 {
     public function index(Request $request)
     {
+        $this->checkAuthorization(auth()->user(), ['subscribers.view']);
+        
         $subscribers = Subscriber::search($request->search)
             ->orderBy('id', 'desc')
             ->paginate(10);

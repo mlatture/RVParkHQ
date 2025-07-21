@@ -193,7 +193,7 @@ class AdminMenuService
             'priority' => 1,
             'permissions' => 'blogs.view'
         ]);
-        
+
         $this->addMenuItem([
             'label' => __('Advertise'),
             'icon' => 'dashboard.svg',
@@ -203,7 +203,6 @@ class AdminMenuService
             'priority' => 1,
             'permissions' => 'advertise.view'
         ]);
-
 
         if (auth()->user()->hasRole('Owner')) {
             $this->addMenuItem([
@@ -215,51 +214,16 @@ class AdminMenuService
                 'priority' => 1,
             ]);
         }
-        
+
         $this->addMenuItem([
-            'label' => __('Advertise'),
+            'label' => __('Bills'),
             'icon' => 'dashboard.svg',
-            'route' => route('admin.advertise.index'),
-            'active' => Route::is('admin.advertise.index'),
-            'id' => 'advertise',
+            'route' => route('admin.bills.index'),
+            'active' => Route::is('admin.bills.index'),
+            'id' => 'bills',
             'priority' => 1,
+            'permissions' => 'bills.view'
         ]);
-
-//        $this->addMenuItem([
-//            'label' => __('Modules'),
-//            'icon' => 'three-dice.svg',
-//            'route' => route('admin.modules.index'),
-//            'active' => Route::is('admin.modules.index'),
-//            'id' => 'modules',
-//            'priority' => 30,
-//            'permissions' => 'module.view'
-//        ]);
-
-//        $this->addMenuItem([
-//            'label' => __('Monitoring'),
-//            'icon' => 'tv.svg',
-//            'id' => 'monitoring-submenu',
-//            'active' => Route::is('admin.actionlog.*'),
-//            'priority' => 40,
-//            'permissions' => ['pulse.view', 'actionlog.view'],
-//            'children' => [
-//                [
-//                    'label' => __('Action Logs'),
-//                    'route' => route('admin.actionlog.index'),
-//                    'active' => Route::is('admin.actionlog.index'),
-//                    'priority' => 20,
-//                    'permissions' => 'actionlog.view'
-//                ],
-//                [
-//                    'label' => __('Laravel Pulse'),
-//                    'route' => route('pulse'),
-//                    'active' => false,
-//                    'target' => '_blank',
-//                    'priority' => 10,
-//                    'permissions' => 'pulse.view'
-//                ]
-//            ]
-//        ]);
 
         $this->addMenuItem([
             'label' => __('Settings'),
