@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 class Bill extends Model
 {
     protected $table = 'bills';
+    
     protected $guarded = [];
 
     public function scopeFilter($query, $search)
@@ -21,6 +22,28 @@ class Bill extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'customer_id');
+        return $this->belongsTo(User::class);
+    }
+    
+    public function getScheduleAttribute($value)
+    {
+        $scheduleTypes = [
+            'one-time' => 'One Time',
+            'monthly' => 'Monthly',
+            'yearly' => 'Yearly'
+        ];
+
+        return $scheduleTypes[$value] ?? ucfirst($value);
+    }
+    
+    public function getStatusAttribute($value)
+    {
+        $statuses = [
+            'pending' => 'Pending',
+            'failed' => 'Failed',
+            'paid' => 'Paid'
+        ];
+
+        return $statuses[$value] ?? ucfirst($value);
     }
 }

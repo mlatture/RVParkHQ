@@ -19,14 +19,13 @@ class BillService
     {
         $bill = Bill::create([
             'send_from' => $data['send_from'],
-            'sales_rep_id' => $data['sales_rep'],
+            'sales_rep' => $data['sales_rep'],
             'subject' => $data['subject'],
             'description' => $data['description'],
             'schedule' => $data['schedule'],
             'due_date' => $data['due_date'],
             'amount' => $data['amount'],
-            'customer_id' => $data['customer_id'],
-            'status' => $sendNow ? 'sent' : 'draft',
+            'user_id' => $data['user_id'],
         ]);
 
         if ($sendNow) {
@@ -40,14 +39,13 @@ class BillService
     {
         $bill->update([
             'send_from' => $data['send_from'],
-            'sales_rep_id' => $data['sales_rep'],
+            'sales_rep' => $data['sales_rep'],
             'subject' => $data['subject'],
             'description' => $data['description'],
             'schedule' => $data['schedule'],
             'due_date' => $data['due_date'],
             'amount' => $data['amount'],
-            'customer_id' => $data['customer_id'],
-            'status' => $sendNow ? 'sent' : 'draft',
+            'user_id' => $data['user_id'],
         ]);
 
         if ($sendNow) {

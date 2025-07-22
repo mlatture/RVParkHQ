@@ -14,15 +14,17 @@ return new class extends Migration
         Schema::create('bills', function (Blueprint $table) {
             $table->id();
             $table->enum('send_from', ['WebDaVinci', 'RVParkHQ']);
-            $table->integer('sales_rep_id')->nullable();
+            $table->string('sales_rep')->nullable();
             $table->string('subject');
             $table->text('description')->nullable();
-            $table->enum('schedule', ['once', 'monthly', 'yearly']);
+            $table->enum('schedule', ['one-time', 'monthly', 'yearly']);
             $table->date('due_date');
             $table->decimal('amount', 10, 2);
-            $table->enum('status', ['draft', 'sent', 'paid'])->default('draft');
-            $table->string('payment_link')->nullable();
-            $table->integer('customer_id')->nullable();
+            $table->enum('status', ['pending', 'paid', 'failed'])->default('pending');
+            $table->integer('user_id')->nullable();
+            $table->string('payment_link_token')->nullable();
+            $table->date('next_reminder_date')->nullable();
+            $table->boolean('paid_at_creation')->default(false);
             $table->timestamps();
         });
     }

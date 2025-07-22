@@ -28,7 +28,7 @@
         <div class="space-y-6">
             <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
                 <div class="px-5 py-4 sm:px-6 sm:py-5">
-                    <h3 class="text-base font-medium text-gray-800 dark:text-white/90">{{ __('Form Information') }}</h3>
+                    <h3 class="text-base font-medium text-gray-800 dark:text-white/90">{{ __('Billing Form Information') }}</h3>
                 </div>
                 <div class="p-5 space-y-6 border-t border-gray-100 dark:border-gray-800 sm:p-6">
                     @include('backend.layouts.partials.messages')
@@ -37,9 +37,9 @@
                         @method('PATCH')
                         <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
                             <div>
-                                <label for="send_from" class="block text-sm font-medium text-gray-700 dark:text-gray-400">{{ __('Send From') }}</label>
+                                <label for="send_from" class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">{{ __('Platform') }}</label>
                                 <select name="send_from" id="send_from" required
-                                        class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 dark:border-gray-700 dark:text-white/90">
+                                        class="form-control dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 dark:border-gray-700 dark:text-white/90">
                                     <option value="">{{ __('Select an option') }}</option>
                                     <option value="WebDaVinci" {{ $bill->send_from == 'WebDaVinci' ? 'selected' : '' }}>{{ __('WebDaVinci') }}</option>
                                     <option value="RVParkHQ" {{ $bill->send_from == 'RVParkHQ' ? 'selected' : '' }}>{{ __('RVParkHQ') }}</option>
@@ -47,23 +47,18 @@
                             </div>
 
                             <div>
-                                <label for="sales_rep" class="block text-sm font-medium text-gray-700 dark:text-gray-400">{{ __('Sales Rep') }}</label>
-                                <select name="sales_rep" id="sales_rep"
-                                        class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 dark:border-gray-700 dark:text-white/90">
-                                    <option value="">{{ __('Select a sales rep') }}</option>
-                                    {{--                                    @foreach($salesReps as $rep)--}}
-                                    {{--                                        <option value="{{ $rep->id }}" {{ $bill->sales_rep == $rep->id ? 'selected' : '' }}>{{ $rep->name }}</option>--}}
-                                    {{--                                    @endforeach--}}
-                                </select>
+                                <label for="sales_rep" class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">{{ __('Sales Representative') }}</label>
+                                <input type="email" name="sales_rep" id="sales_rep"
+                                        class="form-control dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 dark:border-gray-700 dark:text-white/90" value="{{ old('sales_rep', $bill->sales_rep) }}">
                             </div>
 
                             <div>
-                                <label for="customer_id" class="block text-sm font-medium text-gray-700 dark:text-gray-400">{{ __('Customer') }}</label>
-                                <select name="customer_id" id="customer_id"
-                                        class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 dark:border-gray-700 dark:text-white/90">
+                                <label for="user_id" class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">{{ __('Customer') }}</label>
+                                <select name="user_id" id="user_id"
+                                        class="form-control dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 dark:border-gray-700 dark:text-white/90">
                                     <option value="">{{ __('Select a Customer') }}</option>
                                     @foreach($users as $user)
-                                        <option value="{{ $user->id }}" {{ $bill->customer_id == $user->id ? 'selected' : '' }}>
+                                        <option value="{{ $user->id }}" {{ $bill->user_id == $user->id ? 'selected' : '' }}>
                                             {{ $user->email }}
                                         </option>
                                     @endforeach
@@ -71,37 +66,37 @@
                             </div>
 
                             <div class="sm:col-span-2">
-                                <label for="subject" class="block text-sm font-medium text-gray-700 dark:text-gray-400">{{ __('Subject') }}</label>
+                                <label for="subject" class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">{{ __('Subject') }}</label>
                                 <input type="text" name="subject" id="subject" required value="{{ old('subject', $bill->subject) }}"
-                                       class="dark:bg-dark-900 shadow-theme-xs h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 dark:border-gray-700 dark:text-white/90 dark:placeholder:text-white/30">
+                                       class="form-control dark:bg-dark-900 shadow-theme-xs h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 dark:border-gray-700 dark:text-white/90 dark:placeholder:text-white/30">
                             </div>
 
                             <div class="sm:col-span-2">
-                                <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-400">{{ __('Description') }}</label>
+                                <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">{{ __('Description') }}</label>
                                 <textarea name="description" id="description" rows="4" required
-                                          class="dark:bg-dark-900 shadow-theme-xs w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 dark:border-gray-700 dark:text-white/90 dark:placeholder:text-white/30">{{ old('description', $bill->description) }}</textarea>
+                                          class="form-control dark:bg-dark-900 shadow-theme-xs w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 dark:border-gray-700 dark:text-white/90 dark:placeholder:text-white/30">{{ old('description', $bill->description) }}</textarea>
                             </div>
 
                             <div>
-                                <label for="schedule" class="block text-sm font-medium text-gray-700 dark:text-gray-400">{{ __('Schedule') }}</label>
+                                <label for="schedule" class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">{{ __('Schedule') }}</label>
                                 <select name="schedule" id="schedule" required
-                                        class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 dark:border-gray-700 dark:text-white/90">
-                                    <option value="once" {{ $bill->schedule == 'once' ? 'selected' : '' }}>{{ __('Once') }}</option>
+                                        class="form-control dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 dark:border-gray-700 dark:text-white/90">
+                                    <option value="one-time" {{ $bill->schedule == 'one-time' ? 'selected' : '' }}>{{ __('One time') }}</option>
                                     <option value="monthly" {{ $bill->schedule == 'monthly' ? 'selected' : '' }}>{{ __('Monthly') }}</option>
                                     <option value="yearly" {{ $bill->schedule == 'yearly' ? 'selected' : '' }}>{{ __('Yearly') }}</option>
                                 </select>
                             </div>
 
                             <div>
-                                <label for="due_date" class="block text-sm font-medium text-gray-700 dark:text-gray-400">{{ __('Due Date') }}</label>
+                                <label for="due_date" class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">{{ __('Due Date') }}</label>
                                 <input type="date" name="due_date" id="due_date" required value="{{ old('due_date', $bill->due_date) }}"
-                                       class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 dark:border-gray-700 dark:text-white/90">
+                                       class="form-control dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 dark:border-gray-700 dark:text-white/90">
                             </div>
 
                             <div>
-                                <label for="amount" class="block text-sm font-medium text-gray-700 dark:text-gray-400">{{ __('Amount') }}</label>
+                                <label for="amount" class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">{{ __('Amount') }}</label>
                                 <input type="number" name="amount" id="amount" step="0.01" required value="{{ old('amount', $bill->amount) }}"
-                                       class="dark:bg-dark-900 shadow-theme-xs h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 dark:border-gray-700 dark:text-white/90 dark:placeholder:text-white/30">
+                                       class="form-control dark:bg-dark-900 shadow-theme-xs h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 dark:border-gray-700 dark:text-white/90 dark:placeholder:text-white/30">
                             </div>
                         </div>
 

@@ -80,4 +80,9 @@ class User extends Authenticatable
             $this->notify(new DefaultResetPassword($token));
         }
     }
+    
+    public function bills()
+    {
+        return $this->hasMany(Bill::class);
+    }
 }
