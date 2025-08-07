@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Favorite;
 use Illuminate\Http\Request;
+use App\Models\Card;
 
 class ProfileController extends Controller
 {
@@ -43,7 +44,7 @@ class ProfileController extends Controller
         $user->save();
         return redirect()->route('profile.edit')->with(['success' => 'Profile updated successfully.', 'icon' => 'success']);
     }
-    
+
     public function modalProfileUpdate(Request $request)
     {
         $user = Auth::user();
@@ -52,14 +53,14 @@ class ProfileController extends Controller
             'email' => 'required|email|unique:users,email,' . $user->id,
             'password' => 'nullable|min:8|confirmed',
         ]);
-        
+
         $user->name = $request->name;
         $user->email = $request->email;
         if ($request->password) {
             $user->password = bcrypt($request->password);
         }
         $user->save();
-        
+
         return redirect()->back()->with(['success' => 'Profile updated successfully.', 'icon' => 'success']);
     }
 }

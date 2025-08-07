@@ -114,27 +114,28 @@
                         <div class="widget-title">Quick Links</div>
                         <ul class="list text-white">
                             <li><a href="{{ route('rv-park.home') }}">Home</a></li>
-                            <li><a href="{{ route('rv-park.all-parks') }}">Parks</a></li>
+                            <li><a href="{{ route('rv-park.park-country') }}">Parks</a></li>
                             <li><a href="{{ route('rv-park.team') }}">Our Team</a></li>
-                            <li><a href="{{ route('rv-park.blogs.index') }}">Blogs</a></li>
-                            <li><a href="{{ route('rv-park.advertise.index') }}">Advertise</a></li>
+{{--                            <li><a href="{{ route('rv-park.blogs.index') }}">Blog</a></li>--}}
+                            <li><a href="{{ route('rv-park.advertise.index') }}">Advertiser Inquiries</a></li>
+{{--                            <li><a href="{{ route('rv-park.service') }}">Services</a></li>--}}
                             <li><a href="mailto:info@rvparkhq.com">Contact</a></li>
                         </ul>
                     </div>
                 </div>
                 <div class="col-md-5">
-                    
+
                     <div class="mb-3">
                         <p class="mb-2 text-white fw-bold">Don’t see your favorite park?</p>
                         <a href="{{ route('rv-park.suggest.park') }}" class="btn btn-warning text-dark btn-sm">Suggest a Campground</a>
                     </div>
-                    
+
                     <div class="widget">
                         <div class="widget-title">Subscribe for Camping Tips</div>
                         <p class="mb-3 text-white">Join our mailing list for top camping tips, exclusive discounts, and nearby park alerts.</p>
                         <form class="footer-subscribe d-flex flex-wrap" method="POST" action="{{ route('rv-park.email.subscribe') }}">
                             @csrf
-                            <input aria-label="" type="email" name="email" placeholder="Enter your email" required />
+                            <input type="email" name="email" placeholder="Enter your email" required />
                             <button type="submit">Subscribe</button>
                         </form>
                     </div>

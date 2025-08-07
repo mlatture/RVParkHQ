@@ -34,6 +34,7 @@ class TranslationController extends Controller
      */
     public function index(): View
     {
+        return abort(404);
         $this->checkAuthorization(auth()->user(), ['translations.view']);
 
         $languages = $this->languages;

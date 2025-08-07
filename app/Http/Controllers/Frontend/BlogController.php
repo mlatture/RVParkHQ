@@ -10,6 +10,7 @@ class BlogController extends Controller
 {
     public function index(Request $request)
     {
+        return abort(404);
         $query = Blog::query();
 
         if ($request->blog)

@@ -21,5 +21,6 @@ class DatabaseSeeder extends Seeder
         $this->call(SettingsSeeder::class);
         $this->call(ParkSeeder::class);
         $this->call(AmenitySeeder::class);
+        $this->call(CountriesSeeder::class);
     }
 }

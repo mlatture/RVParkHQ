@@ -13,6 +13,7 @@ class OverPassController extends Controller
 {
     public function index()
     {
+        return abort(404);
         $this->checkAuthorization(auth()->user(), ['campground.view']);
 
         $search = request()->input('search');
@@ -33,6 +34,7 @@ class OverPassController extends Controller
 
     public function create()
     {
+        return abort(404);
         $this->checkAuthorization(auth()->user(), ['campground.create']);
         return view('backend.pages.campground.create');
     }
@@ -50,6 +52,7 @@ class OverPassController extends Controller
 
     public function edit($id)
     {
+        return abort(404);
         $this->checkAuthorization(auth()->user(), ['campground.edit']);
         $campgrounds = OverPass::findorFail($id);
         return view('backend.pages.campground.edit', compact('campgrounds'));
@@ -91,6 +94,8 @@ class OverPassController extends Controller
 
     public function fetchCampgroundsByState(Request $request)
     {
+        return abort(404);
+
         $this->checkAuthorization(auth()->user(), ['campground.create']);
 
         $state = str_replace(['_', '-'], ' ', $request->state_name);
@@ -164,7 +169,7 @@ EOT;
             ]);
         }
     }
-    
+
     public function track($campground, $filename = null)
     {
         // Log the visit
@@ -175,10 +180,10 @@ EOT;
             'referrer' => request()->headers->get('referer'),
         ];
         Log::info('Review image hit', $data);
-    
+
         // You can also store to database instead of log
-    
-        return response()->file(public_path('images/review-image-i.jpg'), [
+
+        return response()->file(public_path('images/login.jpg'), [
             'Content-Type' => 'image/png'
         ]);
     }

@@ -56,7 +56,7 @@
                                 
                                 <div class="form-group col-md-12 mb-3">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="user_sms_optin" id="user_sms_optin" checked>
+                                        <input class="form-check-input" type="checkbox" name="user_sms_optin" id="user_sms_optin">
                                         <label class="form-check-label" for="user_sms_optin">
                                             Yes, you may send SMS text messages
                                         </label>
@@ -121,7 +121,7 @@
                                 
                                 <div class="form-group col-md-12 mb-3">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="park_sms_optin" id="park_sms_optin" checked>
+                                        <input class="form-check-input" type="checkbox" name="park_sms_optin" id="park_sms_optin">
                                         <label class="form-check-label" for="park_sms_optin">
                                             Yes, you may send SMS text messages
                                         </label>

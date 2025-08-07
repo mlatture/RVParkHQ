@@ -40,6 +40,24 @@
                                     </div>
                                 </a>
                             </div>
+
+                            <div class="col-md-6">
+                                <a href="{{ route('rv-park.profile.cards') }}" class="text-decoration-none">
+                                    <div class="p-4 border rounded-4 h-100 hover-shadow bg-light text-dark text-center transition">
+                                        <i class="bi bi-heart-fill fs-2 text-danger mb-2"></i>
+                                        <h6 class="mb-0 fw-bold">Payment Method</h6>
+                                    </div>
+                                </a>
+                            </div>
+
+                            <div class="col-md-6">
+                                <a href="{{ route('rv-park.profile.bill') }}" class="text-decoration-none">
+                                    <div class="p-4 border rounded-4 h-100 hover-shadow bg-light text-dark text-center transition">
+                                        <i class="bi bi-heart-fill fs-2 text-danger mb-2"></i>
+                                        <h6 class="mb-0 fw-bold">Payment History</h6>
+                                    </div>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>

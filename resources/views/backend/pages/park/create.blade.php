@@ -118,18 +118,36 @@
                                         value="Campground and RV Park" {{ old('type', 'Campground and RV Park') == 'Campground and RV Park' ? 'selected' : '' }}>{{ __('Campground and RV Park') }}</option>
                                 </select>
                             </div>
-                            
-                            <div class="flex items-center gap-3">
-                                <span class="text-sm font-medium text-gray-900 dark:text-white">Request a Park</span>
 
-                                <label for="requestParkSwitch" class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" id="requestParkSwitch" name="request_park" class="sr-only peer">
-                                    <div class="w-11 h-6 bg-gray-300 rounded-full peer-checked:bg-blue-600 transition-colors duration-300"></div>
-                                    <div class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform duration-300 peer-checked:translate-x-5"></div>
+{{--                            <div class="flex items-center gap-3">--}}
+{{--                                <span class="text-sm font-medium text-gray-900 dark:text-white">Request a Park</span>--}}
+
+{{--                                <label for="requestParkSwitch" class="relative inline-flex items-center cursor-pointer">--}}
+{{--                                    <input type="checkbox" id="requestParkSwitch" name="request_park" class="sr-only peer">--}}
+{{--                                    <div class="w-11 h-6 bg-gray-300 rounded-full peer-checked:bg-blue-600 transition-colors duration-300"></div>--}}
+{{--                                    <div class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform duration-300 peer-checked:translate-x-5"></div>--}}
+{{--                                </label>--}}
+{{--                            </div>--}}
+
+                            @if(auth()->user()->hasRole(['rep', 'Rep']))
+                            <div>
+                                    <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                        {{ __('Representative') }}
+                                    </label>
+                                    <input type="email" name="rep" id="rep" value="{{ auth()->user()->email }}"
+                                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 dark:bg-gray-900 dark:text-white" readonly>
+                                </div>
+                            @endif
+
+                            <div class="flex items-center gap-3">
+                                <label for="requestParkSwitch" class="flex items-center gap-2 cursor-pointer">
+                                    <input type="checkbox" id="requestParkSwitch" name="request_park" class="form-checkbox h-5 w-5 text-blue-600">
+                                    <span class="text-sm font-medium text-gray-900 dark:text-white">Request a Park</span>
                                 </label>
                             </div>
 
-                            @if($amenities->count() > 0)
+
+                        @if($amenities->count() > 0)
                                 <div class="sm:col-span-2">
                                     <label class="block font-medium text-sm text-gray-700 mb-4">Amenities</label>
 
@@ -261,8 +279,8 @@
                                 <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-400">
                                     {{ __('Email') }}
                                 </label>
-                                <input type="email" name="email" id="email" value="{{ old('email') }}"
-                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 dark:bg-gray-900 dark:text-white">
+                                <input type="email" name="email" id="email" value="{{ auth()->user()->hasRole(['rep', 'Rep']) ? auth()->user()->email : old('email') }}"
+                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 dark:bg-gray-900 dark:text-white" {{ auth()->user()->hasRole(['rep', 'Rep']) ? "readonly": '' }}>
                             </div>
 
                             <div>

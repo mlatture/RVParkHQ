@@ -82,7 +82,7 @@ Under his leadership, WebDaVinci has developed AI-driven chatbots, integrated bo
                 'role' => 'Design / Partner Success – RVParkHQ / WebDaVinci',
                 'country' => 'Philippines',
                 'flag' => '🇵🇭',
-                'image' => 'images/login.jpg',
+                'image' => 'images/team/mj.jpg',
                 'email' => 'jm@webdavinci.com',
                 'bio' => 'JM Balaba brings energy, creativity, and a keen eye for user experience to the RVParkHQ and WebDaVinci teams. As a core member of the design and sales team, JM is responsible for shaping the visual identity of the platform and helping campground owners understand the value of digital tools that actually work.'
             ],

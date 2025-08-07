@@ -87,18 +87,18 @@
                                     @endforeach
                                 </div>
                             </div>
-                            <div>
-                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                    {{ __('Select Type') }}
-                                </label>
-                                <select id="type" name="type" autofocus
-                                        class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800">
-                                    <option value="">Select Type</option>
-                                    <option value="admin" {{ $user->type == 'admin' ? 'selected' : '' }}>Admin</option>
-                                    <option value="owner" {{ $user->type == 'owner' ? 'selected' : '' }}>Owner</option>
-                                    <option value="camper" {{ $user->type == 'camper' ? 'selected' : '' }}>Camper</option>
-                                </select>
-                            </div>
+{{--                            <div>--}}
+{{--                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">--}}
+{{--                                    {{ __('Select Type') }}--}}
+{{--                                </label>--}}
+{{--                                <select id="type" name="type" autofocus--}}
+{{--                                        class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800">--}}
+{{--                                    <option value="">Select Type</option>--}}
+{{--                                    <option value="admin" {{ $user->type == 'admin' ? 'selected' : '' }}>Admin</option>--}}
+{{--                                    <option value="owner" {{ $user->type == 'owner' ? 'selected' : '' }}>Owner</option>--}}
+{{--                                    <option value="camper" {{ $user->type == 'camper' ? 'selected' : '' }}>Camper</option>--}}
+{{--                                </select>--}}
+{{--                            </div>--}}
                             <div>
                                 <label for="username"
                                     class="block text-sm font-medium text-gray-700 dark:text-gray-400">{{ __('Username') }}</label>

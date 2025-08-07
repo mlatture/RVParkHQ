@@ -22,12 +22,13 @@ class eBillRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'send_from'    => 'required|in:WebDaVinci,RVParkHQ',
-            'subject'      => 'required|string|max:255',
-            'description'  => 'nullable|string',
-            'schedule'     => 'required|in:one-time,monthly,yearly',
-            'due_date'     => 'required|date|after_or_equal:today',
-            'amount'       => 'required|numeric|min:0',
+            'send_from'     => 'required',
+            'sales_rep'     => 'nullable',
+            'subject'       => 'required|string|max:255',
+            'description'   => 'nullable|string',
+            'schedule'      => 'required',
+            'due_date'      => 'required_if:schedule,monthly,yearly|date|after_or_equal:today',
+            'amount'        => 'required|numeric|min:0',
             'user_id'       => 'required',
         ];
     }

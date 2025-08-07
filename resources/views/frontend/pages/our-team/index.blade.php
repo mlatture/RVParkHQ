@@ -30,11 +30,7 @@
                     <div class="col-lg-4 col-md-6 mb-4">
                         <div class="team-card position-relative">
                             <span class="flag-badge">{{ $member['flag'] }}</span>
-                            <img src="{{ asset($member['image']) }}" alt="{{ $member['name'] }}" class="team-img"
-                                @if($member['name'] === 'Dexter Cabagua')
-                                     style="height: auto; object-fit: contain;"
-                                @endif
-                            >
+                            <img src="{{ asset($member['image']) }}" alt="{{ $member['name'] }}" class="team-img">
                             <div class="team-body">
                                 <div>
                                     <div class="team-name">{{ $member['name'] }}</div>

@@ -185,6 +185,14 @@ class RolesService
         ];
         $roles['camper'] = $this->createRole('Camper', $camperPermissions);
 
+        $repPermissions = [
+            'dashboard.view',
+            'profile.view',
+            'profile.edit',
+            'park.view',
+        ];
+        $roles['rep'] = $this->createRole('Rep', $repPermissions);
+
         return $roles;
     }
 

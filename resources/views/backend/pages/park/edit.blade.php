@@ -53,7 +53,7 @@
         </div>
 
         <div class="space-y-6">
-            
+
             <div class="bg-white shadow-lg rounded-lg border border-gray-200 p-6 mb-8">
                 <div class="flex items-center justify-between mb-4">
                     <h2 class="text-lg font-semibold text-gray-800">Review Badge Embed Code</h2>
@@ -62,7 +62,7 @@
                             Copy Code
                         </button>
                 </div>
-            
+
                 <div class="">
                     <textarea id="review-badge-code" rows="8" readonly spellcheck="false"
                       class="w-full text-center text-sm font-mono text-gray-800 bg-gray-100 border border-gray-300 rounded-md p-4 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -75,9 +75,9 @@
                         </script>
                     </textarea>
                 </div>
-            
+
                 <p id="copy-msg" class="text-green-600 text-sm mt-3 hidden transition-opacity duration-300">✅ Code copied to clipboard!</p>
-            
+
                 <div class="mt-6">
                     <button onclick="togglePreview()" class="text-sm text-blue-600 hover:underline">
                         Show/Hide Preview
@@ -118,25 +118,25 @@
                                         {{ __('Park Name') }}
                                     </label>
 
-                                    <div class="form-check form-switch flex items-center">
-                                        <input class="form-check-input" type="checkbox" name="change_name"
-                                               id="change_name">
-                                        <label class="form-check-label ml-2" for="change_name"
-                                               id="name_check_box_label">Manual</label>
-                                    </div>
+{{--                                    <div class="form-check form-switch flex items-center">--}}
+{{--                                        <input class="form-check-input" type="checkbox" name="change_name"--}}
+{{--                                               id="change_name">--}}
+{{--                                        <label class="form-check-label ml-2" for="change_name"--}}
+{{--                                               id="name_check_box_label">Manual</label>--}}
+{{--                                    </div>--}}
                                 </div>
 
-                                <div id="inputWrapper" class="flex mt-1 hidden">
+                                <div id="inputWrapper" class="flex mt-1">
                                     <input type="text" name="name" id="name" value="{{ old('name', $park->name) }}"
                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 dark:bg-gray-900 dark:text-white">
                                 </div>
 
-                                <div id="selectWrapper"
-                                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 dark:bg-gray-900 dark:text-white">
-                                    <select id="parkDropdown" name="name" class="w-full select2">
-                                        <option value="">Select a park</option>
-                                    </select>
-                                </div>
+{{--                                <div id="selectWrapper"--}}
+{{--                                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 dark:bg-gray-900 dark:text-white">--}}
+{{--                                    <select id="parkDropdown" name="name" class="w-full select2">--}}
+{{--                                        <option value="">Select a park</option>--}}
+{{--                                    </select>--}}
+{{--                                </div>--}}
 
                                 <span id="error-name" class="text-sm text-red-600 mt-1 block"></span>
                             </div>
@@ -168,18 +168,26 @@
                                     </option>
                                 </select>
                             </div>
-                            
-                            <div class="flex items-center gap-3">
-                                <span class="text-sm font-medium text-gray-900 dark:text-white">Request a Park</span>
 
-                                <label for="requestParkSwitch" class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" id="requestParkSwitch" name="request_park" class="sr-only peer" {{ $park->request_park == 1 ? 'checked' : ''}}>
-                                    <div class="w-11 h-6 bg-gray-300 rounded-full peer-checked:bg-blue-600 transition-colors duration-300"></div>
-                                    <div class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform duration-300 peer-checked:translate-x-5"></div>
+                            @if(auth()->user()->hasRole(['rep', 'Rep']))
+                                <div>
+                                    <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                        {{ __('Representative') }}
+                                    </label>
+                                    <input type="email" name="rep" id="rep" value="{{ auth()->user()->email }}"
+                                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 dark:bg-gray-900 dark:text-white" readonly>
+                                </div>
+                            @endif
+
+                            <div class="flex items-center gap-3">
+                                <label class="flex items-center space-x-2">
+                                    <input type="checkbox" name="request_park" value="1" {{ $park->request_park == 1 ? 'checked' : '' }} class="form-checkbox h-5 w-5 text-blue-600">
+                                    <span class="text-sm font-medium text-gray-900 dark:text-white">Request a Park</span>
                                 </label>
                             </div>
 
-                            @if($amenities->count() > 0)
+
+                        @if($amenities->count() > 0)
                                 <div class="sm:col-span-2">
                                     <label class="block font-medium text-sm text-gray-700 mb-4">Amenities</label>
 
@@ -316,8 +324,8 @@
                                 <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-400">
                                     {{ __('Email') }}
                                 </label>
-                                <input type="email" name="email" id="email" value="{{ old('email', $park->email) }}"
-                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 dark:bg-gray-900 dark:text-white">
+                                <input type="email" name="email" id="email" value="{{ auth()->user()->hasRole(['rep', 'Rep']) ? auth()->user()->email : old('email') }}"
+                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 dark:bg-gray-900 dark:text-white" {{ auth()->user()->hasRole(['rep', 'Rep']) ? "readonly": '' }}>
                             </div>
 
                             <div>
@@ -604,17 +612,17 @@
         textarea.select();
         textarea.setSelectionRange(0, 99999);
         document.execCommand("copy");
-    
+
         const msg = document.getElementById("copy-msg");
         msg.classList.remove("hidden");
         msg.style.opacity = 1;
-    
+
         setTimeout(() => {
           msg.style.opacity = 0;
           setTimeout(() => msg.classList.add("hidden"), 300);
         }, 2000);
       }
-    
+
       function togglePreview() {
         const preview = document.getElementById("embed-preview");
         preview.classList.toggle("hidden");

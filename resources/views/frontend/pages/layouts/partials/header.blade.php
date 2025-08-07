@@ -17,13 +17,15 @@
                             <li><a href="{{ route('rv-park.home') }}">Home</a></li>
                             <li><a href="{{ route('rv-park.all-parks') }}">Parks</a></li>
                             <li><a href="{{ route('rv-park.team') }}">Our Team</a></li>
-                            <li><a href="{{ route('rv-park.blogs.index') }}">Blogs</a></li>
-                            <li><a href="{{ route('rv-park.advertise.index') }}">Advertise</a></li>
+{{--                            <li><a href="{{ route('rv-park.blogs.index') }}">Blog</a></li>--}}
+                            <li><a href="{{ route('rv-park.advertise.index') }}">Advertiser Inquiries</a></li>
                             <li><a href="#">Park Owners</a>
                                 <ul class="dropdown-menu">
                                     <li><a href="{{ route('rv-park.CampConnect.index') }}">Camp Connect</a></li>
+                                     <li><a href="{{ route('rv-park.free_marketing.index') }}">Free Marketing Help</a></li>
                                 </ul>
                             </li>
+{{--                            <li><a href="{{ route('rv-park.service') }}">Services</a></li>--}}
                             <li><a href="mailto:info@rvparkhq.com">Contact</a></li>
                             <li>
                                 <a id="btn-search" href="#"> <i class="icon-search"></i></a>
@@ -36,7 +38,7 @@
                                     <a href="#">{{ Auth::user()->name }}</a>
                                     <ul class="dropdown-menu">
                                         <li>
-                                            <a href="{{ route('rv-park.profile.dashboard') }}">My Dashboard</a>
+                                            <a href="{{ route('rv-park.profile.dashboard') }}">Profile</a>
                                         </li>
                                         <li>
                                             <a href="{{ route('logout') }}"

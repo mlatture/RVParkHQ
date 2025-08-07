@@ -35,7 +35,7 @@
 
         <div style="margin-top: 20px; padding: 15px; background-color: #f0f8f5; border-left: 4px solid #4CAF50;">
             <p><strong>🏞️ Park Name:</strong> {{ $park->name }}</p>
-            <p><strong>📍 Location:</strong> {{ $park->city }}, {{ $park->state }}, {{ $park->country }}</p>
+            <p><strong>📍 Location:</strong> {{ $park->city }}, {{ $park->state }}</p>
             @if($park->postal_code)
                 <p><strong>📬 ZIP Code:</strong> {{ $park->postal_code }}</p>
             @endif

@@ -30,4 +30,13 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'cardknox' => [
+        'key' => env('CARDKNOX_API_KEY'),
+    ],
+
+    'gohighlevel' => [
+        'base_url' => 'https://rest.gohighlevel.com/v1',
+        'api_key' => env('GOHIGHLEVEL_API_KEY'),
+        'location_id' => env('GOHIGHLEVEL_LOCATION_ID'),
+    ],
 ];

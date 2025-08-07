@@ -87,13 +87,13 @@ class PermissionService
                     'settings.edit',
                 ],
             ],
-            [
-                'group_name' => 'translations',
-                'permissions' => [
-                    'translations.view',
-                    'translations.edit',
-                ],
-            ],
+//            [
+//                'group_name' => 'translations',
+//                'permissions' => [
+//                    'translations.view',
+//                    'translations.edit',
+//                ],
+//            ],
             [
                 'group_name' => 'parks',
                 'permissions' => [
@@ -103,15 +103,15 @@ class PermissionService
                     'park.delete',
                 ],
             ],
-            [
-                'group_name' => 'campground',
-                'permissions' => [
-                    'campground.view',
-                    'campground.create',
-                    'campground.edit',
-                    'campground.delete',
-                ],
-            ],
+//            [
+//                'group_name' => 'campground',
+//                'permissions' => [
+//                    'campground.view',
+//                    'campground.create',
+//                    'campground.edit',
+//                    'campground.delete',
+//                ],
+//            ],
             [
                 'group_name' => 'amenity',
                 'permissions' => [
@@ -168,6 +168,12 @@ class PermissionService
                     'bills.create',
                     'bills.edit',
                     'bills.delete',
+                ],
+            ],
+            [
+                'group_name' => 'free_marketing',
+                'permissions' => [
+                    'free_marketing.view',
                 ],
             ],
         ];

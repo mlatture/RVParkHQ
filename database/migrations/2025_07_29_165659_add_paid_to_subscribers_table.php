@@ -11,11 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pending_subscribers', function (Blueprint $table) {
-            $table->id();
-            $table->string('email')->unique();
-            $table->uuid('token')->unique();
-            $table->timestamps();
+        Schema::table('subscribers', function (Blueprint $table) {
+            $table->uuid('token')->nullable();
+            $table->enum('status', ['subscribe', 'pending'])->default('pending');
         });
     }
 
@@ -24,6 +22,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pending_subscribers');
+        Schema::table('subscribers', function (Blueprint $table) {
+            $table->dropColumn(['token', 'status']);
+        });
     }
 };

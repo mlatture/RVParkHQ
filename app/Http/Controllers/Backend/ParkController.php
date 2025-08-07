@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ParkRequest;
 use App\Mail\ClaimParkConfirmationMail;
+use App\Mail\ParkCreateMail;
 use App\Models\OverPass;
 use App\Models\Park;
 use App\Models\ClaimPark;
@@ -30,7 +31,7 @@ class ParkController extends Controller
     {
         $this->checkAuthorization(auth()->user(), ['park.view']);
 
-        return view('backend.pages.park.index',[
+        return view('backend.pages.park.index', [
             'parks' => $this->parkService->getPark(),
         ]);
     }
@@ -39,13 +40,14 @@ class ParkController extends Controller
     {
         $this->checkAuthorization(auth()->user(), ['park.create']);
 
-        $amenities = Amenity::select('id','amenity', 'category', 'blackicon', 'whiteicon')->get();
+        $amenities = Amenity::select('id', 'amenity', 'category', 'blackicon', 'whiteicon')->get();
 
         return view('backend.pages.park.create', compact('amenities'));
     }
 
     public function store(ParkRequest $request)
     {
+//        dd($request->all());
         $this->checkAuthorization(auth()->user(), ['park.create']);
 
         $park = new Park();
@@ -62,11 +64,12 @@ class ParkController extends Controller
         $park->latitude = $request->latitude ?? null;
         $park->longitude = $request->longitude ?? null;
         $park->phone = $request->phone ?? null;
-        $park->email = $request->email ?? null;
+        $park->email = auth()->user()->hasRole(['rep', 'Rep']) ? auth()->user()->email : $request->email;;
         $park->website_url = $request->website_url ?? null;
         $park->status = $request->status ?? 'inactive';
         $park->is_featured = $request->is_featured == 1 ? true : false;
         $park->request_park = $request->request_park == "on" ? 1 : 0;
+        $park->rep = auth()->user()->hasRole(['rep', 'Rep']) ? auth()->user()->email : '';
 
         if ($request->hasFile('main_image_url')) {
             $path = $request->file('main_image_url')->store('parks', 'public');
@@ -83,26 +86,63 @@ class ParkController extends Controller
 
         $park->amenities()->sync($request->amenities);
 
+        if (auth()->user()->hasRole(['rep', 'Rep'])){
+            Mail::to($park->rep)->send(new ParkCreateMail($park));
+        }
+
         return redirect()->route('admin.parks.index')->with('success', 'Park created successfully.');
     }
+
+//    public function edit($id)
+//    {
+//        $this->checkAuthorization(auth()->user(), ['park.edit']);
+//        $park = Park::with('amenities')->findOrFail($id);
+//        $user = auth()->user();
+//        if (!$user->hasRole('Superadmin')) {
+//
+//            $hasClaimedPark = ClaimPark::where('park_id', $park->id)
+//                ->where('user_id', $user->id)
+//                ->where('status', 'approved')
+//                ->exists();
+//
+//            if (!$hasClaimedPark) {
+//                return redirect()->route('admin.parks.index')
+//                    ->with('error', 'Unauthorized access. You do not have permission to access this park.');
+//            }
+//        }
+//        $amenities = Amenity::select('id', 'amenity', 'category', 'blackicon', 'whiteicon')->get();
+//        return view('backend.pages.park.edit', [
+//            'park' => $park,
+//            'amenities' => $amenities,
+//        ]);
+//    }
 
     public function edit($id)
     {
         $this->checkAuthorization(auth()->user(), ['park.edit']);
-        $park = Park::with('amenities')->findOrFail($id);
+
         $user = auth()->user();
-        if (!$user->hasRole('Superadmin')) {
+        $park = Park::with('amenities')->findOrFail($id);
+
+        if ($user->hasRole(['rep', 'Rep'])) {
+            if ($park->rep !== $user->email) {
+                return redirect()->route('admin.parks.index')
+                    ->with('error', 'Unauthorized access. You do not have permission to access this park.');
+            }
+        } elseif (!$user->hasRole('Superadmin')) {
             $hasClaimedPark = ClaimPark::where('park_id', $park->id)
                 ->where('user_id', $user->id)
                 ->where('status', 'approved')
                 ->exists();
-                
+
             if (!$hasClaimedPark) {
                 return redirect()->route('admin.parks.index')
                     ->with('error', 'Unauthorized access. You do not have permission to access this park.');
             }
         }
+
         $amenities = Amenity::select('id', 'amenity', 'category', 'blackicon', 'whiteicon')->get();
+
         return view('backend.pages.park.edit', [
             'park' => $park,
             'amenities' => $amenities,
@@ -128,11 +168,12 @@ class ParkController extends Controller
             'latitude' => $request->latitude,
             'longitude' => $request->longitude,
             'phone' => $request->phone,
-            'email' => $request->email,
+            'email' => auth()->user()->hasRole(['rep', 'Rep']) ? auth()->user()->email : $request->email,
             'website_url' => $request->website_url,
             'status' => $request->status,
             'is_featured' => $request->is_featured,
             'request_park' => $request->request_park == 'on' ? 1 : 0,
+            'rep' => auth()->user()->hasRole(['rep', 'Rep']) ? auth()->user()->email : '',
         ];
 
         if ($request->hasFile('main_image_url')) {
@@ -152,9 +193,8 @@ class ParkController extends Controller
 
         $park->update($data);
         $park->amenities()->sync($request->amenities);
-        
-        Mail::to(config('mail.notification_email'))->send(new \App\Mail\ParkUpdatedMail($park, auth()->user()));
 
+        Mail::to(config('mail.notification_email'))->send(new \App\Mail\ParkUpdatedMail($park, auth()->user()));
         return redirect()->route('admin.parks.index')->with('success', 'Park updated successfully.');
     }
 
@@ -195,10 +235,14 @@ class ParkController extends Controller
             ]);
         }
 
-        $park = Park::findorFail(decrypt($id));
-        $claim_check = ClaimPark::where('park_id', $park->id)->where('status', 'approved')->first();
+        $park = Park::findOrFail($park_id);
+
+        $claim_check = ClaimPark::where('park_id', $park->id)
+            ->where('status', 'approved')
+            ->first();
+
         if ($claim_check) {
-            return redirect()->back()->with('error', 'A claim for this park is already approved.');
+            return redirect()->back()->with('error', 'A claim for this park is already pending or approved.');
         }
 
         return view('backend.pages.park.applyClamPark', compact('park'));
@@ -278,21 +322,18 @@ class ParkController extends Controller
 
         // Create the claim
         $claim = ClaimPark::create([
-            // Contact Information
             'contact_name' => $request->contact_name,
             'contact_email' => $request->contact_email,
             'contact_phone' => $request->contact_phone,
             'contact_role' => $request->contact_role,
             'is_owner_or_manager' => $request->is_owner_or_manager,
 
-            // Park Information
             'park_id' => $request->park_id,
             'user_id' => $request->user()->id,
             'booking_url' => $request->booking_url,
             'facebook_url' => $request->facebook_url,
             'instagram_url' => $request->instagram_url,
 
-            // Site Inventory
             'sites_50amp_full' => $request->sites_50amp_full ?? 0,
             'sites_30amp_full' => $request->sites_30amp_full ?? 0,
             'sites_30amp_water_electric' => $request->sites_30amp_water_electric ?? 0,
@@ -305,34 +346,57 @@ class ParkController extends Controller
             'seasonal_sites' => $request->seasonal_sites ?? 0,
             'group_campsites' => $request->group_campsites ?? 0,
 
-            // Cabins & Rentals
             'deluxe_cabins' => $request->deluxe_cabins ?? 0,
             'primitive_cabins' => $request->primitive_cabins ?? 0,
             'yurts_glamping' => $request->yurts_glamping ?? 0,
             'other_rentals' => $request->other_rentals,
 
-            // Waterfront & Marina
             'boat_slips' => $request->boat_slips ?? 0,
             'canoe_kayak_rental' => $request->canoe_kayak_rental ?? false,
             'paddle_boats' => $request->paddle_boats ?? false,
             'boat_ramp' => $request->boat_ramp ?? false,
             'fishing_available' => $request->fishing_available ?? false,
 
-            // Reservation System
             'reservation_provider' => $request->reservation_provider,
             'happy_with_provider' => $request->happy_with_provider,
             'contact_about_reservation' => $request->contact_about_reservation ?? false,
 
-            // Media Storage
             'amenities' => $request->amenities ? json_encode($request->amenities) : null,
             'images' => !empty($photosData) ? json_encode($photosData) : null,
             'logo_path' => $logoPath,
 
-            // Status
             'status' => 'pending'
         ]);
 
+        // Send email
         Mail::to(config('mail.notification_email'))->send(new ClaimParkConfirmationMail($claim));
+
+        // Send data to GoHighLevel
+        try {
+            $client = new \GuzzleHttp\Client();
+            $response = $client->post(config('services.gohighlevel.base_url') . '/contacts/', [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . config('services.gohighlevel.api_key'),
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json',
+                ],
+                'json' => [
+                    'locationId' => config('services.gohighlevel.location_id'),
+                    'firstName'  => $claim->contact_name,
+                    'email'      => $claim->contact_email,
+                    'phone'      => $claim->contact_phone,
+                    'tags'       => ['Claim A Park'],
+                ],
+            ]);
+
+            if (!in_array($response->getStatusCode(), [200, 201])) {
+                \Log::warning('GoHighLevel responded with status: ' . $response->getStatusCode());
+            } else {
+                \Log::info('Contact sent to GoHighLevel successfully.');
+            }
+        } catch (\Exception $e) {
+            \Log::error('Error sending contact to GoHighLevel: ' . $e->getMessage());
+        }
 
         return redirect()->route('admin.parks.index')
             ->with('success', 'Park claim submitted successfully!');

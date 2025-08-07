@@ -23,4 +23,4 @@ class BillMail extends Mailable
             ->view('emails.bill')
             ->with(['bill' => $this->bill]);
     }
-}
+} 

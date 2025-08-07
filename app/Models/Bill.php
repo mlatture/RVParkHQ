@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 class Bill extends Model
 {
     protected $table = 'bills';
-    
+
     protected $guarded = [];
 
     public function scopeFilter($query, $search)
@@ -24,7 +24,12 @@ class Bill extends Model
     {
         return $this->belongsTo(User::class);
     }
-    
+
+    public function latestPayment()
+    {
+        return $this->hasOne(\App\Models\Payment::class, 'bill_id')->latestOfMany();
+    }
+
     public function getScheduleAttribute($value)
     {
         $scheduleTypes = [
@@ -35,7 +40,7 @@ class Bill extends Model
 
         return $scheduleTypes[$value] ?? ucfirst($value);
     }
-    
+
     public function getStatusAttribute($value)
     {
         $statuses = [

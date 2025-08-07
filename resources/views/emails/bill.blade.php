@@ -11,7 +11,7 @@
     </div>
 
     <div style="padding: 30px;">
-        <p style="font-size: 16px; color: #333333; margin-bottom: 10px;">Hi {{ $bill->user->email ?? 'Customer' }},</p>
+        <p style="font-size: 16px; color: #333333; margin-bottom: 10px;">Hi {{ $bill->user->name ?? 'Customer' }},</p>
         <p style="font-size: 14px; color: #555555;">Thanks for your continued trust in us. Here are the details of your latest invoice:</p>
 
         <table style="width: 100%; margin-top: 20px; font-size: 14px; border-collapse: collapse;">
@@ -28,9 +28,15 @@
                 <td style="padding: 10px 0; color: #333333;">${{ number_format($bill->amount, 2) }}</td>
             </tr>
             <tr>
-                <td style="padding: 10px 0; color: #777777;">📅 <strong>Due Date</strong></td>
-                <td style="padding: 10px 0; color: #333333;">{{ \Carbon\Carbon::parse($bill->due_date)->format('F d, Y') }}</td>
+                <td style="padding: 10px 0; color: #777777;">🕛 <strong>Schedule</strong></td>
+                <td style="padding: 10px 0; color: #333333;">{{ $bill->schedule }}</td>
             </tr>
+            @if($bill->schedule != 'One Time')
+                <tr>
+                    <td style="padding: 10px 0; color: #777777;">📅 <strong>Due Date</strong></td>
+                    <td style="padding: 10px 0; color: #333333;">{{ \Carbon\Carbon::parse($bill->due_date)->format('F d, Y') }}</td>
+                </tr>
+            @endif
             <tr>
                 <td style="padding: 10px 0; color: #777777;">📦 <strong>Status</strong></td>
                 <td style="padding: 10px 0; color: {{ $bill->status === 'paid' ? '#198754' : '#dc3545' }};">
@@ -39,7 +45,9 @@
             </tr>
         </table>
 
-        <p style="margin-top: 30px; font-size: 14px; color: #555555;">If you have any questions, feel free to reply to this email. We're here to help!</p>
+        <p style="margin-top: 30px; text-align: center;">
+            <a href="{{ url('/pay-bill/' . $bill->payment_link_token) }}" style="display: inline-block; padding: 12px 30px; background-color: #0d6efd; color: #fff; border-radius: 5px; text-decoration: none; font-size: 16px; font-weight: bold;">Pay Now</a>
+        </p>
 
         <p style="margin-top: 40px; font-size: 14px; color: #333333;">
             Regards,<br><strong>{{ config('app.name') }} Team</strong>

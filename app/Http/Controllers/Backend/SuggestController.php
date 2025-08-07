@@ -11,13 +11,14 @@ use App\Models\SuggestPark;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Http;
 
 class SuggestController extends Controller
 {
     public function index(Request $request)
     {
         $this->checkAuthorization(auth()->user(), ['suggest-park.view']);
-        
+
         $suggests = SuggestPark::search($request->search)
             ->orderBy('id', 'DESC')
             ->paginate(10);
@@ -28,7 +29,7 @@ class SuggestController extends Controller
     public function edit($id)
     {
         $this->checkAuthorization(auth()->user(), ['suggest-park.edit']);
-        
+
         $suggest = SuggestPark::findOrFail($id);
         return view('backend.pages.suggest-park.edit', compact('suggest'));
     }
@@ -36,7 +37,7 @@ class SuggestController extends Controller
     public function update(Request $request, $id)
     {
         $this->checkAuthorization(auth()->user(), ['suggest-park.edit']);
-        
+
         $request->validate([
             'status' => 'required|in:pending,approved,rejected',
         ]);
@@ -63,6 +64,7 @@ class SuggestController extends Controller
                     $slug .= '-' . ($slugCount + 1);
                 }
 
+                // Slug path build logic
                 $slugPath = implode('-', array_filter([
                     Str::slug($editRequest->country),
                     Str::slug($editRequest->state),
@@ -93,56 +95,127 @@ class SuggestController extends Controller
             }
         }
 
-        return redirect()->route('admin.suggest-park.index')->with('success', 'Suggest Park status updated successfully.');
+        return redirect()->route('admin.suggest-park.index')
+            ->with('success', 'Suggest Park status updated successfully.');
     }
 
     public function destroy($id)
     {
         $this->checkAuthorization(auth()->user(), ['suggest-park.delete']);
-        
+
         $editRequest = SuggestPark::findOrFail($id);
         $editRequest->delete();
 
-        return redirect()->route('admin.suggest-park.index')->with('success', 'Suggest Park deleted successfully.');
+        return redirect()->route('admin.suggest-park.index')
+            ->with('success', 'Suggest Park deleted successfully.');
     }
 
     public function suggest()
     {
         $suggest = SuggestPark::where('user_email', auth()->user()->email)->exists();
         if ($suggest){
-            return redirect()->back()->with('success', 'You Already Suggestion Park.');
+            return redirect()->back()->with([
+                'icon' => 'success',
+                'success' => 'You Already Suggestion Park.'
+            ]);
         }
         return view('backend.pages.suggest-park.apply');
     }
 
+//    public function store(Request $request)
+//    {
+//        $validated = $request->validate([
+//            'park_name'      => 'required|string|max:255',
+//            'city'           => 'required|string|max:255',
+//            'state'          => 'required|string|max:100',
+////            'country'        => 'required|string|max:100',
+//            'zip'            => 'nullable|string|max:20',
+//            'website_url'    => 'nullable|url|max:255',
+////            'social_url'     => 'nullable|url|max:255',
+//            'email'             => 'required|email|max:255|unique:suggest_park,email',
+//            'phone'          => 'nullable|string|max:20',
+//            'user_name'      => 'required|string|max:255',
+//            'user_email'     => 'required|email|max:255',
+//            'submitted_by'     => 'required',
+//            'address_line_1'     => 'required|string|max:255',
+//            'address_line_2'     => 'nullable|string|max:255',
+//            'description'     => 'nullable|string|max:1000',
+//        ]);
+//
+//        $validated['user_name'] = auth()->user()->name;
+//        $validated['user_email'] = auth()->user()->email;
+//
+//        SuggestPark::create($validated);
+//        Mail::to(config('mail.notification_email'))->send(new SuggestMail((object)$validated));
+//        return redirect()->route('admin.parks.index')->with([
+//            'icon' => 'success',
+//            'success' => 'Thanks! We’ll review your submission and add the park soon.'
+//        ]);
+//    }
+
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'park_name'      => 'required|string|max:255',
-            'city'           => 'required|string|max:255',
-            'state'          => 'required|string|max:100',
-            'zip'            => 'nullable|string|max:20',
-            'website_url'    => 'nullable|url|max:255',
-            'email'             => 'required|email|max:255|unique:suggest_park,email',
-            'phone'          => 'nullable|string|max:20',
-            'user_name'      => 'required|string|max:255',
-            'user_email'     => 'required|email|max:255',
+            'park_name'        => 'required|string|max:255',
+            'city'             => 'required|string|max:255',
+            'state'            => 'required|string|max:100',
+            'zip'              => 'nullable|string|max:20',
+            'website_url'      => 'nullable|url|max:255',
+            'email'            => 'required|email|max:255|unique:suggest_park,email',
+            'phone'            => 'nullable|string|max:20',
+            'user_name'        => 'required|string|max:255',
+            'user_email'       => 'required|email|max:255',
             'submitted_by'     => 'required',
-            'address_line_1'     => 'required|string|max:255',
-            'address_line_2'     => 'nullable|string|max:255',
-            'description'     => 'nullable|string|max:1000',
+            'address_line_1'   => 'required|string|max:255',
+            'address_line_2'   => 'nullable|string|max:255',
+            'description'      => 'nullable|string|max:1000',
         ]);
 
+        // Add authenticated user info
         $validated['user_name'] = auth()->user()->name;
         $validated['user_email'] = auth()->user()->email;
 
+        // Store in local database
         SuggestPark::create($validated);
-        
+
+        // Send email
         Mail::to(config('mail.notification_email'))->send(new SuggestMail((object)$validated));
-        
+
+        // Prepare data for GoHighLevel
+        try {
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . config('services.gohighlevel.api_key'),
+                'Content-Type' => 'application/json',
+            ])->post(config('services.gohighlevel.base_url') . '/contacts/', [
+                'firstName'   => $validated['user_name'],
+                'email'       => $validated['user_email'],
+                'phone'       => $validated['phone'] ?? '',
+                'locationId'  => config('services.gohighlevel.location_id'),
+                'customField' => [
+                    'Park Name'      => $validated['park_name'],
+                    'Submitted By'   => $validated['submitted_by'],
+                    'Address Line 1' => $validated['address_line_1'],
+                    'City'           => $validated['city'],
+                    'State'          => $validated['state'],
+                    'ZIP'            => $validated['zip'],
+                    'Website'        => $validated['website_url'],
+                ],
+                'tags' => ['Suggest A Park'],
+            ]);
+
+            if (!$response->successful()) {
+                \Log::error('GoHighLevel contact creation failed', [
+                    'status' => $response->status(),
+                    'body' => $response->body(),
+                ]);
+            }
+        } catch (\Exception $e) {
+            \Log::error('Error sending contact to GoHighLevel: ' . $e->getMessage());
+        }
+
         return redirect()->route('admin.parks.index')->with([
             'icon' => 'success',
-            'success' => 'Thank you! Your suggested park has been submitted.'
+            'success' => 'Thanks! We’ll review your submission and add the park soon.',
         ]);
     }
 }

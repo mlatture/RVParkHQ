@@ -12,17 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('payments', function (Blueprint $table) {
-        $table->id();
-        $table->integer('bill_id');
-        $table->decimal('amount', 10, 2);
-        $table->enum('payment_method', ['credit_card', 'ACH']);
-        $table->string('sola_transaction_id');
-        $table->string('sola_payment_token');
-        $table->timestamp('processed_at');
-        $table->enum('status', ['success', 'failed']);
-        $table->string('processed_by_admin');
-        $table->timestamps();
-    });
+            $table->id();
+            $table->unsignedBigInteger('bill_id');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('card_id')->nullable();
+            $table->decimal('amount', 10, 2);
+            $table->enum('payment_method', ['credit_card', 'ACH'])->default('credit_card');
+            $table->timestamp('processed_at')->nullable();
+            $table->enum('status', ['success', 'failed', 'duplicate'])->default('success');
+            $table->timestamps();
+        });
     }
 
     /**

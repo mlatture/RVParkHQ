@@ -4,7 +4,7 @@
             <div class="p-40 p-t-60 p-xs-20">
                 <h3 class="mb-4">Edit Profile</h3>
 
-                <form class="form-grey-fields" method="POST" action="{{ route('modal.profile.update') }}">
+                <form class="form-grey-fields" method="POST" action="{{ route('rv-park.modal.profile.update') }}">
                     @csrf
                     @if ($errors->has('name') || $errors->has('email') || $errors->has('password'))
                         <div class="alert alert-danger">
@@ -57,4 +57,4 @@
             }
         });
     @endif
-</script> 
+</script>

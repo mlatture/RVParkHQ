@@ -81,18 +81,16 @@
                                 <td class="px-5 py-4 sm:px-6 flex items-center md:min-w-[200px]">{{ $amenitie->amenity }}</td>
                                 <td class="px-5 py-4 sm:px-6">{{ $amenitie->category }}</td>
                                 <td class="px-5 py-4 sm:px-6">
-                                    @php
-                                        $blackIconPath = $amenitie->blackicon;
-                                        $blackIconImage = !empty($blackIconPath) && preg_match('/^https?:\/\//', $blackIconPath) ? $blackIconPath : asset('storage/' . $blackIconPath);
-                                    @endphp
-                                    <img src="{{ $blackIconImage }}" alt="Black Icon" width="40" height="40">
+                                    <img src="{{ asset('storage/' . $amenitie->blackicon) }}" alt="Black Icon" width="40" height="40">
                                 </td>
                                 <td class="px-5 py-4 sm:px-6">
-                                    @php
-                                        $whiteIconPath = $amenitie->whiteicon;
-                                        $whiteIconImage = !empty($whiteIconPath) && preg_match('/^https?:\/\//', $whiteIconPath) ? $whiteIconPath : asset('storage/' . $blackIconPath);
-                                    @endphp
-                                    <img src="{{ $whiteIconImage }}" alt="White Icon" width="40" height="40">
+                                    <img
+                                        src="{{ asset('storage/' . $amenitie->whiteicon) }}"
+                                        alt="White Icon"
+                                        width="40"
+                                        height="40"
+                                        style="background-color: black; padding: 5px; border-radius: 4px;"
+                                    >
                                 </td>
 
                                 <td class="flex px-5 py-4 sm:px-6 text-center gap-1">

@@ -42,7 +42,7 @@
                     <h2 class="text-small">For Campground Owners</h2>
                     <p>Claim your listing, get more bookings, and grow with smart tools</p>
                     <div>
-                        <a href="{{ route('rv-park.all-parks') }}" class="btn btn-primary scroll-to">Claim Your Park</a>
+                        <a href="{{ route('rv-park.suggest.park') }}" class="btn btn-primary scroll-to">Suggest a Park</a>
                     </div>
                 </div>
             </div>

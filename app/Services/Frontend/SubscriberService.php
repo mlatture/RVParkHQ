@@ -2,7 +2,6 @@
 
 namespace App\Services\Frontend;
 
-use App\Models\PendingSubscriber;
 use App\Models\Subscriber;
 use App\Mail\ConfirmSubscriptionMail;
 use Illuminate\Support\Facades\Mail;
@@ -17,14 +16,14 @@ class SubscriberService
             return ['status' => false, 'message' => 'You are already subscribed!', 'type' => 'info'];
         }
 
-        $pending = PendingSubscriber::where('email', $email)->first();
+        $pending = Subscriber::where('email', $email)->first();
         if ($pending) {
             Mail::to($email)->send(new ConfirmSubscriptionMail($pending->token));
             return ['status' => true, 'message' => 'Confirmation email resent. Please check your inbox.', 'type' => 'success'];
         }
 
         $token = Str::uuid();
-        PendingSubscriber::create([
+        Subscriber::create([
             'email' => $email,
             'token' => $token,
         ]);
@@ -36,24 +35,20 @@ class SubscriberService
 
     public function handleConfirmation($data)
     {
-        if (Subscriber::where('email', $data['email'])->exists()) {
-            return ['message' => 'You are already subscribed!', 'type' => 'info'];
-        }
 
-        $pending = PendingSubscriber::where('token', $data['token'])->first();
+        $pending = Subscriber::where('token', $data['token'])->first();
 
         if (!$pending) {
             return ['message' => 'Invalid or expired confirmation link.', 'type' => 'error'];
         }
 
-        Subscriber::create([
-            'email' => $pending->email,
+        $pending->update([
             'name' => $data['name'],
             'zip_code' => $data['zip_code'],
-            'confirmed_at' => Carbon::now(),
+            'status' => 'subscribe',
+            'confirmed_at' => now()->toDateString(),
+            'token' => null,
         ]);
-
-        $pending->delete();
 
         return ['message' => 'Subscription confirmed successfully!', 'type' => 'success'];
     }

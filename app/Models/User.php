@@ -54,7 +54,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(ActionLog::class, 'action_by');
     }
-    
+
     public function favorites()
     {
         return $this->hasMany(Favorite::class);
@@ -63,6 +63,16 @@ class User extends Authenticatable
     public function hasFavoritedPark($parkId)
     {
         return $this->favorites()->where('park_id', $parkId)->exists();
+    }
+
+    public function cards()
+    {
+        return $this->hasMany(\App\Models\Card::class, 'user_id');
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(\App\Models\Payment::class, 'user_id');
     }
 
     /**
@@ -80,9 +90,9 @@ class User extends Authenticatable
             $this->notify(new DefaultResetPassword($token));
         }
     }
-    
+
     public function bills()
     {
-        return $this->hasMany(Bill::class);
+        return $this->hasMany(Bill::class, 'user_id');
     }
 }

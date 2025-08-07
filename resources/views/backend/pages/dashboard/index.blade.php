@@ -47,12 +47,28 @@
                         'url' => route('admin.permissions.index'),
                     ])
                     @include('backend.pages.dashboard.partials.card', [
-                        'icon' => 'bi bi-translate',
-                        'label' => __('Translations'),
-                        'value' => $languages['total'] . ' / ' . $languages['active'],
+                        'icon' => 'bi bi-tree',
+                        'label' => __('Suggest Park'),
+                        'value' => $total_suggest_park,
                         'bg' => '#22C55E',
                         'class' => 'bg-white',
-                        'url' => route('admin.translations.index'),
+                        'url' => route('admin.suggest-park.index'),
+                    ])
+                    @include('backend.pages.dashboard.partials.card', [
+                        'icon' => 'bi bi-tree',
+                        'label' => __('Advertiser Inquiries'),
+                        'value' => $total_ad_inquiries,
+                        'bg' => '#F54927',
+                        'class' => 'bg-white',
+                        'url' => route('admin.advertise.index'),
+                    ])
+                    @include('backend.pages.dashboard.partials.card', [
+                        'icon' => 'bi bi-tree',
+                        'label' => __('Claim a Park'),
+                        'value' => $total_claim_park,
+                        'bg' => '#CC8B7E',
+                        'class' => 'bg-white',
+                        'url' => route('admin.claim.index'),
                     ])
                 </div>
             </div>

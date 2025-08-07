@@ -135,15 +135,15 @@ class AdminMenuService
             'priority' => 1,
             'permissions' => 'park.view'
         ]);
-        $this->addMenuItem([
-            'label' => __('Campground '),
-            'icon' => 'dashboard.svg',
-            'route' => route('admin.campground.index'),
-            'active' => Route::is('admin.campground.index'),
-            'id' => 'campground',
-            'priority' => 1,
-            'permissions' => 'campground.view'
-        ]);
+//        $this->addMenuItem([
+//            'label' => __('Campground '),
+//            'icon' => 'dashboard.svg',
+//            'route' => route('admin.campground.index'),
+//            'active' => Route::is('admin.campground.index'),
+//            'id' => 'campground',
+//            'priority' => 1,
+//            'permissions' => 'campground.view'
+//        ]);
 
         $this->addMenuItem([
             'label' => __('Amenity'),
@@ -195,7 +195,7 @@ class AdminMenuService
         ]);
 
         $this->addMenuItem([
-            'label' => __('Advertise'),
+            'label' => __('Advertiser Inquiries'),
             'icon' => 'dashboard.svg',
             'route' => route('admin.advertise.index'),
             'active' => Route::is('admin.advertise.index'),
@@ -226,6 +226,52 @@ class AdminMenuService
         ]);
 
         $this->addMenuItem([
+            'label' => __('Free Marketing'),
+            'icon' => 'dashboard.svg',
+            'route' => route('admin.free_marketing.index'),
+            'active' => Route::is('admin.free_marketing.index'),
+            'id' => 'free_marketing',
+            'priority' => 1,
+            'permissions' => 'free_marketing.view'
+        ]);
+
+//        $this->addMenuItem([
+//            'label' => __('Modules'),
+//            'icon' => 'three-dice.svg',
+//            'route' => route('admin.modules.index'),
+//            'active' => Route::is('admin.modules.index'),
+//            'id' => 'modules',
+//            'priority' => 30,
+//            'permissions' => 'module.view'
+//        ]);
+
+//        $this->addMenuItem([
+//            'label' => __('Monitoring'),
+//            'icon' => 'tv.svg',
+//            'id' => 'monitoring-submenu',
+//            'active' => Route::is('admin.actionlog.*'),
+//            'priority' => 40,
+//            'permissions' => ['pulse.view', 'actionlog.view'],
+//            'children' => [
+//                [
+//                    'label' => __('Action Logs'),
+//                    'route' => route('admin.actionlog.index'),
+//                    'active' => Route::is('admin.actionlog.index'),
+//                    'priority' => 20,
+//                    'permissions' => 'actionlog.view'
+//                ],
+//                [
+//                    'label' => __('Laravel Pulse'),
+//                    'route' => route('pulse'),
+//                    'active' => false,
+//                    'target' => '_blank',
+//                    'priority' => 10,
+//                    'permissions' => 'pulse.view'
+//                ]
+//            ]
+//        ]);
+
+        $this->addMenuItem([
             'label' => __('Settings'),
             'icon' => 'settings.svg',
             'id' => 'settings-submenu',
@@ -240,13 +286,13 @@ class AdminMenuService
                     'priority' => 20,
                     'permissions' => 'settings.edit'
                 ],
-                [
-                    'label' => __('Translations'),
-                    'route' => route('admin.translations.index'),
-                    'active' => Route::is('admin.translations.*'),
-                    'priority' => 10,
-                    'permissions' => ['translations.view', 'translations.edit']
-                ]
+//                [
+//                    'label' => __('Translations'),
+//                    'route' => route('admin.translations.index'),
+//                    'active' => Route::is('admin.translations.*'),
+//                    'priority' => 10,
+//                    'permissions' => ['translations.view', 'translations.edit']
+//                ]
             ]
         ], __('More'));
 

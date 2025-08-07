@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Subscriber;
 use Illuminate\Http\Request;
-use App\Models\PendingSubscriber;
 use App\Services\Frontend\SubscriberService;
 
 class SubscriberController extends Controller
@@ -68,7 +68,7 @@ class SubscriberController extends Controller
 
     public function index(Request $request)
     {
-        $pending = PendingSubscriber::where('token', $request->token)->first();
+        $pending = Subscriber::where('token', $request->token)->first();
 
         if (!$pending) {
             return redirect()->route('rv-park.home')->with([

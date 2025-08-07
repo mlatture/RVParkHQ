@@ -19,13 +19,16 @@
 
         <div style="margin-top: 20px; padding: 15px; background-color: #f0f8f5; border-left: 4px solid #4CAF50;">
             <p><strong>🏞️ Park Name:</strong> {{ $suggestedPark->park_name }}</p>
-            <p><strong>📍 Location:</strong> {{ $suggestedPark->address_line_1 }}</p>
+            <p><strong>📍 Location:</strong> {{ $suggestedPark->city }}, {{ $suggestedPark->state }}</p>
             @if($suggestedPark->zip)
                 <p><strong>📬 ZIP Code:</strong> {{ $suggestedPark->zip }}</p>
             @endif
             @if($suggestedPark->website_url)
                 <p><strong>🔗 Website:</strong> <a href="{{ $suggestedPark->website_url }}" style="color: #4CAF50;">{{ $suggestedPark->website_url }}</a></p>
             @endif
+{{--            @if($suggestedPark->social_url)--}}
+{{--                <p><strong>📱 Social:</strong> <a href="{{ $suggestedPark->social_url }}" style="color: #4CAF50;">{{ $suggestedPark->social_url }}</a></p>--}}
+{{--            @endif--}}
             @if($suggestedPark->email)
                 <p><strong>📧 Email:</strong> {{ $suggestedPark->email }}</p>
             @endif

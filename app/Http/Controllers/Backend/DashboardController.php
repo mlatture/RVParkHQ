@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Models\AdInquiries;
+use App\Models\ClaimPark;
+use App\Models\SuggestPark;
 use App\Models\User;
 use App\Services\Charts\UserChartService;
 use App\Services\LanguageService;
@@ -27,6 +30,9 @@ class DashboardController extends Controller
             'backend.pages.dashboard.index',
             [
                 'total_users' => number_format(User::count()),
+                'total_suggest_park' => number_format(SuggestPark::where('status', 'pending')->count()),
+                'total_ad_inquiries' => number_format(AdInquiries::where('status', 'pending')->count()),
+                'total_claim_park' => number_format(ClaimPark::where('status', 'pending')->count()),
                 'total_roles' => number_format(Role::count()),
                 'total_permissions' => number_format(Permission::count()),
                 'languages' => [

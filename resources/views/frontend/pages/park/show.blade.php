@@ -193,9 +193,9 @@
                 <ul>
                     <li>{{ request()->segment(1) }}</li>
                     <li>
-                        <a href="{{ route('rv-park.all-parks') }}">
+                        <!--<a href="{{ route('rv-park.all-parks') }}">-->
                             {{request()->segment(2) }}
-                        </a>
+                        <!--</a>-->
                     </li>
 
                     <li>{{ request()->segment(3) }}</li>

@@ -49,9 +49,45 @@ class ClaimController extends Controller
             'verify_token' => $token,
         ]);
 
+        // Send verification email
         Mail::to($request->email)->send(new ClaimParkVerifyMail($submission));
 
-        return redirect()->route('rv-park.park')
+        // Send to GoHighLevel
+        try {
+            $client = new \GuzzleHttp\Client();
+
+            $response = $client->post(config('services.gohighlevel.base_url') . '/contacts', [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . config('services.gohighlevel.api_key'),
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json',
+                ],
+                'json' => [
+                    'locationId' => config('services.gohighlevel.location_id'),
+                    'firstName'  => $request->park_name,
+                    'email'      => $request->email,
+                    'phone'      => $request->phone,
+                    'tags'       => 'Claim A Park',
+                    'customField' => [
+                        // Optional: include URL or address if needed
+                        'Park URL' => $request->park_url,
+                        'City' => $request->city,
+                        'State' => $request->state,
+                    ],
+                ],
+            ]);
+
+            if (in_array($response->getStatusCode(), [200, 201])) {
+                \Log::info('Contact sent to GoHighLevel successfully.');
+            } else {
+                \Log::warning('GoHighLevel responded with status: ' . $response->getStatusCode());
+            }
+
+        } catch (\Exception $e) {
+            \Log::error('Error sending contact to GoHighLevel: ' . $e->getMessage());
+        }
+
+        return redirect()->route('rv-park.all-parks')
             ->with([
                 'success' => 'Email has been sent. Please verify your email address.',
                 'icon' => 'success'
@@ -63,14 +99,15 @@ class ClaimController extends Controller
         $submission = ClaimParkSubmission::where('verify_token', $token)->firstOrFail();
 
         if ($submission->is_verified == 1) {
-            return redirect()->route('rv-park.park')
+            return redirect()->route('rv-park.all-parks')
                 ->with([
                     'success' => 'You are already verified. Please wait.',
                     'icon' => 'info'
                 ]);
         }
 
-        ClaimPark::create([
+        // Create local record
+        $claimPark = ClaimPark::create([
             'contact_name' => explode('@', $submission->email)[0] ?? 'N/A',
             'contact_email' => $submission->email,
             'contact_phone' => $submission->phone,
@@ -81,7 +118,7 @@ class ClaimController extends Controller
         $submission->is_verified = 1;
         $submission->save();
 
-        return redirect()->route('rv-park.park')
+        return redirect()->route('rv-park.all-parks')
             ->with([
                 'success' => 'Email has been sent. Please verify your email address.',
                 'icon' => 'success'

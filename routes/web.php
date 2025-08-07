@@ -22,6 +22,7 @@ use App\Http\Controllers\Backend\SuggestController;
 use App\Http\Controllers\Backend\AdvertiseController;
 use App\Http\Controllers\Backend\BillController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Backend\FreeMarketingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -94,6 +95,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth']], 
     Route::post('park-edit-requests/{park}/suggest', [SuggestController::class, 'suggest'])->name('park_edit_requests.suggest');
     Route::get('suggestion', [SuggestController::class, 'suggest'])->name('suggest.parks');
     Route::get('/subscribers', [\App\Http\Controllers\Backend\SubscriberController::class, 'index'])->name('subscribers.index');
+    Route::delete('/subscribers/{id}', [\App\Http\Controllers\Backend\SubscriberController::class, 'destroy'])->name('subscribers.destroy');
 
     Route::get('/claim-park/{id}', [ParkController::class, 'applyClamPark'])->name('claim.park.apply');
     Route::post('/claim-park/store', [ParkController::class, 'storeClamPark'])->name('claim.park.store');
@@ -106,6 +108,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth']], 
     Route::resource('blogs', BlogController::class);
     Route::resource('/advertise', AdvertiseController::class);
     Route::resource('/bills', BillController::class);
+    Route::post('/bills/{id}/send-email', [BillController::class, 'sendEmail'])->name('bills.email.send');
+    
+    Route::get('/free-marketing', [FreeMarketingController::class, 'index'])->name('free_marketing.index');
 });
 
 /**

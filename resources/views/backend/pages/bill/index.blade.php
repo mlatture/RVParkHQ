@@ -60,56 +60,81 @@
                             <th class="p-2 bg-gray-50 dark:bg-gray-800 dark:text-white text-left px-5">{{ __('#') }}</th>
                             <th class="p-2 bg-gray-50 dark:bg-gray-800 dark:text-white text-left px-5">{{ __('Customer') }}</th>
                             <th class="p-2 bg-gray-50 dark:bg-gray-800 dark:text-white text-left px-5">{{ __('Sales Rep') }}</th>
-                            <th class="p-2 bg-gray-50 dark:bg-gray-800 dark:text-white text-left px-5">{{ __('Due Date') }}</th>
                             <th class="p-2 bg-gray-50 dark:bg-gray-800 dark:text-white text-left px-5">{{ __('Amount') }}</th>
                             <th class="p-2 bg-gray-50 dark:bg-gray-800 dark:text-white text-left px-5">{{ __('Schedule') }}</th>
+                            <th class="p-2 bg-gray-50 dark:bg-gray-800 dark:text-white text-left px-5">{{ __('Due Date') }}</th>
                             <th class="p-2 bg-gray-50 dark:bg-gray-800 dark:text-white text-left px-5">{{ __('Status') }}</th>
                             <th class="p-2 bg-gray-50 dark:bg-gray-800 dark:text-white text-left px-5">{{ __('Action') }}</th>
                         </tr>
                         </thead>
                         <tbody>
-                        @forelse ($bills as  $blog)
+                        @forelse ($bills as  $bill)
                             <tr class="'border-b border-gray-100 dark:border-gray-800'">
                                 <td class="px-5 py-4 sm:px-6">{{ $loop->index + 1 }}</td>
-                                <td class="px-5 py-4 sm:px-6">{{ $blog->user->name ?? '-' }}</td>
-                                <td class="px-5 py-4 sm:px-6">{{ $blog->sales_rep ?? '-' }}</td>
-                                <td class="px-5 py-4 sm:px-6">{{ $blog->due_date ?? '-' }}</td>
-                                <td class="px-5 py-4 sm:px-6">{{ $blog->amount ?? '-' }}</td>
-                                <td class="px-5 py-4 sm:px-6">{{ $blog->schedule ?? '-' }}</td>
-                                <td class="px-5 py-4 sm:px-6">{{ $blog->status ?? '-' }}</td>
+                                <td class="px-5 py-4 sm:px-6">{{ $bill->user->name ?? '-' }}</td>
+                                <td class="px-5 py-4 sm:px-6">{{ $bill->sales_rep ?? '-' }}</td>
+                                <td class="px-5 py-4 sm:px-6">{{ $bill->amount ?? '-' }}</td>
+                                <td class="px-5 py-4 sm:px-6">{{ $bill->schedule ?? '-' }}</td>
+                                <td class="px-5 py-4 sm:px-6">
+                                    {{ $bill->due_date ? \Carbon\Carbon::parse($bill->due_date)->format('d/M/Y') : '-' }}
+                                </td>
+                                <td class="px-5 py-4 sm:px-6">
+                                    @php
+                                        $status = strtolower(trim($bill->status));
+                                        $badgeColor = match ($status) {
+                                            'paid' => 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
+                                            'pending' => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300',
+                                            'failed' => 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300',
+                                            default => 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200',
+                                        };
+                                    @endphp
+
+                                    <span class="inline-flex items-center rounded-full px-3 py-1 text-sm font-medium {{ $badgeColor }}">
+                                        {{ ucfirst($status) }}
+                                    </span>
+                                </td>
 
                                 <td class="flex px-5 py-4 sm:px-6 text-center gap-1">
 
-                                    <a data-tooltip-target="tooltip-edit-park-{{ $blog->id }}" class="btn-default !p-3"
-                                       href="{{ route('admin.bills.edit', $blog->id) }}">
+                                    @if(strtolower(trim($bill->status)) == 'pending')
+                                        <form action="{{ route('admin.bills.email.send', $bill->id) }}" method="POST" style="display: inline;">
+                                            @csrf
+                                            <button type="submit" class="btn-primary !p-3">
+                                                <i class="bi bi-send text-sm"></i>
+                                            </button>
+                                        </form>
+                                    @endif
+
+                                    <a data-tooltip-target="tooltip-edit-park-{{ $bill->id }}" class="btn-default !p-3"
+                                       href="{{ route('admin.bills.edit', $bill->id) }}">
                                         <i class="bi bi-pencil text-sm"></i>
                                     </a>
-                                    <div id="tooltip-edit-park-{{ $blog->id }}" role="tooltip"
+                                    <div id="tooltip-edit-park-{{ $bill->id }}" role="tooltip"
                                          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-700">
                                         {{ __('Edit Bill') }}
                                         <div class="tooltip-arrow" data-popper-arrow></div>
                                     </div>
 
-                                    <a data-modal-target="delete-modal-{{ $blog->id }}"
-                                       data-modal-toggle="delete-modal-{{ $blog->id }}"
-                                       data-tooltip-target="tooltip-delete-park-{{ $blog->id }}" class="btn-danger !p-3"
+                                    <a data-modal-target="delete-modal-{{ $bill->id }}"
+                                       data-modal-toggle="delete-modal-{{ $bill->id }}"
+                                       data-tooltip-target="tooltip-delete-park-{{ $bill->id }}" class="btn-danger !p-3"
                                        href="javascript:void(0);">
                                         <i class="bi bi-trash text-sm"></i>
                                     </a>
-                                    <div id="tooltip-delete-park-{{ $blog->id }}" role="tooltip"
+                                    <div id="tooltip-delete-park-{{ $bill->id }}" role="tooltip"
                                          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-700">
                                         {{ __('Delete Bill') }}
                                         <div class="tooltip-arrow" data-popper-arrow></div>
                                     </div>
 
-                                    <div id="delete-modal-{{ $blog->id }}" tabindex="-1"
+                                    <div id="delete-modal-{{ $bill->id }}" tabindex="-1"
                                          class="hidden fixed inset-0 z-50 flex items-center justify-center">
                                         <!-- Modal Content -->
                                         <div
                                             class="relative p-4 w-full max-w-md bg-white rounded-lg shadow-lg dark:bg-gray-700 z-60">
                                             <button type="button"
                                                     class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                                                    data-modal-hide="delete-modal-{{ $blog->id }}">
+                                                    data-modal-hide="delete-modal-{{ $bill->id }}">
                                                 <svg class="w-3 h-3" aria-hidden="true"
                                                      xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                                                     <path stroke="currentColor" stroke-linecap="round"
@@ -127,8 +152,8 @@
                                                           d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                                                 </svg>
                                                 <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">{{ __('Are you sure you want to delete this Bill?') }}</h3>
-                                                <form id="delete-form-{{ $blog->id }}"
-                                                      action="{{ route('admin.bills.destroy', $blog->id) }}"
+                                                <form id="delete-form-{{ $bill->id }}"
+                                                      action="{{ route('admin.bills.destroy', $bill->id) }}"
                                                       method="POST">
                                                     @method('DELETE')
                                                     @csrf
@@ -137,7 +162,7 @@
                                                             class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
                                                         {{ __('Yes, Confirm') }}
                                                     </button>
-                                                    <button data-modal-hide="delete-modal-{{ $blog->id }}" type="button"
+                                                    <button data-modal-hide="delete-modal-{{ $bill->id }}" type="button"
                                                             class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">{{ __('No, cancel') }}</button>
                                                 </form>
                                             </div>

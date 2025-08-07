@@ -4,8 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class PendingSubscriber extends Model
+class SystemLog extends Model
 {
-    protected $table = 'pending_subscribers';
+    protected $table = 'system_logs';
     protected $guarded = [];
 }

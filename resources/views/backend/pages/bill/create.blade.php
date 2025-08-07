@@ -60,6 +60,11 @@
                                 </select>
                             </div>
 
+                            <div>
+                                <label for="sales_rep" class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">{{ __('Billing Recipient') }}</label>
+                                <input type="email" id="bill_rep" name="bill_rep" class="form-control dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 dark:border-gray-700 dark:text-white/90" value="{{ old('sales_rep') }}">
+                            </div>
+
                             <div class="sm:col-span-2">
                                 <label for="subject" class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">{{ __('Subject') }}</label>
                                 <input type="text" name="subject" id="subject" required value="{{ old('subject') }}"
@@ -75,22 +80,22 @@
                             <div>
                                 <label for="schedule" class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">{{ __('Schedule') }}</label>
                                 <select name="schedule" id="schedule" required
-                                        class="form-control dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 dark:border-gray-700 dark:text-white/90">
+                                        class="form-control dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 dark:border-gray-700 dark:text-white/90" onchange="toggleDueDateField()">
                                     <option value="one-time">{{ __('One Time') }}</option>
                                     <option value="monthly">{{ __('Monthly') }}</option>
                                     <option value="yearly">{{ __('Yearly') }}</option>
                                 </select>
                             </div>
 
-                            <div>
+                            <div id="due_date_field">
                                 <label for="due_date" class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">{{ __('Due Date') }}</label>
-                                <input type="date" name="due_date" id="due_date" required value="{{ old('due_date') }}"
+                                <input type="text" name="due_date" id="due_date" value="{{ old('due_date', '') }}"
                                        class="form-control dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 dark:border-gray-700 dark:text-white/90">
                             </div>
 
                             <div>
                                 <label for="amount" class="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">{{ __('Amount') }}</label>
-                                <input type="number" name="amount" id="amount" step="0.01" required value="{{ old('amount') }}"
+                                <input type="text" name="amount" id="amount" step="0.01" required value="{{ old('amount') }}"
                                        class="form-control dark:bg-dark-900 shadow-theme-xs h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 dark:border-gray-700 dark:text-white/90 dark:placeholder:text-white/30">
                             </div>
                         </div>
@@ -107,10 +112,31 @@
     </div>
 
     <script>
-        flatpickr("#due_date", {
-            dateFormat: "Y-m-d",
-            allowInput: true,
-            minDate: "today"
+        document.addEventListener('DOMContentLoaded', function() {
+            var dueDateInput = document.getElementById('due_date');
+            var today = new Date().toISOString().split('T')[0];
+            if (!dueDateInput.value) {
+                dueDateInput.value = today;
+            }
+            flatpickr("#due_date", {
+                dateFormat: "Y-m-d",
+                allowInput: true,
+                minDate: "today",
+                defaultDate: dueDateInput.value
+            });
         });
+        // function toggleDueDateField() {
+        //     var schedule = document.getElementById('schedule').value;
+        //     var dueDateField = document.getElementById('due_date_field');
+        //     if (schedule === 'monthly' || schedule === 'yearly') {
+        //         dueDateField.style.display = 'block';
+        //     } else {
+        //         dueDateField.style.display = 'none';
+        //         document.getElementById('due_date').value = '';
+        //     }
+        // }
+        // document.addEventListener('DOMContentLoaded', function() {
+        //     toggleDueDateField();
+        // });
     </script>
 @endsection
