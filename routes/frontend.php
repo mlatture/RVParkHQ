@@ -22,7 +22,7 @@ Route::name('rv-park.')->group(function () {
 
     Route::prefix('en-us/parks')->controller(ParkController::class)->group(function () {
         Route::get('/{country?}/{state?}', 'index')->name('all-parks');
-        Route::get('/confirm-review/{token}', 'confirmReview')->name('conform-review');
+        Route::get('/confirm-review/{token}', 'confirmReview')->name('conform-review')->middleware(['signed', 'throttle:10,1']); // signed link + 10 req/min
         Route::post('/pending', 'pendingReview')->name('pending-review');
         Route::get('/winner-park', 'winnerPark');
         Route::get('{slug_path}/reviews/write', 'show')->name('park-show');

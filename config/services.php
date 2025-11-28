@@ -39,4 +39,8 @@ return [
         'api_key' => env('GOHIGHLEVEL_API_KEY'),
         'location_id' => env('GOHIGHLEVEL_LOCATION_ID'),
     ],
+    
+    'flow_api' => [
+        'token' => env('FLOW_API_TOKEN'),
+    ],
 ];

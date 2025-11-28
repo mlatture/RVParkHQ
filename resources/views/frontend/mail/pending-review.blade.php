@@ -26,12 +26,21 @@
         <li><strong>Message:</strong> {{ $pendingFeedback->message }}</li>
     </ul>
 
-    <p style="text-align: center; margin: 30px 0;">
-        <a href="{{ route('rv-park.conform-review', $pendingFeedback->token) }}"
-           style="background-color: #28a745; color: white; text-decoration: none; padding: 12px 20px; border-radius: 5px; font-weight: bold;">
-            Confirm My Review
-        </a>
-    </p>
+   @php
+    // Use YOUR route name and YOUR param name
+    $confirmUrl = URL::temporarySignedRoute(
+        'conform-review',            // ← match your route name
+        now()->addDay(),             // 24h validity
+        ['token' => $pendingFeedback->token] // ← match {token}
+    );
+@endphp
+
+<p style="text-align:center;margin:30px 0;">
+    <a href="{{ $confirmUrl }}" style="background-color:#28a745;color:#fff;text-decoration:none;padding:12px 20px;border-radius:5px;font-weight:bold;">
+        Confirm My Review
+    </a>
+</p>
+
 
     <p>If you did not submit this review, you can safely ignore this email.</p>
 

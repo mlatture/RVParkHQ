@@ -13,6 +13,7 @@ use App\Services\ParkService;
 use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class ParkController extends Controller
 {
@@ -47,24 +48,36 @@ class ParkController extends Controller
         ]);
     }
     
-    public function confirmReview($token)
-    {
-        $status = $this->reviewService->confirmReview($token);
+  public function confirmReview(Request $request, string $token)
+{
+    // 'signed' + 'throttle' are already on the route — good.
 
-        if ($status === 'already_submitted') {
-            return redirect()->route('rv-park.park')
-                ->with([
-                    'success' => 'A review has already been submitted for this park using your email address.',
-                    'icon' => 'info'
-                ]);
-        }
+    $status = $this->reviewService->confirmReview($token);
 
-        return redirect()->route('rv-park.park')
-            ->with([
-                'success' => 'Your review has been confirmed and submitted.',
-                'icon' => 'success'
-            ]);
-    }
+    // Map service statuses to user-facing flashes
+    return match ($status) {
+        'invalid' => redirect()->route('rv-park.park')->with([
+            'success' => 'This confirmation link is invalid or has expired.',
+            'icon'    => 'error',
+        ]),
+        'expired' => redirect()->route('rv-park.park')->with([
+            'success' => 'This confirmation link has expired. Please submit your review again.',
+            'icon'    => 'error',
+        ]),
+        'already_confirmed', 'already_submitted' => redirect()->route('rv-park.park')->with([
+            'success' => 'A review has already been submitted for this park using your email address.',
+            'icon'    => 'info',
+        ]),
+        'confirmed' => redirect()->route('rv-park.park')->with([
+            'success' => 'Your review has been confirmed and submitted.',
+            'icon'    => 'success',
+        ]),
+        default => redirect()->route('rv-park.park')->with([
+            'success' => 'We could not process this confirmation link.',
+            'icon'    => 'error',
+        ]),
+    };
+}
     
     public function show($slug_path)
     {

@@ -23,23 +23,46 @@ class ReviewService
     }
 
     public function confirmReview(string $token): string
-    {
-        $pending = Review::where('token', $token)->firstOrFail();
+{
+    // Only consider pending rows for this token (prevents reuse if you keep old rows)
+    $pending = Review::where([
+        'token'  => $token,
+        'status' => 'pending',      // <- if you track status
+    ])->first();
 
-        $alreadyExists = Review::where([
-            'email' => $pending->email,
-            'park_id' => $pending->park_id,
-            'status' => 'confirmed',
-        ])->exists();
-
-        if ($alreadyExists) {
-            return 'already_submitted';
-        }
-
-        $pending->update([
-            'status' => 'confirmed',
-        ]);
-
-        return 'confirmed';
+    if (!$pending) {
+        // The token might have been used already or never existed
+        // Try to tell if it's already confirmed to return a nicer message
+        $already = Review::where('token', $token)->where('status', 'confirmed')->exists();
+        return $already ? 'already_confirmed' : 'invalid';
     }
+
+    // Optional: enforce expiry if you have a column like token_expires_at
+    if (!empty($pending->token_expires_at) && now()->greaterThan($pending->token_expires_at)) {
+        return 'expired';
+    }
+
+    // If there’s already a confirmed review by this email for this park, don’t double-submit
+    $alreadyExists = Review::where([
+        'email'   => $pending->email,
+        'park_id' => $pending->park_id,
+        'status'  => 'confirmed',
+    ])->exists();
+
+    if ($alreadyExists) {
+        return 'already_submitted';
+    }
+
+    // Mark single-use and finalize
+    $pending->forceFill([
+        'status'            => 'confirmed',
+        'confirmed_at'      => now(),       // <- add this column if you have it
+        'token'             => null,        // <- clears token so link can never be reused
+        'token_used_at'     => now(),       // <- optional audit column
+        'token_expires_at'  => null,        // <- optional: clear expiry
+    ])->save();
+
+    return 'confirmed';
+}
+
 }

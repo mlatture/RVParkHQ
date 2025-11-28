@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Backend\OverPassController;
 use App\Http\Controllers\Api\TrackingController;
-
+use App\Http\Controllers\Api\PostScheduleController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -19,6 +19,13 @@ use App\Http\Controllers\Api\TrackingController;
 // Route::middleware('auth:api')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
+
+
+
+
+Route::middleware('flow.api')->group(function () {
+    Route::post('/posts.schedule', [PostScheduleController::class, 'store']);
+});
 
 // API endpoint to get translations for a specific language
 Route::get('/translations/{lang}', function (string $lang) {
