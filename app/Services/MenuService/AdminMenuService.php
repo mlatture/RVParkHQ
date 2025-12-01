@@ -154,6 +154,18 @@ class AdminMenuService
             'priority' => 1,
             'permissions' => 'amenity.view'
         ]);
+        
+         $this->addMenuItem([
+            'label' => __('Social Posts'),
+            'icon' => 'dashboard.svg',
+            'route' => route('admin.social-posts.index'),
+            'active' => Route::is('admin.social-posts.index'),
+            'id' => 'social-post',
+            'priority' => 1,
+            'permissions' => 'amenity.view'
+        ]);
+        
+        
         $this->addMenuItem([
             'label' => __('Suggest Park'),
             'icon' => 'dashboard.svg',

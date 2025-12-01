@@ -23,6 +23,7 @@ use App\Http\Controllers\Backend\AdvertiseController;
 use App\Http\Controllers\Backend\BillController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Backend\FreeMarketingController;
+use App\Http\Controllers\Backend\SocialPostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -89,6 +90,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth']], 
     Route::get('/review/{campground}/{filename?}', [OverPassController::class, 'track']);
 
     Route::resource('amenities', AmenityController::class);
+    Route::resource('social-posts', SocialPostController::class);
+
 
     Route::resource('suggest-park', SuggestController::class);
 
