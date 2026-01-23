@@ -19,6 +19,7 @@ yarn-error.log
 public/.DS_Store
 public/images/.DS_Store
 deploy.sh
+getupdates.sh
 # Exclude anything from /Modules folder.
 /Modules/*
 
