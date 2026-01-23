@@ -13,7 +13,6 @@ use App\Services\ParkService;
 use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
 
 class ParkController extends Controller
 {
