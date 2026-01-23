@@ -91,13 +91,13 @@ ssh -o StrictHostKeyChecking=no -p $SSH_PORT $SSH_USER@$SSH_HOST << 'ENDSSH'
     echo ""
 
     # Navigate to project directory
-    cd ~/$REMOTE_PATH
+    cd ~/domains/rvparkhq.com/public_html
     echo "Current directory: $(pwd)"
     echo ""
 
     # Enable maintenance mode
     echo "Enabling maintenance mode..."
-    php artisan down --message="Deploying updates, please wait..." --retry=60 || true
+    php artisan down || true
 
     # Pull latest changes from GitHub
     echo ""
