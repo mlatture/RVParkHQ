@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Backend\OverPassController;
 use App\Http\Controllers\Api\TrackingController;
 use App\Http\Controllers\Api\PostScheduleController;
+use App\Http\Controllers\Api\ParkController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -25,6 +26,11 @@ use App\Http\Controllers\Api\PostScheduleController;
 
 Route::middleware('flow.api')->group(function () {
     Route::post('/posts.schedule', [PostScheduleController::class, 'store']);
+});
+
+Route::middleware('bot.api')->group(function () {
+    Route::post('/parks', [ParkController::class, 'store']);
+    Route::put('/parks/{park}', [ParkController::class, 'update']);
 });
 
 // API endpoint to get translations for a specific language

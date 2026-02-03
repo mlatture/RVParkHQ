@@ -43,4 +43,8 @@ return [
     'flow_api' => [
         'token' => env('FLOW_API_TOKEN'),
     ],
+
+    'bot_api' => [
+        'token' => env('BOT_API_TOKEN'),
+    ],
 ];

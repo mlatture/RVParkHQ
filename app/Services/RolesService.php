@@ -67,7 +67,9 @@ class RolesService
 
     public function createRole(string $name, array $permissions = []): Role
     {
-        $role = Role::create(['name' => $name, 'guard_name' => 'web']);
+        $role = Role::firstOrCreate(
+            ['name' => $name, 'guard_name' => 'web']
+        );
 
         if (!empty($permissions)) {
             $role->syncPermissions($permissions);

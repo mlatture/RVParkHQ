@@ -15,33 +15,34 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-
-        User::insert([
+        User::updateOrCreate(
+            ['email' => 'mark@rvparkhq.com'],
             [
                 'name' => 'Super Admin',
-                'email' => 'mark@rvparkhq.com',
                 'username' => 'superadmin',
                 'type' => 'admin',
                 'password' => Hash::make('12345678'),
-            ],
+            ]
+        );
+
+        User::updateOrCreate(
+            ['email' => 'owner@example.com'],
             [
                 'name' => 'Owner',
-                'email' => 'owner@example.com',
                 'username' => 'Owner',
                 'type' => 'owner',
                 'password' => Hash::make('12345678'),
-            ],
+            ]
+        );
+
+        User::updateOrCreate(
+            ['email' => 'camper@example.com'],
             [
                 'name' => 'Camper',
-                'email' => 'camper@example.com',
                 'username' => 'Camper',
                 'type' => 'camper',
                 'password' => Hash::make('12345678'),
-            ],
-        ]);
-
-        // Run factory to create additional users with unique details.
-        //User::factory()->count(500)->create();
-        //$this->command->info('Users table seeded with 502 users!');
+            ]
+        );
     }
 }

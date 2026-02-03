@@ -16,7 +16,7 @@ class SettingsSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('settings')->insert([
+        $settings = [
             // Site title.
             ['option_name' => 'app_name', 'option_value' => 'Rv Park And Campground'],
 
@@ -57,6 +57,13 @@ class SettingsSeeder extends Seeder
             // Custom CSS and JS.
             ['option_name' => 'global_custom_css', 'option_value' => ''],
             ['option_name' => 'global_custom_js', 'option_value' => ''],
-        ]);
+        ];
+
+        foreach ($settings as $setting) {
+            DB::table('settings')->updateOrInsert(
+                ['option_name' => $setting['option_name']],
+                ['option_value' => $setting['option_value']]
+            );
+        }
     }
 }

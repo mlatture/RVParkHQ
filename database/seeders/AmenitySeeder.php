@@ -2,17 +2,13 @@
 
 namespace Database\Seeders;
 
+use App\Models\Amenity;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class AmenitySeeder extends Seeder
 {
     public function run()
     {
-        DB::statement('SET FOREIGN_KEY_CHECKS = 0');
-        DB::table('amenities')->truncate();
-        DB::statement('SET FOREIGN_KEY_CHECKS = 1');
-
         $amenities = [
             ['amenity' => 'Swimming Pool', 'category' => 'Water & Recreation', 'blackicon' => 'amenities/icons/black/swimmingpool-black.png', 'whiteicon' => 'amenities/icons/white/swimmingpool-white.png'],
             ['amenity' => 'Heated Swimming Pool', 'category' => 'Water & Recreation', 'blackicon' => 'amenities/icons/black/heatedpool-black.png', 'whiteicon' => 'amenities/icons/white/heatedpool-white.png'],
@@ -70,6 +66,15 @@ class AmenitySeeder extends Seeder
             ['amenity' => 'Clothing Optional', 'category' => 'Other Features', 'blackicon' => 'amenities/icons/black/clothing-black.png', 'whiteicon' => 'amenities/icons/white/clothing-white.png'],
         ];
 
-        DB::table('amenities')->insert($amenities);
+        foreach ($amenities as $amenity) {
+            Amenity::updateOrCreate(
+                ['amenity' => $amenity['amenity']],
+                [
+                    'category' => $amenity['category'],
+                    'blackicon' => $amenity['blackicon'],
+                    'whiteicon' => $amenity['whiteicon'],
+                ]
+            );
+        }
     }
 }

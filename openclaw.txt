@@ -1,0 +1,74 @@
+RVPARKHQ BOT API INSTRUCTIONS
+
+Base URL: https://rvparkhq.com/api
+
+Authentication: Bearer token in Authorization header
+Authorization: Bearer YOUR_BOT_API_TOKEN
+
+---
+
+CREATE PARK
+POST /api/parks
+
+Required fields:
+- name (string)
+
+Optional fields:
+- description (string)
+- short_description (string, max 500 chars)
+- address (string)
+- city (string)
+- state (string)
+- country (string)
+- postal_code (string)
+- latitude (string)
+- longitude (string)
+- phone (string)
+- email (string)
+- website_url (string, must be valid URL)
+- main_image_url (string, must be valid URL)
+- status (string: "active" or "inactive", default: "active")
+- is_featured (boolean, default: false)
+- amenity_ids (array of integers)
+
+Example:
+curl -X POST https://rvparkhq.com/api/parks \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Example RV Park","city":"Austin","state":"Texas","country":"United States"}'
+
+---
+
+UPDATE PARK
+PUT /api/parks/{park_id}
+
+Same fields as create, all optional. Only send fields you want to update.
+
+Example:
+curl -X PUT https://rvparkhq.com/api/parks/123 \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"phone":"512-555-1234","description":"Updated description"}'
+
+---
+
+RESPONSES
+
+Success (201 for create, 200 for update):
+{"message":"Park created successfully","park":{...}}
+
+Unauthorized (401):
+{"message":"Unauthorized"}
+
+Validation Error (422):
+{"message":"The name field is required.","errors":{...}}
+
+Not Found (404):
+Park ID does not exist
+
+---
+
+NOTES
+- Slugs are auto-generated from park name
+- Duplicate names get numeric suffix (e.g., park-name-2)
+- Rate limit: 60 requests per minute

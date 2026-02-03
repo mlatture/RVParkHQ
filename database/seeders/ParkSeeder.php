@@ -12,6 +12,12 @@ class ParkSeeder extends Seeder
      */
     public function run(): void
     {
+        // Skip if parks already exist to avoid duplicate test data
+        if (Park::count() > 0) {
+            $this->command->info('Parks already exist, skipping ParkSeeder.');
+            return;
+        }
+
         Park::factory()->count(10)->create();
     }
 }

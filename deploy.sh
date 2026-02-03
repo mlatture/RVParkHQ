@@ -127,6 +127,11 @@ ssh -o StrictHostKeyChecking=no -p $SSH_PORT $SSH_USER@$SSH_HOST << 'ENDSSH'
     echo "Running database migrations..."
     php artisan migrate --force
 
+    # Run database seeders
+    echo ""
+    echo "Running database seeders..."
+    php artisan db:seed --force
+
     # Clear and rebuild caches
     echo ""
     echo "Clearing caches..."
