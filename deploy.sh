@@ -109,10 +109,13 @@ ssh -o StrictHostKeyChecking=no -p $SSH_PORT $SSH_USER@$SSH_HOST << 'ENDSSH'
     echo "Installing composer dependencies..."
     # Clear composer cache to ensure fresh install
     composer2 clear-cache || true
-    # Remove vendor directory if corrupted (optional - uncomment if needed)
-    # rm -rf vendor
     # Install with verbose output to catch issues
     composer2 install --no-dev --optimize-autoloader --no-interaction
+
+    # Regenerate autoload files to fix any class loading issues
+    echo ""
+    echo "Regenerating autoload files..."
+    composer2 dump-autoload --optimize
 
     # Verify vendor directory exists
     if [ ! -d "vendor" ]; then
@@ -126,11 +129,6 @@ ssh -o StrictHostKeyChecking=no -p $SSH_PORT $SSH_USER@$SSH_HOST << 'ENDSSH'
     echo ""
     echo "Running database migrations..."
     php artisan migrate --force
-
-    # Run database seeders
-    echo ""
-    echo "Running database seeders..."
-    php artisan db:seed --force
 
     # Clear and rebuild caches
     echo ""

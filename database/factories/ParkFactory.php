@@ -21,30 +21,31 @@ class ParkFactory extends Factory
 
     public function definition(): array
     {
-        $name = $this->faker->unique()->company . ' Park';
-        $country = $this->faker->country;
-        $state = $this->faker->state;
-        $city = $this->faker->city;
+        $faker = fake();
+        $name = $faker->unique()->company . ' Park';
+        $country = $faker->country;
+        $state = $faker->state;
+        $city = $faker->city;
         $slug = Str::slug($name);
 
         return [
             'name' => $name,
             'slug' => $slug,
-            'description' => $this->faker->paragraph(3),
-            'short_description' => $this->faker->sentence,
-            'address' => $this->faker->streetAddress,
+            'description' => $faker->paragraph(3),
+            'short_description' => $faker->sentence,
+            'address' => $faker->streetAddress,
             'city' => $city,
             'state' => $state,
             'country' => $country,
-            'postal_code' => $this->faker->postcode,
-            'latitude' => $this->faker->latitude,
-            'longitude' => $this->faker->longitude,
-            'phone' => $this->faker->phoneNumber,
-            'email' => $this->faker->safeEmail,
-            'website_url' => $this->faker->url,
-            'status' => $this->faker->randomElement(['active', 'inactive']),
-            'is_featured' => $this->faker->boolean(30),
-            'main_image_url' => $this->faker->imageUrl(800, 600, 'nature', true, 'park'),
+            'postal_code' => $faker->postcode,
+            'latitude' => $faker->latitude,
+            'longitude' => $faker->longitude,
+            'phone' => $faker->phoneNumber,
+            'email' => $faker->safeEmail,
+            'website_url' => $faker->url,
+            'status' => $faker->randomElement(['active', 'inactive']),
+            'is_featured' => $faker->boolean(30),
+            'main_image_url' => $faker->imageUrl(800, 600, 'nature', true, 'park'),
             'slug_path' => implode('-', array_filter([
                 Str::slug($country),
                 Str::slug($state),
