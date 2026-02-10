@@ -265,7 +265,7 @@ EOT;
             if ($hasAmenity) {
                 $amenity = Amenity::firstOrCreate(
                     ['amenity' => $amenityName],
-                    ['category' => 'General']
+                    ['category' => 'Other Features']
                 );
                 $amenityIds[] = $amenity->id;
             }
