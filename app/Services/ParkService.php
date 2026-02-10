@@ -51,7 +51,7 @@ class ParkService
 
     public function getParkDetails($slug_path)
     {
-        $park = Park::with('winnerParks', 'amenities', 'claim_parks')->where('slug_path', $slug_path)->firstOrFail();
+        $park = Park::with('winnerParks', 'amenities', 'claim_parks', 'park_photos')->where('slug_path', $slug_path)->firstOrFail();
         $reviews = Review::where(['park_id' => $park->id, 'status' => 'confirmed'])->latest()->limit(10)->get();
         $approvedClaim = $park->claim_parks->where('status', 'approved')->first();
         return compact('park', 'reviews', 'approvedClaim');

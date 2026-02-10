@@ -228,7 +228,12 @@
                         </div>
                     </div>
                     <div class="col-lg-7">
-                        <div class="product-title">
+                        <x-social-share
+                            :url="url()->current()"
+                            :title="ucfirst($parks->name) . ' | RVParkHQ'"
+                            :image="$imageUrl ?? ''"
+                        />
+                        <div class="product-title mt-3">
                             <h3>
                                 {{ ucfirst($parks->name) }}
                                 @if (!empty($parks->short_description))

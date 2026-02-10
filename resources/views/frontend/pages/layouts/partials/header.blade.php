@@ -16,6 +16,7 @@
                         <ul>
                             <li><a href="{{ route('rv-park.home') }}">Home</a></li>
                             <li><a href="{{ route('rv-park.all-parks') }}">Parks</a></li>
+                            <li><a href="{{ route('campgrounds.index') }}">Campgrounds</a></li>
                             <li><a href="{{ route('rv-park.team') }}">Our Team</a></li>
 {{--                            <li><a href="{{ route('rv-park.blogs.index') }}">Blog</a></li>--}}
                             <li><a href="{{ route('rv-park.advertise.index') }}">Advertiser Inquiries</a></li>

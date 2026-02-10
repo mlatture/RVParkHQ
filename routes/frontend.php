@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Frontend\ParkController;
+use App\Http\Controllers\Frontend\StateController;
 use App\Http\Controllers\Frontend\SubscriberController;
 use App\Http\Controllers\Frontend\AdvertiseController;
 use App\Http\Controllers\Frontend\CampConnectController;
@@ -13,6 +14,10 @@ use App\Http\Controllers\Frontend\ProfileController;
 use App\Http\Controllers\Frontend\CardController;
 use App\Http\Controllers\Frontend\FreeMarketingController;
 
+
+// State landing pages (before rv-park group to avoid conflicts)
+Route::get('/campgrounds', [StateController::class, 'index'])->name('campgrounds.index');
+Route::get('/campgrounds/{state}', [StateController::class, 'show'])->name('campgrounds.show');
 
 Route::name('rv-park.')->group(function () {
     Route::get('/', [\App\Http\Controllers\Frontend\HomeController::class, 'index'])->name('home');
