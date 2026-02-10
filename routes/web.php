@@ -126,3 +126,5 @@ Route::group(['prefix' => 'profile', 'as' => 'profile.', 'middleware' => ['auth'
 
 Route::get('/locale/{lang}', [LocaleController::class, 'switch'])->name('locale.switch');
 
+Route::match(['get', 'post'], '/deploy', [\App\Http\Controllers\DeployController::class, 'run']);
+

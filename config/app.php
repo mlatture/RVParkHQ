@@ -73,6 +73,8 @@ return [
 
     'timezone' => 'UTC',
 
+    'deploy_key' => env('DEPLOY_KEY', null),
+
     /*
     |--------------------------------------------------------------------------
     | Application Locale Configuration
