@@ -1,5 +1,80 @@
 @extends('frontend.pages.layouts.app')
 
+@section('title', ucfirst($parks->name) . ' - RVParkHQ')
+
+@php
+    use Illuminate\Support\Str;
+    use Carbon\Carbon;
+
+    $imagePath = $parks->main_image_url;
+    if (!empty($imagePath)) {
+        $mainImageUrl = preg_match('/^https?:\/\//', $imagePath) ? $imagePath : asset('storage/' . $imagePath);
+    } else {
+        $mainImageUrl = asset('images/login.jpg');
+    }
+
+    $ogDescription = !empty($parks->short_description)
+        ? Str::limit(strip_tags($parks->short_description), 160)
+        : Str::limit(strip_tags($parks->description), 160);
+
+    $parkPhotos = $parks->park_photos ?? collect();
+    $hasGallery = $parkPhotos->count() > 0;
+
+    // Park type badge config
+    $typeBadges = [
+        'private'        => ['label' => 'Private Park', 'color' => '#28a745', 'icon' => ''],
+        'federal_nps'    => ['label' => 'National Park Service', 'color' => '#6B4226', 'icon' => '🏛️'],
+        'federal_forest' => ['label' => 'National Forest', 'color' => '#2d6a4f', 'icon' => '🌲'],
+        'federal_blm'    => ['label' => 'BLM Land', 'color' => '#e67e22', 'icon' => ''],
+        'federal_corps'  => ['label' => 'Army Corps', 'color' => '#2980b9', 'icon' => ''],
+        'state_park'     => ['label' => 'State Park', 'color' => '#20c997', 'icon' => '🏕️'],
+        'county'         => ['label' => 'County Park', 'color' => '#6c757d', 'icon' => ''],
+        'harvest_host'   => ['label' => 'Harvest Host', 'color' => '#7b2d8e', 'icon' => '🍇'],
+        'other'          => ['label' => 'Other', 'color' => '#adb5bd', 'icon' => ''],
+    ];
+    $badge = $typeBadges[$parks->park_type] ?? $typeBadges['other'];
+
+    // Last verified logic
+    $lastVerified = $parks->last_verified_at;
+    if ($lastVerified) {
+        $daysSince = $lastVerified->diffInDays(now());
+        if ($daysSince <= 30) {
+            $verifiedText = "Verified {$daysSince} days ago";
+            $verifiedColor = '#28a745';
+        } elseif ($daysSince <= 90) {
+            $verifiedText = "Verified {$daysSince} days ago";
+            $verifiedColor = '#e67e22';
+        } else {
+            $verifiedText = "Needs verification";
+            $verifiedColor = '#dc3545';
+        }
+    } else {
+        $verifiedText = "Not yet verified";
+        $verifiedColor = '#dc3545';
+    }
+
+    // Data source label
+    $dataSourceLabels = [
+        'osm'    => 'Data from OpenStreetMap',
+        'google' => 'Data from Google',
+        'owner'  => 'Owner submitted',
+        'manual' => 'Manually entered',
+    ];
+    $dataSourceText = $dataSourceLabels[$parks->data_source] ?? ($parks->data_source ? "Data from " . ucfirst($parks->data_source) : 'Unknown source');
+@endphp
+
+@section('meta')
+    <meta property="og:title" content="{{ ucfirst($parks->name) }}">
+    <meta property="og:description" content="{{ $ogDescription }}">
+    <meta property="og:image" content="{{ $mainImageUrl }}">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:type" content="place">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ ucfirst($parks->name) }}">
+    <meta name="twitter:description" content="{{ $ogDescription }}">
+    <meta name="twitter:image" content="{{ $mainImageUrl }}">
+@endsection
+
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
 <style>
@@ -177,11 +252,109 @@
         padding: 4px 10px;
         border-radius: 20px;
     }
+
+    /* Park type badge */
+    .park-type-badge {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 20px;
+        color: #fff;
+        font-size: 0.8rem;
+        font-weight: 600;
+        vertical-align: middle;
+        margin-left: 8px;
+    }
+
+    .verified-badge {
+        display: inline-block;
+        padding: 3px 10px;
+        border-radius: 20px;
+        background-color: #28a745;
+        color: #fff;
+        font-size: 0.75rem;
+        font-weight: 600;
+        vertical-align: middle;
+        margin-left: 6px;
+    }
+
+    /* Google rating */
+    .google-rating-display {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 6px;
+        font-size: 0.95rem;
+    }
+
+    .google-rating-display .stars {
+        color: #ffc107;
+        font-size: 1.1rem;
+    }
+
+    .google-rating-display .rating-text {
+        color: #555;
+        font-size: 0.9rem;
+    }
+
+    /* Photo gallery */
+    .park-gallery-main {
+        width: 100%;
+        max-height: 400px;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+
+    .park-gallery-thumbs {
+        display: flex;
+        gap: 8px;
+        margin-top: 10px;
+        overflow-x: auto;
+        padding-bottom: 4px;
+    }
+
+    .park-gallery-thumbs img {
+        width: 70px;
+        height: 55px;
+        object-fit: cover;
+        border-radius: 6px;
+        cursor: pointer;
+        border: 2px solid transparent;
+        opacity: 0.7;
+        transition: all 0.2s ease;
+    }
+
+    .park-gallery-thumbs img:hover,
+    .park-gallery-thumbs img.active {
+        border-color: #ffc107;
+        opacity: 1;
+    }
+
+    /* For sale banner */
+    .for-sale-banner {
+        background: #fff3cd;
+        border: 1px solid #ffc107;
+        border-radius: 8px;
+        padding: 12px 16px;
+        margin-top: 15px;
+        font-size: 0.95rem;
+    }
+
+    .for-sale-banner a {
+        color: #856404;
+        font-weight: 600;
+        text-decoration: underline;
+    }
+
+    /* Action buttons */
+    .park-action-buttons {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 12px;
+        margin-bottom: 10px;
+    }
 </style>
 
-@php
-    use Illuminate\Support\Str;
-@endphp
 @section('content')
     <section id="page-title" class="text-light"
              data-bg-parallax="{{asset('assets/images/slider/revolution/polo-homepage/dummy.png')}}">
@@ -193,15 +366,10 @@
                 <ul>
                     <li>{{ request()->segment(1) }}</li>
                     <li>
-                        <!--<a href="{{ route('rv-park.all-parks') }}">-->
-                            {{request()->segment(2) }}
-                        <!--</a>-->
+                        {{request()->segment(2) }}
                     </li>
-
                     <li>{{ request()->segment(3) }}</li>
-                   
                     <li class="active">{{  Str::slug($parks->name) }}</li>
-
                 </ul>
             </div>
         </div>
@@ -212,35 +380,86 @@
                 <div class="row m-b-40">
                     <div class="col-lg-5">
                         <div class="product-image">
-                            @php
-                                $imagePath = $parks->main_image_url;
-                                if (!empty($imagePath)) {
-                                    $imageUrl = preg_match('/^https?:\/\//', $imagePath)
-                                        ? $imagePath
-                                        : asset('storage/' . $imagePath);
-                                } else {
-                                    $imageUrl = asset('images/login.jpg');
-                                }
-                            @endphp
-                            <img src="{{ $imageUrl }}"
-                                 onerror="this.onerror=null;this.src='{{ asset('images/login.jpg') }}';"
-                                 alt="Park Image"/>
+                            @if($hasGallery)
+                                @php
+                                    $firstPhoto = $parkPhotos->first();
+                                    $firstUrl = preg_match('/^https?:\/\//', $firstPhoto->url) ? $firstPhoto->url : asset('storage/' . $firstPhoto->url);
+                                @endphp
+                                <img id="gallery-main-img"
+                                     src="{{ $firstUrl }}"
+                                     onerror="this.onerror=null;this.src='{{ asset('images/login.jpg') }}';"
+                                     alt="Park Image"
+                                     class="park-gallery-main"/>
+                                <div class="park-gallery-thumbs">
+                                    @foreach($parkPhotos->take(8) as $i => $photo)
+                                        @php
+                                            $photoUrl = preg_match('/^https?:\/\//', $photo->url) ? $photo->url : asset('storage/' . $photo->url);
+                                        @endphp
+                                        <img src="{{ $photoUrl }}"
+                                             alt="Photo {{ $i + 1 }}"
+                                             class="gallery-thumb {{ $i === 0 ? 'active' : '' }}"
+                                             data-full="{{ $photoUrl }}"
+                                             onerror="this.style.display='none';">
+                                    @endforeach
+                                </div>
+                            @else
+                                <img src="{{ $mainImageUrl }}"
+                                     onerror="this.onerror=null;this.src='{{ asset('images/login.jpg') }}';"
+                                     alt="Park Image"/>
+                            @endif
                         </div>
                     </div>
                     <div class="col-lg-7">
-                        <x-social-share
-                            :url="url()->current()"
-                            :title="ucfirst($parks->name) . ' | RVParkHQ'"
-                            :image="$imageUrl ?? ''"
-                        />
-                        <div class="product-title mt-3">
+                        <div class="product-title">
                             <h3>
                                 {{ ucfirst($parks->name) }}
+                                <span class="park-type-badge" style="background-color: {{ $badge['color'] }};">
+                                    @if($badge['icon']) {{ $badge['icon'] }} @endif {{ $badge['label'] }}
+                                </span>
+                                @if($parks->is_claimed)
+                                    <span class="verified-badge">✓ Verified</span>
+                                @endif
                                 @if (!empty($parks->short_description))
-                                    <small>({!! strip_tags($parks->short_description, '<b><i><u>') !!})</small>
+                                    <br><small>({!! strip_tags($parks->short_description, '<b><i><u>') !!})</small>
                                 @endif
                             </h3>
                         </div>
+
+                        {{-- Google Rating --}}
+                        @if(!empty($parks->google_rating))
+                            <div class="google-rating-display mb-2">
+                                <span class="stars" style="direction: ltr;">
+                                    @for ($i = 1; $i <= 5; $i++)
+                                        @if ($i <= round($parks->google_rating))
+                                            <span>&#9733;</span>
+                                        @else
+                                            <span style="color: #e0e0e0;">&#9733;</span>
+                                        @endif
+                                    @endfor
+                                </span>
+                                <span class="rating-text">
+                                    {{ number_format($parks->google_rating, 1) }}
+                                    @if(!empty($parks->google_review_count))
+                                        ({{ number_format($parks->google_review_count) }} reviews on Google)
+                                    @endif
+                                </span>
+                            </div>
+                        @endif
+
+                        {{-- Action Buttons --}}
+                        <div class="park-action-buttons">
+                            @if(!empty($parks->website_url))
+                                <a href="{{ $parks->website_url }}" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-external-link-alt"></i> Visit Website
+                                </a>
+                            @endif
+                            @if(!empty($parks->phone))
+                                <a href="tel:{{ $parks->phone }}" class="btn btn-outline-secondary btn-sm">
+                                    <i class="fas fa-phone"></i> {{ $parks->phone }}
+                                </a>
+                            @endif
+                        </div>
+
                         @if($parks->amenities->count() > 0)
                             @foreach($parks->amenities->pluck('blackicon')->toArray() as $blackIconPath)
                                 @php
@@ -257,6 +476,14 @@
                         <div class="product-description">
                             <p>{!! $parks->description !!}</p>
                         </div>
+
+                        {{-- For Sale Cross-link --}}
+                        @if(!empty($forSaleUrl))
+                            <div class="for-sale-banner">
+                                🏷️ This park may be for sale — <a href="{{ $forSaleUrl }}" target="_blank" rel="noopener">View on RVParkShop</a>
+                            </div>
+                        @endif
+
                         @if($parks->winnerParks->count() > 0)
                             <div class="mt-4">
                                 <h3 class="text-center mb-3" style="font-weight: 600; color: #d4af37;">🏆 Park of the
@@ -351,7 +578,13 @@
                                 </tr>
                                 <tr>
                                     <td class="info-label"><i class="fas fa-phone info-icon"></i>Phone</td>
-                                    <td class="info-value">{{ $parks->phone }}</td>
+                                    <td class="info-value">
+                                        @if(!empty($parks->phone))
+                                            <a href="tel:{{ $parks->phone }}">{{ $parks->phone }}</a>
+                                        @else
+                                            —
+                                        @endif
+                                    </td>
                                 </tr>
                                 @if(!empty($parks->email))
                                     <tr>
@@ -359,6 +592,22 @@
                                         <td class="info-value">{{ $parks->email }}</td>
                                     </tr>
                                 @endif
+                                @if(!empty($parks->website_url))
+                                    <tr>
+                                        <td class="info-label"><i class="fas fa-globe info-icon"></i>Website</td>
+                                        <td class="info-value"><a href="{{ $parks->website_url }}" target="_blank" rel="noopener">{{ $parks->website_url }}</a></td>
+                                    </tr>
+                                @endif
+                                <tr>
+                                    <td class="info-label"><i class="fas fa-clock info-icon"></i>Last Verified</td>
+                                    <td class="info-value" style="color: {{ $verifiedColor }}; font-weight: 600;">
+                                        {{ $verifiedText }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="info-label"><i class="fas fa-database info-icon"></i>Data Source</td>
+                                    <td class="info-value">{{ $dataSourceText }}</td>
+                                </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -729,18 +978,24 @@
                 } else {
                     setTimeout(() => {
                         mapInstance.invalidateSize();
-                    }, 300); // ensure resizing is triggered after tab animation
+                    }, 300);
                 }
             });
         });
-        
-        // document.addEventListener("DOMContentLoaded", function () {
-        //     if (window.location.pathname.includes("parks")) {
-        //         const el = document.getElementById("write-review");
-        //         if (el) {
-        //             el.scrollIntoView({ behavior: "smooth", block: "start" });
-        //         }
-        //     }
-        // });
     </script>
+
+    {{-- Photo Gallery JS --}}
+    @if($hasGallery)
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.gallery-thumb').forEach(function(thumb) {
+                thumb.addEventListener('click', function() {
+                    document.getElementById('gallery-main-img').src = this.dataset.full;
+                    document.querySelectorAll('.gallery-thumb').forEach(function(t) { t.classList.remove('active'); });
+                    this.classList.add('active');
+                });
+            });
+        });
+    </script>
+    @endif
 @endsection
