@@ -12,6 +12,55 @@ class Park extends Model
     protected $table = 'parks';
     protected $guarded = [];
 
+    protected $casts = [
+        'last_enriched_at' => 'datetime',
+        'last_verified_at' => 'datetime',
+        'is_claimed'       => 'boolean',
+        'is_featured'      => 'boolean',
+    ];
+
+    public const TYPE_LABELS = [
+        'private'        => 'Private',
+        'federal_nps'    => 'National Park Service',
+        'federal_forest' => 'National Forest',
+        'federal_blm'    => 'Bureau of Land Management',
+        'federal_corps'  => 'Army Corps of Engineers',
+        'state_park'     => 'State Park',
+        'county'         => 'County / Municipal',
+        'harvest_host'   => 'Harvest Host',
+        'other'          => 'Other',
+    ];
+
+    public function getTypeLabel(): string
+    {
+        return self::TYPE_LABELS[$this->park_type] ?? 'Unknown';
+    }
+
+    public function park_photos()
+    {
+        return $this->hasMany(ParkPhoto::class)->orderBy('sort_order');
+    }
+
+    public function scopeExcludeFederal($query)
+    {
+        return $query->whereNotIn('park_type', ['federal_nps', 'federal_forest', 'federal_blm', 'federal_corps']);
+    }
+
+    public function scopeExcludeHarvestHosts($query)
+    {
+        return $query->where('park_type', '!=', 'harvest_host');
+    }
+
+    public function scopeDefaultSearch($query)
+    {
+        return $query->excludeFederal()->excludeHarvestHosts();
+    }
+
+    public function scopeByType($query, string $type)
+    {
+        return $query->where('park_type', $type);
+    }
+
     public function scopeFilter($query, $filters)
     {
         if (!is_array($filters)) return $query;
