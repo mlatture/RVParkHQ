@@ -67,15 +67,30 @@ class ImportOsmParks extends Command
 
         foreach ($statesToImport as $i => $stateName) {
             if ($i > 0) {
-                sleep(2); // Rate limit
+                sleep(5); // Rate limit — Overpass needs breathing room
             }
 
             $this->info("Importing {$stateName}...");
 
-            try {
-                $elements = $this->fetchFromOverpass($stateName);
-            } catch (\Exception $e) {
-                $this->warn("  Failed for {$stateName}: {$e->getMessage()}");
+            // Retry up to 3 times with backoff
+            $elements = null;
+            $lastError = null;
+            for ($attempt = 1; $attempt <= 3; $attempt++) {
+                try {
+                    $elements = $this->fetchFromOverpass($stateName);
+                    break;
+                } catch (\Exception $e) {
+                    $lastError = $e;
+                    if ($attempt < 3) {
+                        $waitTime = $attempt * 10; // 10s, 20s backoff
+                        $this->warn("  Attempt {$attempt} failed for {$stateName}: {$e->getMessage()} — retrying in {$waitTime}s...");
+                        sleep($waitTime);
+                    }
+                }
+            }
+
+            if ($elements === null) {
+                $this->warn("  Failed for {$stateName} after 3 attempts: {$lastError->getMessage()}");
                 continue;
             }
 
