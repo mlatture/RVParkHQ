@@ -1,5 +1,16 @@
 @extends('frontend.pages.layouts.app')
 
+@section('meta')
+    <title>Find Campgrounds & RV Parks Across America | RVParkHQ</title>
+    <meta name="description" content="Browse campgrounds and RV parks across all 50 US states. Find the perfect outdoor stay.">
+    <meta property="og:title" content="Find Campgrounds & RV Parks Across America | RVParkHQ">
+    <meta property="og:description" content="Browse campgrounds and RV parks across all 50 US states.">
+    <meta property="og:url" content="{{ url('/campgrounds') }}">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Find Campgrounds & RV Parks Across America | RVParkHQ">
+@endsection
+
 @section('content')
     {{-- Hero --}}
     <section id="page-title" class="text-light" data-bg-parallax="{{ asset('assets/images/slider/revolution/polo-homepage/dummy.png') }}">
@@ -22,7 +33,6 @@
             <div class="text-center mb-5">
                 <h2>Explore by Region</h2>
                 <p class="text-muted">Select a state to discover campgrounds, RV parks, and outdoor stays.</p>
-                <x-social-share :url="url('/campgrounds')" title="Find Campgrounds & RV Parks Across America | RVParkHQ" />
             </div>
 
             @foreach($regions as $regionName => $states)
@@ -51,22 +61,11 @@
     {{-- Schema.org --}}
     <script type="application/ld+json">
     {
-        "@context": "https://schema.org",
-        "@type": "CollectionPage",
+        "@@context": "https://schema.org",
+        "@@type": "CollectionPage",
         "name": "Campgrounds & RV Parks Across America",
-        "description": "Browse {{ number_format($totalParks) }} campgrounds and RV parks across all 50 US states.",
+        "description": "Browse campgrounds and RV parks across all 50 US states.",
         "url": "{{ url('/campgrounds') }}"
     }
     </script>
-@endsection
-
-@section('meta')
-    <title>Find Campgrounds & RV Parks Across America | RVParkHQ</title>
-    <meta name="description" content="Browse {{ number_format($totalParks) }} campgrounds and RV parks across all 50 US states. Find the perfect outdoor stay.">
-    <meta property="og:title" content="Find Campgrounds & RV Parks Across America | RVParkHQ">
-    <meta property="og:description" content="Browse {{ number_format($totalParks) }} campgrounds and RV parks across all 50 US states.">
-    <meta property="og:url" content="{{ url('/campgrounds') }}">
-    <meta property="og:type" content="website">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Find Campgrounds & RV Parks Across America | RVParkHQ">
 @endsection

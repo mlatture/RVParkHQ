@@ -7,6 +7,18 @@
     $metaDesc = "Explore {$totalParks} campgrounds and RV parks in {$stateName}. Filter by amenities, sort by rating or city.";
 @endphp
 
+@section('meta')
+    <title>{{ $metaTitle }}</title>
+    <meta name="description" content="{{ $metaDesc }}">
+    <meta property="og:title" content="{{ $metaTitle }}">
+    <meta property="og:description" content="{{ $metaDesc }}">
+    <meta property="og:url" content="{{ $currentUrl }}">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ $metaTitle }}">
+    <meta name="twitter:description" content="{{ $metaDesc }}">
+@endsection
+
 @section('content')
     {{-- Hero --}}
     <section id="page-title" class="text-light" data-bg-parallax="{{ asset('assets/images/slider/revolution/polo-homepage/dummy.png') }}">
@@ -43,7 +55,13 @@
                             </span>
                         @endforeach
                     </div>
-                    <x-social-share :url="$currentUrl" :title="$metaTitle" :image="$ogImage ?? ''" />
+                    {{-- Social share links --}}
+                    <div class="d-flex gap-2 mt-2">
+                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode($currentUrl) }}" target="_blank" title="Share on Facebook" style="color:#1877F2;"><i class="fab fa-facebook fa-lg"></i></a>
+                        <a href="https://twitter.com/intent/tweet?url={{ urlencode($currentUrl) }}&text={{ urlencode($metaTitle) }}" target="_blank" title="Share on X" style="color:#333;"><i class="fab fa-x-twitter fa-lg"></i></a>
+                        <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ urlencode($currentUrl) }}" target="_blank" title="Share on LinkedIn" style="color:#0077B5;"><i class="fab fa-linkedin fa-lg"></i></a>
+                        <a href="mailto:?subject={{ urlencode($metaTitle) }}&body={{ urlencode('Check this out: ' . $currentUrl) }}" title="Share via Email" style="color:#555;"><i class="fas fa-envelope fa-lg"></i></a>
+                    </div>
                 </div>
                 <div class="col-md-4 text-md-end">
                     {{-- Toggle links --}}
@@ -199,15 +217,15 @@
     {{-- Schema.org ItemList --}}
     <script type="application/ld+json">
     {
-        "@context": "https://schema.org",
-        "@type": "ItemList",
+        "@@context": "https://schema.org",
+        "@@type": "ItemList",
         "name": "{{ $pageTitle }}",
         "url": "{{ $currentUrl }}",
         "numberOfItems": {{ $totalParks }},
         "itemListElement": [
             @foreach($parks as $i => $park)
             {
-                "@type": "ListItem",
+                "@@type": "ListItem",
                 "position": {{ $i + 1 }},
                 "url": "{{ route('rv-park.park-show', ['slug_path' => $park->slug_path]) }}",
                 "name": "{{ addslashes($park->name) }}"
@@ -218,19 +236,4 @@
     </script>
 @endsection
 
-@section('meta')
-    <title>{{ $metaTitle }}</title>
-    <meta name="description" content="{{ $metaDesc }}">
-    <meta property="og:title" content="{{ $metaTitle }}">
-    <meta property="og:description" content="{{ $metaDesc }}">
-    <meta property="og:url" content="{{ $currentUrl }}">
-    <meta property="og:type" content="website">
-    @if(!empty($ogImage))
-        @php $ogImgUrl = preg_match('/^https?:\/\//', $ogImage) ? $ogImage : asset('storage/' . $ogImage); @endphp
-        <meta property="og:image" content="{{ $ogImgUrl }}">
-        <meta name="twitter:image" content="{{ $ogImgUrl }}">
-    @endif
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="{{ $metaTitle }}">
-    <meta name="twitter:description" content="{{ $metaDesc }}">
-@endsection
+{{-- meta section is defined above @section('content') --}}
