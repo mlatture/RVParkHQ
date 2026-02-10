@@ -95,6 +95,18 @@ class ImportOsmParks extends Command
                     continue;
                 }
 
+                // Filter out junk OSM entries
+                $trimmedName = trim($name);
+                if (
+                    strlen($trimmedName) < 3 ||           // Too short
+                    is_numeric($trimmedName) ||            // Just a number
+                    preg_match('/^[^a-zA-Z]*$/', $trimmedName) || // No letters at all
+                    preg_match('/^(site|lot|spot|space|pad)\s*\d*$/i', $trimmedName) // Generic site names
+                ) {
+                    $skipped++;
+                    continue;
+                }
+
                 if ($dryRun) {
                     $new++;
                     continue;
