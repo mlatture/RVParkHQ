@@ -108,4 +108,66 @@ class DeployController extends Controller
             ['Content-Type' => 'text/plain']
         );
     }
+
+    /**
+     * Run an artisan command via web request.
+     * Usage: /run?key=DEPLOY_KEY&cmd=parks:import-osm&--state=florida
+     */
+    public function runCommand(Request $request)
+    {
+        $key = $request->query('key');
+        $validKey = config('app.deploy_key');
+
+        if (!$validKey || $key !== $validKey) {
+            abort(403, 'Unauthorized');
+        }
+
+        $cmd = $request->query('cmd');
+        if (!$cmd) {
+            return response("Missing 'cmd' parameter.\n\nAvailable commands:\n" .
+                "  parks:import-osm     - Import parks from OpenStreetMap\n" .
+                "  parks:heartbeat      - Check/update park status\n" .
+                "  parks:clean          - Clean junk OSM data\n" .
+                "  migrate              - Run migrations\n",
+                400, ['Content-Type' => 'text/plain']);
+        }
+
+        // Allowlist of safe commands
+        $allowed = ['parks:import-osm', 'parks:heartbeat', 'parks:clean',
+                     'migrate', 'config:cache', 'route:cache', 'view:cache',
+                     'cache:clear', 'config:clear', 'route:clear', 'view:clear'];
+
+        $baseCmd = explode(' ', $cmd)[0];
+        if (!in_array($baseCmd, $allowed)) {
+            return response("Command not allowed: {$baseCmd}", 403, ['Content-Type' => 'text/plain']);
+        }
+
+        // Parse extra parameters from query string
+        $params = [];
+        foreach ($request->query() as $k => $v) {
+            if (in_array($k, ['key', 'cmd'])) continue;
+            if (str_starts_with($k, '--')) {
+                $params[$k] = $v === '' ? true : $v;
+            }
+        }
+
+        Log::info("Run command: {$cmd}", ['params' => $params, 'ip' => $request->ip()]);
+
+        set_time_limit(600); // OSM imports can take a while
+
+        try {
+            Artisan::call($cmd, array_merge($params, ['--no-interaction' => true]));
+            $output = Artisan::output();
+        } catch (\Exception $e) {
+            $output = "Error: " . $e->getMessage();
+        }
+
+        return response(
+            "=== RUN: {$cmd} ===\n" .
+            "Time: " . now()->toDateTimeString() . "\n\n" .
+            $output,
+            200,
+            ['Content-Type' => 'text/plain']
+        );
+    }
 }
