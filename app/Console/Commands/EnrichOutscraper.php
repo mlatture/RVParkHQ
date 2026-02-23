@@ -151,7 +151,7 @@ class EnrichOutscraper extends Command
             'city'          => ['city'],
             'state'         => ['state', 'state_code'],
             'postal_code'   => ['postal_code'],
-            'description'   => ['description', 'about'],
+            'description'   => ['description'],
         ];
 
         foreach ($fieldMap as $ourField => $theirFields) {
@@ -219,7 +219,7 @@ class EnrichOutscraper extends Command
             'longitude'           => $record['longitude'] ?? null,
             'phone'               => $record['phone'] ?? null,
             'website_url'         => $record['site'] ?? $record['website'] ?? null,
-            'description'         => $record['description'] ?? $record['about'] ?? null,
+            'description'         => is_string($record['description'] ?? null) ? $record['description'] : null,
             'google_place_id'     => $record['google_id'] ?? $record['place_id'] ?? null,
             'google_rating'       => floatval($record['rating'] ?? 0) ?: null,
             'google_review_count' => intval($record['reviews'] ?? 0) ?: null,
