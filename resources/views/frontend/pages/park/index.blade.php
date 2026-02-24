@@ -248,14 +248,11 @@
                                     <h5 class="mb-3 text-muted">
                                         <i class="bi bi-geo-alt text-primary fs-5 me-2"></i> Filter by State
                                     </h5>
+                                    @php $currentState = request()->segment(4) ? strtoupper(str_replace('-', ' ', request()->segment(4))) : ''; @endphp
                                     <select id="filterState" class="form-select shadow-sm">
                                         <option value="">All States</option>
-                                        @php
-                                            $uniqueStates = collect($parks['parks'] ?? $parks)->pluck('state')
-                                                ->filter()->map(fn($s) => strtoupper(trim($s)))->unique()->sort()->values();
-                                        @endphp
-                                        @foreach($uniqueStates as $st)
-                                            <option value="{{ strtolower($st) }}">{{ $st }}</option>
+                                        @foreach($allStates ?? [] as $st)
+                                            <option value="{{ strtolower($st) }}" {{ $currentState === $st ? 'selected' : '' }}>{{ $st }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -529,9 +526,14 @@
                 $('.mfp-close').trigger('click');
             });
 
-            // Auto-filter when state dropdown changes
+            // State dropdown: server-side filter (works across pages)
             $('#filterState').on('change', function() {
-                $('#advancedFilterForm').trigger('submit');
+                var state = $(this).val();
+                if (state) {
+                    window.location.href = '{{ url("en-us/parks") }}/' + state;
+                } else {
+                    window.location.href = '{{ url("en-us/parks") }}';
+                }
             });
 
             // Reset filters

@@ -34,6 +34,14 @@ class ParkController extends Controller
             $filters = $request->only(['country', 'state', 'city', 'states', 'global_search', 'site_availability', 'amenities']);
             $data['parks'] = $this->parkService->getFilteredParks($filters);   
         }
+        // All unique states for the filter dropdown
+        $data['allStates'] = Park::whereNotNull('state')
+            ->where('state', '!=', '')
+            ->selectRaw('UPPER(TRIM(state)) as state')
+            ->distinct()
+            ->orderBy('state')
+            ->pluck('state');
+
         return view('frontend.pages.park.index', $data);
     }
 
@@ -106,7 +114,12 @@ class ParkController extends Controller
     
     public function parkCountry()
     {
-        $states = Park::select('state', 'color')->distinct()->orderBy('state')->get();
+        $states = Park::selectRaw('state, MIN(color) as color, COUNT(*) as park_count')
+            ->whereNotNull('state')
+            ->where('state', '!=', '')
+            ->groupBy('state')
+            ->orderBy('state')
+            ->get();
         return view('frontend.pages.park.state', compact('states'));
     }
     
