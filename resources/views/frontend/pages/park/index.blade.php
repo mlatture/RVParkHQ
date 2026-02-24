@@ -243,6 +243,23 @@
                         <div class="p-40 p-t-60 p-xs-20">
                             <h3><i class="bi bi-funnel"></i> Advanced Filters</h3>
                             <form id="advancedFilterForm" class="form-grey-fields" onsubmit="return false;">
+                                {{-- State Filter --}}
+                                <div class="mb-5">
+                                    <h5 class="mb-3 text-muted">
+                                        <i class="bi bi-geo-alt text-primary fs-5 me-2"></i> Filter by State
+                                    </h5>
+                                    <select id="filterState" class="form-select shadow-sm">
+                                        <option value="">All States</option>
+                                        @php
+                                            $uniqueStates = collect($parks['parks'] ?? $parks)->pluck('state')
+                                                ->filter()->map(fn($s) => strtoupper(trim($s)))->unique()->sort()->values();
+                                        @endphp
+                                        @foreach($uniqueStates as $st)
+                                            <option value="{{ strtolower($st) }}">{{ $st }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
                                 <div class="mb-5">
                                     <h5 class="mb-3 text-muted">
                                         <i class="bi bi-plug text-primary fs-5 me-2"></i> Filter by Site Availability
@@ -455,6 +472,9 @@
 
                 $('.park-item').each(function () {
                     let park = $(this);
+                    let parkName = (park.data('name') || '').toString().toLowerCase();
+                    let parkCity = (park.data('city') || '').toString().toLowerCase();
+                    let parkState = (park.data('state') || '').toString().toLowerCase();
                     let parkAmenities = (park.data('amenities') || '').toString().split(',');
 
                     let show = true;
@@ -462,7 +482,7 @@
                     // Text match filters
                     if (name && !parkName.includes(name)) show = false;
                     if (city && !parkCity.includes(city)) show = false;
-                    if (state && !parkState.includes(state)) show = false;
+                    if (state && parkState !== state) show = false;
 
                     // Amenity check (must include all selected)
                     if (selectedAmenities.length > 0) {
@@ -507,6 +527,11 @@
 
                 // Close modal
                 $('.mfp-close').trigger('click');
+            });
+
+            // Auto-filter when state dropdown changes
+            $('#filterState').on('change', function() {
+                $('#advancedFilterForm').trigger('submit');
             });
 
             // Reset filters
