@@ -47,6 +47,35 @@ class Park extends Model
         return $this->hasMany(ParkPhoto::class)->orderBy('sort_order');
     }
 
+    /**
+     * Get the first photo (for card listings - eager load with ->with('cover_photo'))
+     */
+    public function cover_photo()
+    {
+        return $this->hasOne(ParkPhoto::class)->orderBy('sort_order');
+    }
+
+    /**
+     * Get the best available image URL for card display.
+     * Priority: main_image_url > first photo > placeholder
+     */
+    public function getCoverImageUrlAttribute(): string
+    {
+        if (!empty($this->main_image_url)) {
+            return preg_match('/^https?:\/\//', $this->main_image_url)
+                ? $this->main_image_url
+                : asset('storage/' . $this->main_image_url);
+        }
+
+        if ($this->relationLoaded('cover_photo') && $this->cover_photo) {
+            return preg_match('/^https?:\/\//', $this->cover_photo->url)
+                ? $this->cover_photo->url
+                : asset('storage/' . $this->cover_photo->url);
+        }
+
+        return asset('images/placeholder.jpg');
+    }
+
     public function scopeExcludeFederal($query)
     {
         return $query->whereNotIn('park_type', ['federal_nps', 'federal_forest', 'federal_blm', 'federal_corps']);

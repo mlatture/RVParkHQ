@@ -61,7 +61,7 @@ class ParkService
     {
         $parks = Park::query()->filter($filters)->with(['claim_parks' => function($query) {
             $query->where('status', 'approved');
-        }])->paginate($perPage)->withQueryString();
+        }, 'cover_photo'])->paginate($perPage)->withQueryString();
 
         // Add site availability data to each park from approved claim
         $parks->getCollection()->transform(function($park) {

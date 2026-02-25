@@ -379,17 +379,10 @@
                                         </span>
                                     @endauth
                                     
-                                    @php
-                                        $imagePath = $park->main_image_url;
-                                        $imageUrl = !empty($imagePath) ?
-                                            (preg_match('/^https?:\/\//', $imagePath) ? $imagePath : asset('storage/' . $imagePath))
-                                            : asset('images/placeholder.jpg');
-                                    @endphp
-
                                     <a href="{{ route('rv-park.park-show', $park->slug_path) }}">
-                                        <img class="main" src="{{ $imageUrl }}"
+                                        <img class="main" src="{{ $park->cover_image_url }}"
                                              onerror="this.onerror=null;this.src='{{ asset('images/placeholder.jpg') }}';"
-                                             alt="Park Image">
+                                             alt="{{ $park->name }}">
                                         <div class="park-overlay">View Park</div>
                                     </a>
                                 </div>
