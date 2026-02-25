@@ -81,6 +81,116 @@ class ParkController extends Controller
         ], 201);
     }
 
+    /**
+     * Search/lookup parks by name, state, or ID.
+     * GET /api/parks/search?q=pioneer&state=california&limit=10
+     */
+    public function search(Request $request)
+    {
+        $query = Park::query();
+
+        if ($request->filled('id')) {
+            $park = Park::find($request->id);
+            return $park
+                ? response()->json(['park' => $park->load('amenities', 'park_photos')])
+                : response()->json(['error' => 'Park not found'], 404);
+        }
+
+        if ($request->filled('slug')) {
+            $park = Park::where('slug', $request->slug)->first();
+            return $park
+                ? response()->json(['park' => $park->load('amenities', 'park_photos')])
+                : response()->json(['error' => 'Park not found'], 404);
+        }
+
+        if ($request->filled('q')) {
+            $query->where('name', 'like', '%' . $request->q . '%');
+        }
+
+        if ($request->filled('state')) {
+            $state = ucwords(str_replace('-', ' ', $request->state));
+            $query->where('state', 'like', '%' . $state . '%');
+        }
+
+        if ($request->filled('city')) {
+            $query->where('city', 'like', '%' . $request->city . '%');
+        }
+
+        $limit = min((int) ($request->limit ?? 20), 100);
+
+        $parks = $query->select(['id', 'name', 'slug', 'city', 'state', 'phone', 'website_url', 'enrichment_updated_at'])
+            ->orderBy('name')
+            ->limit($limit)
+            ->get();
+
+        return response()->json(['parks' => $parks, 'count' => $parks->count()]);
+    }
+
+    /**
+     * Enrich a park with detailed data (rates, facilities, policies, etc.)
+     * POST /api/parks/{park}/enrich
+     */
+    public function enrich(Request $request, Park $park)
+    {
+        $validated = $request->validate([
+            'rates' => 'nullable|array',
+            'facilities' => 'nullable|array',
+            'site_types' => 'nullable|array',
+            'policies' => 'nullable|array',
+            'manager_name' => 'nullable|string|max:255',
+            'total_sites' => 'nullable|integer|min:0',
+            'acreage' => 'nullable|numeric|min:0',
+            'reservation_url' => 'nullable|url|max:255',
+            'facebook_url' => 'nullable|url|max:255',
+            'description' => 'nullable|string',
+            'short_description' => 'nullable|string|max:500',
+            'phone' => 'nullable|string|max:30',
+            'email' => 'nullable|email|max:255',
+            'website_url' => 'nullable|url|max:255',
+            'hours_of_operation' => 'nullable|array',
+            'amenity_ids' => 'nullable|array',
+            'amenity_ids.*' => 'exists:amenities,id',
+            'enrichment_source' => 'nullable|string|max:100',
+        ]);
+
+        // Remove amenity_ids before mass update
+        $amenityIds = $validated['amenity_ids'] ?? null;
+        unset($validated['amenity_ids']);
+
+        // Merge JSON fields instead of replacing (if park already has data)
+        foreach (['rates', 'facilities', 'site_types', 'policies'] as $jsonField) {
+            if (isset($validated[$jsonField]) && is_array($park->$jsonField)) {
+                $validated[$jsonField] = array_merge($park->$jsonField, $validated[$jsonField]);
+            }
+        }
+
+        $validated['enrichment_updated_at'] = now();
+
+        // Filter out null values so we don't overwrite existing data with null
+        $validated = array_filter($validated, fn($v) => $v !== null);
+
+        $park->update($validated);
+
+        if ($amenityIds !== null) {
+            $park->amenities()->syncWithoutDetaching($amenityIds);
+        }
+
+        return response()->json([
+            'message' => 'Park enriched successfully',
+            'park' => $park->fresh()->load('amenities'),
+        ]);
+    }
+
+    /**
+     * List available amenities (for enrichment reference)
+     * GET /api/amenities
+     */
+    public function amenities()
+    {
+        $amenities = \App\Models\Amenity::select(['id', 'amenity', 'category'])->orderBy('category')->orderBy('amenity')->get();
+        return response()->json(['amenities' => $amenities]);
+    }
+
     public function update(Request $request, Park $park)
     {
         $validated = $request->validate([

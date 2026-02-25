@@ -13,11 +13,16 @@ class Park extends Model
     protected $guarded = [];
 
     protected $casts = [
-        'last_enriched_at'  => 'datetime',
-        'last_verified_at'  => 'datetime',
-        'is_claimed'        => 'boolean',
-        'is_featured'       => 'boolean',
-        'hours_of_operation' => 'array',
+        'last_enriched_at'      => 'datetime',
+        'last_verified_at'      => 'datetime',
+        'enrichment_updated_at' => 'datetime',
+        'is_claimed'            => 'boolean',
+        'is_featured'           => 'boolean',
+        'hours_of_operation'    => 'array',
+        'rates'                 => 'array',
+        'facilities'            => 'array',
+        'site_types'            => 'array',
+        'policies'              => 'array',
     ];
 
     public const TYPE_LABELS = [

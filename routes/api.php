@@ -29,8 +29,11 @@ Route::middleware('flow.api')->group(function () {
 });
 
 Route::middleware('bot.api')->group(function () {
+    Route::get('/parks/search', [ParkController::class, 'search']);
     Route::post('/parks', [ParkController::class, 'store']);
     Route::put('/parks/{park}', [ParkController::class, 'update']);
+    Route::post('/parks/{park}/enrich', [ParkController::class, 'enrich']);
+    Route::get('/amenities', [ParkController::class, 'amenities']);
 });
 
 // API endpoint to get translations for a specific language

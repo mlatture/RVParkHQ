@@ -533,6 +533,33 @@
                         </li>
                     @endif
 
+                    @if(!empty($parks->rates))
+                        <li class="nav-item">
+                            <a class="nav-link" id="rates-tab" data-bs-toggle="tab" href="#rates" role="tab"
+                               aria-controls="rates" aria-selected="false">
+                                <i class="fa fa-dollar-sign"></i>Rates
+                            </a>
+                        </li>
+                    @endif
+
+                    @if(!empty($parks->facilities))
+                        <li class="nav-item">
+                            <a class="nav-link" id="facilities-tab" data-bs-toggle="tab" href="#facilities" role="tab"
+                               aria-controls="facilities" aria-selected="false">
+                                <i class="fa fa-campground"></i>Facilities
+                            </a>
+                        </li>
+                    @endif
+
+                    @if(!empty($parks->policies))
+                        <li class="nav-item">
+                            <a class="nav-link" id="policies-tab" data-bs-toggle="tab" href="#policies" role="tab"
+                               aria-controls="policies" aria-selected="false">
+                                <i class="fa fa-clipboard-list"></i>Policies
+                            </a>
+                        </li>
+                    @endif
+
                     @if(!empty($parks->latitude) && !empty($parks->longitude))
                         <li class="nav-item">
                             <a class="nav-link" id="map-tab" data-bs-toggle="tab" href="#map-tab-pane" role="tab"
@@ -597,6 +624,36 @@
                                         <td class="info-label"><i class="fas fa-globe info-icon"></i>Website</td>
                                         <td class="info-value"><a href="{{ $parks->website_url }}" target="_blank" rel="noopener">{{ $parks->website_url }}</a></td>
                                     </tr>
+                                @endif
+                                @if(!empty($parks->manager_name))
+                                <tr>
+                                    <td class="info-label"><i class="fas fa-user-tie info-icon"></i>Manager</td>
+                                    <td class="info-value">{{ $parks->manager_name }}</td>
+                                </tr>
+                                @endif
+                                @if(!empty($parks->total_sites))
+                                <tr>
+                                    <td class="info-label"><i class="fas fa-campground info-icon"></i>Total Sites</td>
+                                    <td class="info-value">{{ $parks->total_sites }}</td>
+                                </tr>
+                                @endif
+                                @if(!empty($parks->acreage))
+                                <tr>
+                                    <td class="info-label"><i class="fas fa-ruler-combined info-icon"></i>Acreage</td>
+                                    <td class="info-value">{{ $parks->acreage }} acres</td>
+                                </tr>
+                                @endif
+                                @if(!empty($parks->reservation_url))
+                                <tr>
+                                    <td class="info-label"><i class="fas fa-calendar-check info-icon"></i>Reservations</td>
+                                    <td class="info-value"><a href="{{ $parks->reservation_url }}" target="_blank" rel="noopener" class="btn btn-sm btn-success">Book Now</a></td>
+                                </tr>
+                                @endif
+                                @if(!empty($parks->facebook_url))
+                                <tr>
+                                    <td class="info-label"><i class="fab fa-facebook info-icon"></i>Facebook</td>
+                                    <td class="info-value"><a href="{{ $parks->facebook_url }}" target="_blank" rel="noopener">{{ $parks->facebook_url }}</a></td>
+                                </tr>
                                 @endif
                                 <tr>
                                     <td class="info-label"><i class="fas fa-clock info-icon"></i>Last Verified</td>
@@ -815,6 +872,242 @@
 
                             @endif
                     </div>
+                                        {{-- Rates Tab --}}
+                    @if(!empty($parks->rates))
+                    <div class="tab-pane fade" id="rates" role="tabpanel" aria-labelledby="rates-tab">
+                        <div class="p-3">
+                            @if(!empty($parks->rates['nightly']))
+                            <h5 class="mb-3"><i class="fa fa-moon text-primary"></i> Nightly Rates</h5>
+                            <div class="table-responsive mb-4">
+                                <table class="table table-striped">
+                                    <thead><tr><th>Site Type</th><th>Rate</th><th>Season</th></tr></thead>
+                                    <tbody>
+                                    @foreach((array) $parks->rates['nightly'] as $rate)
+                                        <tr>
+                                            <td>{{ $rate['type'] ?? 'Standard' }}</td>
+                                            <td><strong>{{ $rate['price'] ?? 'Call' }}</strong></td>
+                                            <td>{{ $rate['season'] ?? 'Year-round' }}</td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                            @endif
+
+                            @if(!empty($parks->rates['weekly']))
+                            <h5 class="mb-3"><i class="fa fa-calendar-week text-primary"></i> Weekly Rates</h5>
+                            <div class="table-responsive mb-4">
+                                <table class="table table-striped">
+                                    <thead><tr><th>Site Type</th><th>Rate</th><th>Notes</th></tr></thead>
+                                    <tbody>
+                                    @foreach((array) $parks->rates['weekly'] as $rate)
+                                        <tr>
+                                            <td>{{ $rate['type'] ?? 'Standard' }}</td>
+                                            <td><strong>{{ $rate['price'] ?? 'Call' }}</strong></td>
+                                            <td>{{ $rate['notes'] ?? '' }}</td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                            @endif
+
+                            @if(!empty($parks->rates['monthly']))
+                            <h5 class="mb-3"><i class="fa fa-calendar text-primary"></i> Monthly Rates</h5>
+                            <div class="table-responsive mb-4">
+                                <table class="table table-striped">
+                                    <thead><tr><th>Type</th><th>Rate</th><th>Notes</th></tr></thead>
+                                    <tbody>
+                                    @foreach((array) $parks->rates['monthly'] as $rate)
+                                        <tr>
+                                            <td>{{ $rate['type'] ?? 'Standard' }}</td>
+                                            <td><strong>{{ $rate['price'] ?? 'Call' }}</strong></td>
+                                            <td>{{ $rate['notes'] ?? '' }}</td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                            @endif
+
+                            @if(!empty($parks->rates['seasonal']))
+                            <h5 class="mb-3"><i class="fa fa-sun text-warning"></i> Seasonal Rates</h5>
+                            <div class="table-responsive mb-4">
+                                <table class="table table-striped">
+                                    <thead><tr><th>Season</th><th>Dates</th><th>Rate</th></tr></thead>
+                                    <tbody>
+                                    @foreach((array) $parks->rates['seasonal'] as $rate)
+                                        <tr>
+                                            <td>{{ $rate['name'] ?? '' }}</td>
+                                            <td>{{ $rate['dates'] ?? '' }}</td>
+                                            <td><strong>{{ $rate['price'] ?? 'Call' }}</strong></td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                            @endif
+
+                            @if(!empty($parks->rates['additional']))
+                            <h5 class="mb-3"><i class="fa fa-plus-circle text-info"></i> Additional Fees</h5>
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead><tr><th>Fee</th><th>Amount</th></tr></thead>
+                                    <tbody>
+                                    @foreach((array) $parks->rates['additional'] as $fee)
+                                        <tr>
+                                            <td>{{ $fee['name'] ?? '' }}</td>
+                                            <td><strong>{{ $fee['price'] ?? '' }}</strong></td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                            @endif
+
+                            @if(!empty($parks->rates['notes']))
+                            <div class="alert alert-info mt-3">
+                                <i class="fa fa-info-circle"></i> {{ $parks->rates['notes'] }}
+                            </div>
+                            @endif
+                        </div>
+                    </div>
+                    @endif
+
+                    {{-- Facilities Tab --}}
+                    @if(!empty($parks->facilities))
+                    <div class="tab-pane fade" id="facilities" role="tabpanel" aria-labelledby="facilities-tab">
+                        <div class="p-3">
+                            @php
+                                $facilityCategories = [];
+                                foreach ((array) $parks->facilities as $item) {
+                                    $cat = $item['category'] ?? 'General';
+                                    $facilityCategories[$cat][] = $item;
+                                }
+                            @endphp
+                            <div class="row">
+                                @foreach($facilityCategories as $category => $items)
+                                <div class="col-md-6 mb-4">
+                                    <h5 class="text-primary mb-3">{{ $category }}</h5>
+                                    <ul class="list-unstyled">
+                                        @foreach($items as $item)
+                                        <li class="mb-2">
+                                            <i class="fa fa-check-circle text-success"></i>
+                                            {{ $item['name'] ?? $item }}
+                                            @if(!empty($item['details']))
+                                                <small class="text-muted d-block ms-4">{{ $item['details'] }}</small>
+                                            @endif
+                                        </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                                @endforeach
+                            </div>
+
+                            @if(!empty($parks->total_sites) || !empty($parks->acreage))
+                            <div class="row mt-3 border-top pt-3">
+                                @if(!empty($parks->total_sites))
+                                <div class="col-md-3">
+                                    <div class="text-center">
+                                        <h3 class="text-primary mb-0">{{ $parks->total_sites }}</h3>
+                                        <small class="text-muted">Total Sites</small>
+                                    </div>
+                                </div>
+                                @endif
+                                @if(!empty($parks->acreage))
+                                <div class="col-md-3">
+                                    <div class="text-center">
+                                        <h3 class="text-primary mb-0">{{ $parks->acreage }}</h3>
+                                        <small class="text-muted">Acres</small>
+                                    </div>
+                                </div>
+                                @endif
+                            </div>
+                            @endif
+                        </div>
+                    </div>
+                    @endif
+
+                    {{-- Policies Tab --}}
+                    @if(!empty($parks->policies))
+                    <div class="tab-pane fade" id="policies" role="tabpanel" aria-labelledby="policies-tab">
+                        <div class="p-3">
+                            <div class="row">
+                                @if(!empty($parks->policies['pets']))
+                                <div class="col-md-6 mb-4">
+                                    <h5><i class="fa fa-paw text-primary"></i> Pet Policy</h5>
+                                    <p>{{ $parks->policies['pets'] }}</p>
+                                </div>
+                                @endif
+
+                                @if(!empty($parks->policies['cancellation']))
+                                <div class="col-md-6 mb-4">
+                                    <h5><i class="fa fa-ban text-danger"></i> Cancellation Policy</h5>
+                                    <p>{{ $parks->policies['cancellation'] }}</p>
+                                </div>
+                                @endif
+
+                                @if(!empty($parks->policies['check_in']))
+                                <div class="col-md-6 mb-4">
+                                    <h5><i class="fa fa-clock text-info"></i> Check-In / Check-Out</h5>
+                                    <p>{{ $parks->policies['check_in'] }}</p>
+                                </div>
+                                @endif
+
+                                @if(!empty($parks->policies['quiet_hours']))
+                                <div class="col-md-6 mb-4">
+                                    <h5><i class="fa fa-volume-mute text-secondary"></i> Quiet Hours</h5>
+                                    <p>{{ $parks->policies['quiet_hours'] }}</p>
+                                </div>
+                                @endif
+
+                                @if(!empty($parks->policies['max_guests']))
+                                <div class="col-md-6 mb-4">
+                                    <h5><i class="fa fa-users text-primary"></i> Max Guests</h5>
+                                    <p>{{ $parks->policies['max_guests'] }}</p>
+                                </div>
+                                @endif
+
+                                @if(!empty($parks->policies['age_restrictions']))
+                                <div class="col-md-6 mb-4">
+                                    <h5><i class="fa fa-id-card text-warning"></i> Age Restrictions</h5>
+                                    <p>{{ $parks->policies['age_restrictions'] }}</p>
+                                </div>
+                                @endif
+
+                                @if(!empty($parks->policies['fires']))
+                                <div class="col-md-6 mb-4">
+                                    <h5><i class="fa fa-fire text-danger"></i> Fire Policy</h5>
+                                    <p>{{ $parks->policies['fires'] }}</p>
+                                </div>
+                                @endif
+
+                                @if(!empty($parks->policies['deposit']))
+                                <div class="col-md-6 mb-4">
+                                    <h5><i class="fa fa-credit-card text-success"></i> Deposit</h5>
+                                    <p>{{ $parks->policies['deposit'] }}</p>
+                                </div>
+                                @endif
+
+                                @if(!empty($parks->policies['other']))
+                                <div class="col-12 mb-4">
+                                    <h5><i class="fa fa-info-circle text-primary"></i> Other Policies</h5>
+                                    @if(is_array($parks->policies['other']))
+                                        <ul>
+                                        @foreach($parks->policies['other'] as $policy)
+                                            <li>{{ $policy }}</li>
+                                        @endforeach
+                                        </ul>
+                                    @else
+                                        <p>{{ $parks->policies['other'] }}</p>
+                                    @endif
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                    @endif
+
                     <div class="tab-pane fade" id="map-tab-pane" role="tabpanel" aria-labelledby="map-tab">
                         <div id="map" style="height: 300px; width: 100%; border: 1px solid #ccc;"></div>
                     </div>
