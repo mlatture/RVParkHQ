@@ -296,14 +296,52 @@
         font-size: 0.9rem;
     }
 
-    /* Photo gallery */
+    /* Photo gallery slideshow */
+    .park-gallery-wrapper {
+        position: relative;
+    }
     .park-gallery-main {
         width: 100%;
         max-height: 400px;
         object-fit: cover;
         border-radius: 8px;
+        transition: opacity 0.4s ease;
     }
-
+    .park-gallery-main.fade-out {
+        opacity: 0;
+    }
+    .gallery-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(0,0,0,0.5);
+        color: #fff;
+        border: none;
+        border-radius: 50%;
+        width: 36px;
+        height: 36px;
+        font-size: 18px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2;
+        transition: background 0.2s;
+    }
+    .gallery-nav:hover { background: rgba(0,0,0,0.75); }
+    .gallery-nav.prev { left: 8px; }
+    .gallery-nav.next { right: 8px; }
+    .gallery-counter {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        background: rgba(0,0,0,0.6);
+        color: #fff;
+        padding: 2px 10px;
+        border-radius: 12px;
+        font-size: 0.8rem;
+        z-index: 2;
+    }
     .park-gallery-thumbs {
         display: flex;
         gap: 8px;
@@ -311,7 +349,6 @@
         overflow-x: auto;
         padding-bottom: 4px;
     }
-
     .park-gallery-thumbs img {
         width: 70px;
         height: 55px;
@@ -321,8 +358,8 @@
         border: 2px solid transparent;
         opacity: 0.7;
         transition: all 0.2s ease;
+        flex-shrink: 0;
     }
-
     .park-gallery-thumbs img:hover,
     .park-gallery-thumbs img.active {
         border-color: #ffc107;
@@ -384,14 +421,22 @@
                                 @php
                                     $firstPhoto = $parkPhotos->first();
                                     $firstUrl = preg_match('/^https?:\/\//', $firstPhoto->url) ? $firstPhoto->url : asset('storage/' . $firstPhoto->url);
+                                    $photoCount = $parkPhotos->count();
                                 @endphp
-                                <img id="gallery-main-img"
-                                     src="{{ $firstUrl }}"
-                                     onerror="this.onerror=null;this.src='{{ asset('images/login.jpg') }}';"
-                                     alt="Park Image"
-                                     class="park-gallery-main"/>
+                                <div class="park-gallery-wrapper">
+                                    @if($photoCount > 1)
+                                        <button class="gallery-nav prev" onclick="galleryNav(-1)" aria-label="Previous">&#10094;</button>
+                                        <button class="gallery-nav next" onclick="galleryNav(1)" aria-label="Next">&#10095;</button>
+                                        <span class="gallery-counter"><span id="gallery-index">1</span> / {{ $photoCount }}</span>
+                                    @endif
+                                    <img id="gallery-main-img"
+                                         src="{{ $firstUrl }}"
+                                         onerror="this.onerror=null;this.src='{{ asset('images/login.jpg') }}';"
+                                         alt="Park Image"
+                                         class="park-gallery-main"/>
+                                </div>
                                 <div class="park-gallery-thumbs">
-                                    @foreach($parkPhotos->take(8) as $i => $photo)
+                                    @foreach($parkPhotos as $i => $photo)
                                         @php
                                             $photoUrl = preg_match('/^https?:\/\//', $photo->url) ? $photo->url : asset('storage/' . $photo->url);
                                         @endphp
@@ -399,6 +444,7 @@
                                              alt="Photo {{ $i + 1 }}"
                                              class="gallery-thumb {{ $i === 0 ? 'active' : '' }}"
                                              data-full="{{ $photoUrl }}"
+                                             data-index="{{ $i }}"
                                              onerror="this.style.display='none';">
                                     @endforeach
                                 </div>
@@ -1277,17 +1323,82 @@
         });
     </script>
 
-    {{-- Photo Gallery JS --}}
+    {{-- Photo Gallery Slideshow JS --}}
     @if($hasGallery)
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('.gallery-thumb').forEach(function(thumb) {
+            var thumbs = document.querySelectorAll('.gallery-thumb');
+            var mainImg = document.getElementById('gallery-main-img');
+            var counterEl = document.getElementById('gallery-index');
+            var currentIndex = 0;
+            var totalPhotos = thumbs.length;
+            var autoplayInterval = null;
+
+            function showPhoto(index, animate) {
+                if (totalPhotos === 0) return;
+                currentIndex = ((index % totalPhotos) + totalPhotos) % totalPhotos;
+                var thumb = thumbs[currentIndex];
+                if (!thumb) return;
+
+                if (animate) {
+                    mainImg.classList.add('fade-out');
+                    setTimeout(function() {
+                        mainImg.src = thumb.dataset.full;
+                        mainImg.classList.remove('fade-out');
+                    }, 200);
+                } else {
+                    mainImg.src = thumb.dataset.full;
+                }
+
+                thumbs.forEach(function(t) { t.classList.remove('active'); });
+                thumb.classList.add('active');
+                if (counterEl) counterEl.textContent = currentIndex + 1;
+
+                // Scroll thumb into view
+                thumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            }
+
+            // Click handlers for thumbs
+            thumbs.forEach(function(thumb) {
                 thumb.addEventListener('click', function() {
-                    document.getElementById('gallery-main-img').src = this.dataset.full;
-                    document.querySelectorAll('.gallery-thumb').forEach(function(t) { t.classList.remove('active'); });
-                    this.classList.add('active');
+                    showPhoto(parseInt(this.dataset.index), true);
+                    resetAutoplay();
                 });
             });
+
+            // Navigation function (called from buttons)
+            window.galleryNav = function(dir) {
+                showPhoto(currentIndex + dir, true);
+                resetAutoplay();
+            };
+
+            // Keyboard navigation
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'ArrowLeft') { window.galleryNav(-1); }
+                else if (e.key === 'ArrowRight') { window.galleryNav(1); }
+            });
+
+            // Auto-advance every 5 seconds
+            function startAutoplay() {
+                if (totalPhotos <= 1) return;
+                autoplayInterval = setInterval(function() {
+                    showPhoto(currentIndex + 1, true);
+                }, 5000);
+            }
+
+            function resetAutoplay() {
+                clearInterval(autoplayInterval);
+                startAutoplay();
+            }
+
+            // Pause on hover
+            var wrapper = document.querySelector('.park-gallery-wrapper');
+            if (wrapper) {
+                wrapper.addEventListener('mouseenter', function() { clearInterval(autoplayInterval); });
+                wrapper.addEventListener('mouseleave', function() { startAutoplay(); });
+            }
+
+            startAutoplay();
         });
     </script>
     @endif
