@@ -15,6 +15,9 @@ use App\Http\Controllers\Frontend\CardController;
 use App\Http\Controllers\Frontend\FreeMarketingController;
 
 
+// API Documentation (public, no auth)
+Route::get('/api/docs', fn() => view('frontend.pages.api-docs'))->name('api.docs');
+
 // State landing pages (before rv-park group to avoid conflicts)
 Route::get('/campgrounds', [StateController::class, 'index'])->name('campgrounds.index');
 Route::get('/campgrounds/{state}', [StateController::class, 'show'])->name('campgrounds.show');
