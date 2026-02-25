@@ -25,4 +25,4 @@ getupdates.sh
 
 # Exclude release builds
 /releases
-BOT_API.md
+BOT_API.md.env.save
