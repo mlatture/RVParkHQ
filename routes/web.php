@@ -39,7 +39,7 @@ use App\Http\Controllers\Backend\SocialPostController;
 require __DIR__.'/frontend.php';
 
 //Route::get('/', 'HomeController@redirectAdmin')->name('index');
-//Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/admin', function () {
     return redirect()->route('admin.dashboard');
