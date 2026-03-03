@@ -33,12 +33,19 @@
 
                         <div class="form-group mb-3 col-12 col-md-6">
                             <label for="password" class="form-label">Password</label>
-                            <input type="password" name="password" id="password" class="form-control" placeholder="Create Password" required>
+                            <div class="d-flex gap-2">
+                                <input type="password" name="password" id="password" class="form-control" placeholder="Create Password" required>
+                                <button type="button" class="btn btn-outline-secondary" id="togglePassword">Show</button>
+                            </div>
+                            <small class="text-muted">Must be at least 8 characters and include uppercase, lowercase, number, and special character.</small>
                         </div>
 
                         <div class="form-group mb-3 col-12 col-md-6">
                             <label for="password_confirmation" class="form-label">Confirm Password</label>
-                            <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" placeholder="Re-type Password" required>
+                            <div class="d-flex gap-2">
+                                <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" placeholder="Re-type Password" required>
+                                <button type="button" class="btn btn-outline-secondary" id="togglePasswordConfirmation">Show</button>
+                            </div>
                         </div>
                     </div>
 
@@ -56,13 +63,37 @@
     </div>
 </div>
 <script>
-    // Auto-open register modal if there are register errors
-    @if (
-        $errors->has('name') ||
-        ($errors->has('email') && old('name')) ||
-        ($errors->has('password') && old('name'))
-    )
-        document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function() {
+        const passwordInput = document.getElementById('password');
+        const passwordConfirmInput = document.getElementById('password_confirmation');
+        const togglePasswordBtn = document.getElementById('togglePassword');
+        const togglePasswordConfirmBtn = document.getElementById('togglePasswordConfirmation');
+
+        const toggleInputVisibility = (input, button) => {
+            if (!input || !button) return;
+            const isPassword = input.type === 'password';
+            input.type = isPassword ? 'text' : 'password';
+            button.textContent = isPassword ? 'Hide' : 'Show';
+        };
+
+        if (togglePasswordBtn) {
+            togglePasswordBtn.addEventListener('click', function() {
+                toggleInputVisibility(passwordInput, togglePasswordBtn);
+            });
+        }
+
+        if (togglePasswordConfirmBtn) {
+            togglePasswordConfirmBtn.addEventListener('click', function() {
+                toggleInputVisibility(passwordConfirmInput, togglePasswordConfirmBtn);
+            });
+        }
+
+        // Auto-open register modal if there are register errors
+        @if (
+            $errors->has('name') ||
+            ($errors->has('email') && old('name')) ||
+            ($errors->has('password') && old('name'))
+        )
             if (window.jQuery && $.magnificPopup) {
                 $.magnificPopup.open({ items: { src: '#modalRegister' }, type: 'inline' });
             } else if (window.lightbox) {
@@ -70,6 +101,6 @@
             } else {
                 document.getElementById('modalRegister').style.display = 'block';
             }
-        });
-    @endif
+        @endif
+    });
 </script>
