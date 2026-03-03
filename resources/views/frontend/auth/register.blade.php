@@ -6,17 +6,23 @@
 
                 <form class="form-grey-fields" method="POST" action="{{ route('modal.register') }}">
                     @csrf
-                    @if (
-                        (
-                            $errors->has('name') ||
-                            ($errors->has('email') && old('name')) ||
-                            ($errors->has('password') && old('name'))
-                        )
-                    )
+
+                    @if ($errors->has('email'))
+                        <div class="alert alert-danger">{{ $errors->first('email') }}</div>
+                    @endif
+
+                    @if ($errors->has('password'))
+                        <div class="alert alert-danger">{{ $errors->first('password') }}</div>
+                    @endif
+
+                    @if ($errors->has('name') || $errors->has('password_confirmation'))
                         <div class="alert alert-danger">
-                            @foreach ($errors->all() as $error)
-                                <div>{{ $error }}</div>
-                            @endforeach
+                            @if ($errors->has('name'))
+                                <div>{{ $errors->first('name') }}</div>
+                            @endif
+                            @if ($errors->has('password_confirmation'))
+                                <div>{{ $errors->first('password_confirmation') }}</div>
+                            @endif
                         </div>
                     @endif
 
@@ -33,18 +39,21 @@
 
                         <div class="form-group mb-3 col-12 col-md-6">
                             <label for="password" class="form-label">Password</label>
-                            <div class="d-flex gap-2">
+                            <div class="password-wrapper">
                                 <input type="password" name="password" id="password" class="form-control" placeholder="Create Password" required>
-                                <button type="button" class="btn btn-outline-secondary" id="togglePassword">Show</button>
+                                <button type="button" class="password-toggle" id="togglePassword" aria-label="Toggle password visibility" title="Show/Hide password">
+                                    <span data-open="👁" data-closed="🙈">👁</span>
+                                </button>
                             </div>
-                            <small class="text-muted">Must be at least 8 characters and include uppercase, lowercase, number, and special character.</small>
                         </div>
 
                         <div class="form-group mb-3 col-12 col-md-6">
                             <label for="password_confirmation" class="form-label">Confirm Password</label>
-                            <div class="d-flex gap-2">
+                            <div class="password-wrapper">
                                 <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" placeholder="Re-type Password" required>
-                                <button type="button" class="btn btn-outline-secondary" id="togglePasswordConfirmation">Show</button>
+                                <button type="button" class="password-toggle" id="togglePasswordConfirmation" aria-label="Toggle password confirmation visibility" title="Show/Hide password confirmation">
+                                    <span data-open="👁" data-closed="🙈">👁</span>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -62,6 +71,30 @@
         </div>
     </div>
 </div>
+
+<style>
+    #modalRegister .password-wrapper {
+        position: relative;
+    }
+
+    #modalRegister .password-wrapper input {
+        padding-right: 44px;
+    }
+
+    #modalRegister .password-toggle {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        border: 0;
+        background: transparent;
+        padding: 0;
+        line-height: 1;
+        font-size: 18px;
+        cursor: pointer;
+    }
+</style>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const passwordInput = document.getElementById('password');
@@ -73,7 +106,10 @@
             if (!input || !button) return;
             const isPassword = input.type === 'password';
             input.type = isPassword ? 'text' : 'password';
-            button.textContent = isPassword ? 'Hide' : 'Show';
+            const icon = button.querySelector('span');
+            if (icon) {
+                icon.textContent = isPassword ? icon.dataset.closed : icon.dataset.open;
+            }
         };
 
         if (togglePasswordBtn) {
@@ -91,8 +127,9 @@
         // Auto-open register modal if there are register errors
         @if (
             $errors->has('name') ||
-            ($errors->has('email') && old('name')) ||
-            ($errors->has('password') && old('name'))
+            $errors->has('email') ||
+            $errors->has('password') ||
+            $errors->has('password_confirmation')
         )
             if (window.jQuery && $.magnificPopup) {
                 $.magnificPopup.open({ items: { src: '#modalRegister' }, type: 'inline' });

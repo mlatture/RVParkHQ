@@ -38,9 +38,10 @@ class FrontendRegisterController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
             'password' => ['required', 'string', 'min:8', 'confirmed', 'regex:/[A-Z]/', 'regex:/[a-z]/', 'regex:/[0-9]/', 'regex:/[^A-Za-z0-9]/'],
         ], [
-            'password.min' => 'Password must be at least 8 characters.',
+            'email.unique' => 'This email is already registered. Please login or use another email.',
+            'password.min' => 'Password must be at least 8 characters and include uppercase, lowercase, number, and special character.',
             'password.confirmed' => 'Password confirmation does not match.',
-            'password.regex' => 'Password must include uppercase, lowercase, number, and special character.',
+            'password.regex' => 'Password must be at least 8 characters and include uppercase, lowercase, number, and special character.',
         ]);
 
         if ($validator->fails()) {
