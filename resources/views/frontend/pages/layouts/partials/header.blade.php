@@ -17,6 +17,9 @@
                             <li><a href="{{ route('rv-park.home') }}">Home</a></li>
                             <li><a href="{{ route('rv-park.all-parks') }}">Parks</a></li>
                             <li><a href="{{ route('campgrounds.index') }}">Campgrounds</a></li>
+                            <li class="buy-park-cta">
+                                <a href="https://rvparkshop.com/rv-parks-for-sale" target="_blank" rel="noopener">Buy a Park</a>
+                            </li>
                             <li><a href="{{ route('rv-park.team') }}">Our Team</a></li>
 {{--                            <li><a href="{{ route('rv-park.blogs.index') }}">Blog</a></li>--}}
                             <li><a href="{{ route('rv-park.advertise.index') }}">Advertiser Inquiries</a></li>
@@ -60,6 +63,21 @@
             </div>
         </div>
     </div>
+    <style>
+        #header #mainMenu nav > ul > li.buy-park-cta > a {
+            background: #0d6efd;
+            color: #fff !important;
+            border-radius: 999px;
+            padding: 8px 16px;
+            font-weight: 700;
+        }
+
+        #header #mainMenu nav > ul > li.buy-park-cta > a:hover {
+            background: #0b5ed7;
+            color: #fff !important;
+        }
+    </style>
+
     @include('frontend.pages.layouts.partials.search')
     @include('frontend.auth.login')
     @include('frontend.auth.register')
