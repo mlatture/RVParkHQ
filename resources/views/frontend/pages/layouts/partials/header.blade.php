@@ -18,7 +18,7 @@
                             <li><a href="{{ route('rv-park.all-parks') }}">Parks</a></li>
                             <li><a href="{{ route('campgrounds.index') }}">Campgrounds</a></li>
                             <li class="buy-park-cta">
-                                <a href="https://rvparkshop.com/rv-parks-for-sale" target="_blank" rel="noopener">Buy a Park</a>
+                                <a href="https://rvparkshop.com" target="_blank" rel="noopener">Buy a Park</a>
                             </li>
                             <li><a href="{{ route('rv-park.team') }}">Our Team</a></li>
 {{--                            <li><a href="{{ route('rv-park.blogs.index') }}">Blog</a></li>--}}
