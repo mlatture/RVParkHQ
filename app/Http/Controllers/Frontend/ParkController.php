@@ -28,26 +28,44 @@ class ParkController extends Controller
 
     public function index(Request $request)
     {
-        if ($request->is('en-us/parks') || $request->is('en-us/parks/usa') || $request->is('en-us/parks/usa/*')) {
-            if ($request->segment(4)) {
-                return redirect('/campgrounds/'.Str::slug($request->segment(4)), 301);
-            }
+        $states = collect(config('states.list'));
+        $stateBySlug = $states->keyBy('slug');
+        $stateSlug = null;
 
-            $query = [];
-            if ($request->filled('global_search')) {
-                $query['search'] = $request->input('global_search');
-            }
-
-            return redirect()->route('campgrounds.index', $query, 301);
+        if ($request->is('en-us/parks/usa/*') && $request->segment(4)) {
+            return redirect('/en-us/parks/'.Str::slug($request->segment(4)), 301);
         }
 
-        if (! empty($request->segment('4'))) {
-            $filters['state'] = $request->segment('4');
+        if ($request->segment(3) && $request->segment(3) !== 'usa') {
+            $candidateSlug = Str::slug($request->segment(3));
+
+            if ($stateBySlug->has($candidateSlug)) {
+                $stateSlug = $candidateSlug;
+            }
+        }
+
+        if ($stateSlug) {
+            $filters['state'] = $stateBySlug[$stateSlug]['name'];
             $data['parks'] = $this->parkService->getFilteredParks($filters);
         } else {
             $filters = $request->only(['country', 'state', 'city', 'states', 'global_search', 'site_availability', 'amenities']);
             $data['parks'] = $this->parkService->getFilteredParks($filters);
         }
+
+        $parkCounts = Park::query()
+            ->defaultSearch()
+            ->where('status', 'active')
+            ->selectRaw('state, COUNT(*) as count')
+            ->groupBy('state')
+            ->pluck('count', 'state');
+
+        $data['mapStates'] = $states->map(function ($state) use ($parkCounts) {
+            $state['park_count'] = $parkCounts->get($state['name'], 0);
+
+            return $state;
+        });
+        $data['currentStateSlug'] = $stateSlug;
+
         // All unique states for the filter dropdown
         $data['allStates'] = Park::whereNotNull('state')
             ->where('state', '!=', '')

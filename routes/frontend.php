@@ -11,15 +11,14 @@ use App\Http\Controllers\Frontend\FreeMarketingController;
 use App\Http\Controllers\Frontend\ParkController;
 use App\Http\Controllers\Frontend\PaymentController;
 use App\Http\Controllers\Frontend\ProfileController;
-use App\Http\Controllers\Frontend\StateController;
 use App\Http\Controllers\Frontend\SubscriberController;
 
 // API Documentation (public, no auth)
 Route::get('/api/docs', fn () => view('frontend.pages.api-docs'))->name('api.docs');
 
-// State landing pages (before rv-park group to avoid conflicts)
-Route::get('/campgrounds', [StateController::class, 'index'])->name('campgrounds.index');
-Route::get('/campgrounds/{state}', [StateController::class, 'show'])->name('campgrounds.show');
+// Legacy campground-directory aliases. Keep them working while the consumer browse hub is /en-us/parks.
+Route::redirect('/campgrounds', '/en-us/parks', 301)->name('campgrounds.index');
+Route::get('/campgrounds/{state}', fn (string $state) => redirect('/en-us/parks/'.$state, 301))->name('campgrounds.show');
 
 Route::name('rv-park.')->group(function () {
     Route::get('/', [\App\Http\Controllers\Frontend\HomeController::class, 'index'])->name('home');
@@ -35,7 +34,7 @@ Route::name('rv-park.')->group(function () {
         Route::get('/{country?}/{state?}', 'index')->name('all-parks');
     });
 
-    Route::redirect('en-us/park/state', '/campgrounds', 301)->name('park-country');
+    Route::redirect('en-us/park/state', '/en-us/parks', 301)->name('park-country');
 
     Route::post('/email/subscribe', [SubscriberController::class, 'store'])->name('email.subscribe');
     Route::get('/confirm-email', [SubscriberController::class, 'index'])->name('email-confirm.index');

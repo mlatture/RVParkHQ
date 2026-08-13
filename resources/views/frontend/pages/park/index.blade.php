@@ -196,6 +196,82 @@
             transform: scale(1.15);
             transition: transform 0.15s;
         }
+
+        .us-state-map-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f4f7fb 100%);
+            border: 1px solid #e7edf5;
+            border-radius: 1.35rem;
+            box-shadow: 0 14px 45px rgba(15, 23, 42, 0.08);
+            padding: 1.5rem;
+            margin: 0 auto 2rem;
+        }
+
+        .us-state-map {
+            display: grid;
+            grid-template-columns: repeat(12, minmax(48px, 1fr));
+            grid-auto-rows: minmax(42px, auto);
+            gap: 0.38rem;
+            max-width: 980px;
+            margin: 0 auto;
+        }
+
+        .us-state-tile {
+            display: flex;
+            min-height: 42px;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            border-radius: 0.7rem;
+            border: 1px solid #c9d6e8;
+            background: #fff;
+            color: #16324f;
+            font-size: 0.78rem;
+            font-weight: 800;
+            line-height: 1.05;
+            text-decoration: none;
+            box-shadow: 0 2px 7px rgba(15, 23, 42, 0.05);
+            transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+        }
+
+        .us-state-tile small {
+            display: block;
+            margin-top: 0.12rem;
+            font-size: 0.62rem;
+            font-weight: 700;
+            color: #64748b;
+        }
+
+        .us-state-tile:hover,
+        .us-state-tile:focus {
+            transform: translateY(-2px);
+            border-color: #0d6efd;
+            background: #eaf3ff;
+            box-shadow: 0 8px 22px rgba(13, 110, 253, 0.18);
+            color: #0b3d91;
+            outline: none;
+            text-decoration: none;
+        }
+
+        .us-state-tile.active {
+            background: #0d6efd;
+            border-color: #0d6efd;
+            color: #fff;
+        }
+
+        .us-state-tile.active small {
+            color: rgba(255,255,255,0.82);
+        }
+
+        @media (max-width: 991px) {
+            .us-state-map {
+                grid-template-columns: repeat(6, minmax(44px, 1fr));
+            }
+
+            .us-state-tile {
+                grid-column: auto !important;
+                grid-row: auto !important;
+            }
+        }
     </style>
     
 @section('content')
@@ -204,14 +280,14 @@
              data-bg-parallax="{{asset('assets/images/slider/revolution/polo-homepage/dummy.png')}}">
         <div class="container">
             <div class="page-title">
-                <h1>Parks</h1>
+                <h1>Campgrounds</h1>
             </div>
             <div class="breadcrumb">
                 <ul>
                     <li><a href="{{ route('rv-park.home') }}">Home</a></li>
                     <li>{{ request()->segment(2) }}</li>
                     @if(request()->segment(3))
-                        <li><a href="{{ route('campgrounds.index') }}">{{ request()->segment(3) }}</a></li>
+                        <li><a href="{{ route('rv-park.all-parks') }}">Campgrounds</a></li>
                     @endif
                     @if(request()->segment(4))
                         <li class="active">{{ strtolower(request()->segment(4)) }}</li>
@@ -248,7 +324,7 @@
                                     <h5 class="mb-3 text-muted">
                                         <i class="bi bi-geo-alt text-primary fs-5 me-2"></i> Filter by State
                                     </h5>
-                                    @php $currentState = request()->segment(4) ? strtoupper(str_replace('-', ' ', request()->segment(4))) : ''; @endphp
+                                    @php $currentState = request()->segment(3) && request()->segment(3) !== 'usa' ? strtoupper(str_replace('-', ' ', request()->segment(3))) : ''; @endphp
                                     <select id="filterState" class="form-select shadow-sm">
                                         <option value="">All States</option>
                                         @foreach($allStates ?? [] as $st)
@@ -337,6 +413,36 @@
             </div>
             
             <div class="shop container">
+                @php
+                    $stateMapPositions = [
+                        'washington' => [1, 1], 'montana' => [1, 3], 'north-dakota' => [1, 5], 'minnesota' => [1, 6], 'wisconsin' => [1, 7], 'michigan' => [1, 8], 'maine' => [1, 12],
+                        'oregon' => [2, 1], 'idaho' => [2, 2], 'wyoming' => [2, 3], 'south-dakota' => [2, 5], 'iowa' => [2, 6], 'illinois' => [2, 7], 'indiana' => [2, 8], 'ohio' => [2, 9], 'pennsylvania' => [2, 10], 'new-york' => [2, 11], 'vermont' => [2, 12],
+                        'california' => [3, 1], 'nevada' => [3, 2], 'utah' => [3, 3], 'colorado' => [3, 4], 'nebraska' => [3, 5], 'missouri' => [3, 6], 'kentucky' => [3, 8], 'west-virginia' => [3, 9], 'virginia' => [3, 10], 'maryland' => [3, 11], 'new-hampshire' => [3, 12],
+                        'arizona' => [4, 2], 'new-mexico' => [4, 3], 'kansas' => [4, 5], 'arkansas' => [4, 6], 'tennessee' => [4, 7], 'north-carolina' => [4, 10], 'delaware' => [4, 11], 'massachusetts' => [4, 12],
+                        'oklahoma' => [5, 5], 'louisiana' => [5, 6], 'mississippi' => [5, 7], 'alabama' => [5, 8], 'georgia' => [5, 9], 'south-carolina' => [5, 10], 'new-jersey' => [5, 11], 'connecticut' => [5, 12],
+                        'alaska' => [6, 1], 'hawaii' => [6, 2], 'texas' => [6, 5], 'florida' => [6, 10], 'rhode-island' => [6, 12],
+                    ];
+                @endphp
+
+                <div class="us-state-map-card">
+                    <div class="text-center mb-4">
+                        <h2 class="mb-2">Browse Campgrounds by State</h2>
+                        <p class="text-muted mb-0">Pick a state on the map to view its campground listings.</p>
+                    </div>
+                    <div class="us-state-map" aria-label="Clickable United States campground map">
+                        @foreach($mapStates ?? [] as $state)
+                            @php [$row, $col] = $stateMapPositions[$state['slug']] ?? [1, 1]; @endphp
+                            <a href="{{ url('/en-us/parks/'.$state['slug']) }}"
+                               class="us-state-tile {{ ($currentStateSlug ?? null) === $state['slug'] ? 'active' : '' }}"
+                               style="grid-row: {{ $row }}; grid-column: {{ $col }};"
+                               aria-label="Browse campgrounds in {{ $state['name'] }}">
+                                {{ $state['abbr'] }}
+                                <small>{{ number_format($state['park_count'] ?? 0) }}</small>
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
+
                 <div class="grid-layout grid-5-columns" data-item="grid-item">
                     @forelse($parks['parks'] as $park)
                         @php $user = Auth::user(); @endphp
