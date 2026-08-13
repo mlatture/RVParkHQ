@@ -33,9 +33,20 @@
             <div class="text-center mb-5">
                 <h2>Explore by Region</h2>
                 <p class="text-muted">Select a state to discover campgrounds, RV parks, and outdoor stays.</p>
+                <form method="GET" action="{{ route('campgrounds.index') }}" class="row justify-content-center mt-4">
+                    <div class="col-md-6 col-lg-5">
+                        <input type="text" name="search" class="form-control" value="{{ request('search') }}" placeholder="Search by state, abbreviation, or region...">
+                    </div>
+                    <div class="col-auto mt-2 mt-md-0">
+                        <button type="submit" class="btn btn-dark">Search</button>
+                        @if(request('search'))
+                            <a href="{{ route('campgrounds.index') }}" class="btn btn-link">Clear</a>
+                        @endif
+                    </div>
+                </form>
             </div>
 
-            @foreach($regions as $regionName => $states)
+            @forelse($regions as $regionName => $states)
                 <div class="mb-5">
                     <h3 class="mb-3" style="border-left: 4px solid #ffc107; padding-left: 12px;">{{ $regionName }}</h3>
                     <div class="row">
@@ -54,7 +65,14 @@
                         @endforeach
                     </div>
                 </div>
-            @endforeach
+            @empty
+                <div class="text-center py-5">
+                    <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                    <h4>No campground regions matched "{{ request('search') }}"</h4>
+                    <p class="text-muted">Try a state name, two-letter abbreviation, or region.</p>
+                    <a href="{{ route('campgrounds.index') }}" class="btn btn-warning">Browse All Campgrounds</a>
+                </div>
+            @endforelse
         </div>
     </section>
 

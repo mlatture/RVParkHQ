@@ -15,7 +15,6 @@
                     <nav>
                         <ul>
                             <li><a href="{{ route('rv-park.home') }}">Home</a></li>
-                            <li><a href="{{ route('rv-park.all-parks') }}">Parks</a></li>
                             <li><a href="{{ route('campgrounds.index') }}">Campgrounds</a></li>
                             <li class="buy-park-cta">
                                 <a href="https://rvparkshop.com" target="_blank" rel="noopener">Buy a Park</a>

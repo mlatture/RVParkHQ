@@ -1,22 +1,21 @@
 <?php
 
-use App\Http\Controllers\Frontend\ParkController;
-use App\Http\Controllers\Frontend\StateController;
-use App\Http\Controllers\Frontend\SubscriberController;
 use App\Http\Controllers\Frontend\AdvertiseController;
-use App\Http\Controllers\Frontend\CampConnectController;
-use App\Http\Controllers\Frontend\ClaimController;
 use App\Http\Controllers\Frontend\Auth\FrontendLoginController;
 use App\Http\Controllers\Frontend\Auth\FrontendRegisterController;
-use App\Http\Controllers\Frontend\PaymentController;
 use App\Http\Controllers\Frontend\BillController;
-use App\Http\Controllers\Frontend\ProfileController;
+use App\Http\Controllers\Frontend\CampConnectController;
 use App\Http\Controllers\Frontend\CardController;
+use App\Http\Controllers\Frontend\ClaimController;
 use App\Http\Controllers\Frontend\FreeMarketingController;
-
+use App\Http\Controllers\Frontend\ParkController;
+use App\Http\Controllers\Frontend\PaymentController;
+use App\Http\Controllers\Frontend\ProfileController;
+use App\Http\Controllers\Frontend\StateController;
+use App\Http\Controllers\Frontend\SubscriberController;
 
 // API Documentation (public, no auth)
-Route::get('/api/docs', fn() => view('frontend.pages.api-docs'))->name('api.docs');
+Route::get('/api/docs', fn () => view('frontend.pages.api-docs'))->name('api.docs');
 
 // State landing pages (before rv-park group to avoid conflicts)
 Route::get('/campgrounds', [StateController::class, 'index'])->name('campgrounds.index');
@@ -36,7 +35,7 @@ Route::name('rv-park.')->group(function () {
         Route::get('/{country?}/{state?}', 'index')->name('all-parks');
     });
 
-    Route::get('en-us/park/state', [ParkController::class, 'parkCountry'])->name('park-country');
+    Route::redirect('en-us/park/state', '/campgrounds', 301)->name('park-country');
 
     Route::post('/email/subscribe', [SubscriberController::class, 'store'])->name('email.subscribe');
     Route::get('/confirm-email', [SubscriberController::class, 'index'])->name('email-confirm.index');
@@ -80,7 +79,7 @@ Route::name('rv-park.')->group(function () {
 
     Route::post('/claim-park', [ClaimController::class, 'store'])->name('claim-park.store');
     Route::get('/claim-park/verify/{token}', [ClaimController::class, 'verify']);
-    
+
     Route::get('/free-marketing', [FreeMarketingController::class, 'index'])->name('free_marketing.index');
     Route::post('/log/marketing-schedule', [FreeMarketingController::class, 'marketingSchedule'])->name('log.marketing.schedule');
 });
@@ -88,7 +87,6 @@ Route::name('rv-park.')->group(function () {
 Route::post('/modal-login', [FrontendLoginController::class, 'loginModal'])->name('modal.login');
 Route::post('/modal-register', [FrontendRegisterController::class, 'registerModal'])->name('modal.register');
 Route::get('/frontend-verify/{id}/{hash}', [FrontendRegisterController::class, 'verify'])->name('frontend.verification.verify');
-
 
 Route::get('email/verify', [FrontendLoginController::class, 'showVerificationNotice'])->name('verification.notice');
 Route::get('email/verify/{id}/{hash}', [FrontendLoginController::class, 'verifyEmail'])->middleware(['signed'])->name('verification.verify');

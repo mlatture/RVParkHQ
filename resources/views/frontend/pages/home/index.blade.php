@@ -11,7 +11,7 @@
                     <h2 data-caption-animate="zoom-out">Find the Perfect Campground for Your Next Adventure.</h2>
                     <p class="text-small">From rustic sites to resort-style RV parks -  we’ve got you covered.</p>
                     <div>
-                        <a href="{{ route('rv-park.home') }}" class="btn btn-primary scroll-to">Start Your Search</a>
+                        <a href="{{ route('campgrounds.index') }}" class="btn btn-primary">Start Your Search</a>
                     </div>
                 </div>
             </div>
@@ -28,7 +28,7 @@
                     <h1>Explore 10+ Campgrounds Across the USA</h1>
                     <p class="text-small">Pet-friendly, big-rig ready, tent-only, and everything in between</p>
                     <div>
-                        <a href="{{ route('rv-park.park-country') }}" class="btn btn-primary scroll-to">Browse by State</a>
+                        <a href="{{ route('campgrounds.index') }}" class="btn btn-primary">Browse by State</a>
                     </div>
                 </div>
             </div>

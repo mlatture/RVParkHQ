@@ -13,9 +13,18 @@ class StateController extends Controller
     /**
      * Browse all states grouped by region.
      */
-    public function index()
+    public function index(Request $request)
     {
         $states = collect(config('states.list'));
+
+        if ($request->filled('search')) {
+            $search = Str::lower($request->input('search'));
+            $states = $states->filter(function ($state) use ($search) {
+                return Str::contains(Str::lower($state['name']), $search)
+                    || Str::contains(Str::lower($state['abbr']), $search)
+                    || Str::contains(Str::lower($state['region']), $search);
+            });
+        }
 
         // Get park counts per state using defaultSearch scope
         $parkCounts = Park::query()
@@ -28,6 +37,7 @@ class StateController extends Controller
         // Attach counts to states
         $states = $states->map(function ($state) use ($parkCounts) {
             $state['park_count'] = $parkCounts->get($state['name'], 0);
+
             return $state;
         });
 
@@ -47,7 +57,7 @@ class StateController extends Controller
         $states = collect(config('states.list'));
         $stateInfo = $states->firstWhere('slug', $stateSlug);
 
-        if (!$stateInfo) {
+        if (! $stateInfo) {
             abort(404);
         }
 
@@ -57,10 +67,10 @@ class StateController extends Controller
         $query = Park::query()->where('status', 'active');
 
         // Default search behavior with toggles
-        if (!$request->has('include_federal')) {
+        if (! $request->has('include_federal')) {
             $query->excludeFederal();
         }
-        if (!$request->has('include_harvest_hosts')) {
+        if (! $request->has('include_harvest_hosts')) {
             $query->excludeHarvestHosts();
         }
 
@@ -71,7 +81,7 @@ class StateController extends Controller
             $search = $request->input('search');
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('city', 'like', "%{$search}%");
+                    ->orWhere('city', 'like', "%{$search}%");
             });
         }
 

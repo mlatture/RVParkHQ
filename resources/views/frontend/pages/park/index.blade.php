@@ -211,7 +211,7 @@
                     <li><a href="{{ route('rv-park.home') }}">Home</a></li>
                     <li>{{ request()->segment(2) }}</li>
                     @if(request()->segment(3))
-                        <li><a href="{{ route('rv-park.park-country') }}">{{ request()->segment(3) }}</a></li>
+                        <li><a href="{{ route('campgrounds.index') }}">{{ request()->segment(3) }}</a></li>
                     @endif
                     @if(request()->segment(4))
                         <li class="active">{{ strtolower(request()->segment(4)) }}</li>

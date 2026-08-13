@@ -3,17 +3,16 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\ClaimParkSubmission;
-use App\Models\ClaimPark;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Mail;
 use App\Mail\ClaimParkVerifyMail;
+use App\Models\ClaimPark;
+use App\Models\ClaimParkSubmission;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class ClaimController extends Controller
 {
-
     public function store(Request $request)
     {
         $request->validate([
@@ -54,20 +53,20 @@ class ClaimController extends Controller
 
         // Send to GoHighLevel
         try {
-            $client = new \GuzzleHttp\Client();
+            $client = new \GuzzleHttp\Client;
 
-            $response = $client->post(config('services.gohighlevel.base_url') . '/contacts', [
+            $response = $client->post(config('services.gohighlevel.base_url').'/contacts', [
                 'headers' => [
-                    'Authorization' => 'Bearer ' . config('services.gohighlevel.api_key'),
+                    'Authorization' => 'Bearer '.config('services.gohighlevel.api_key'),
                     'Content-Type' => 'application/json',
                     'Accept' => 'application/json',
                 ],
                 'json' => [
                     'locationId' => config('services.gohighlevel.location_id'),
-                    'firstName'  => $request->park_name,
-                    'email'      => $request->email,
-                    'phone'      => $request->phone,
-                    'tags'       => 'Claim A Park',
+                    'firstName' => $request->park_name,
+                    'email' => $request->email,
+                    'phone' => $request->phone,
+                    'tags' => 'Claim A Park',
                     'customField' => [
                         // Optional: include URL or address if needed
                         'Park URL' => $request->park_url,
@@ -80,17 +79,17 @@ class ClaimController extends Controller
             if (in_array($response->getStatusCode(), [200, 201])) {
                 \Log::info('Contact sent to GoHighLevel successfully.');
             } else {
-                \Log::warning('GoHighLevel responded with status: ' . $response->getStatusCode());
+                \Log::warning('GoHighLevel responded with status: '.$response->getStatusCode());
             }
 
         } catch (\Exception $e) {
-            \Log::error('Error sending contact to GoHighLevel: ' . $e->getMessage());
+            \Log::error('Error sending contact to GoHighLevel: '.$e->getMessage());
         }
 
-        return redirect()->route('rv-park.all-parks')
+        return redirect()->route('campgrounds.index')
             ->with([
                 'success' => 'Email has been sent. Please verify your email address.',
-                'icon' => 'success'
+                'icon' => 'success',
             ]);
     }
 
@@ -99,10 +98,10 @@ class ClaimController extends Controller
         $submission = ClaimParkSubmission::where('verify_token', $token)->firstOrFail();
 
         if ($submission->is_verified == 1) {
-            return redirect()->route('rv-park.all-parks')
+            return redirect()->route('campgrounds.index')
                 ->with([
                     'success' => 'You are already verified. Please wait.',
-                    'icon' => 'info'
+                    'icon' => 'info',
                 ]);
         }
 
@@ -118,10 +117,10 @@ class ClaimController extends Controller
         $submission->is_verified = 1;
         $submission->save();
 
-        return redirect()->route('rv-park.all-parks')
+        return redirect()->route('campgrounds.index')
             ->with([
                 'success' => 'Email has been sent. Please verify your email address.',
-                'icon' => 'success'
+                'icon' => 'success',
             ]);
     }
 }

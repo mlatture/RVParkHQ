@@ -62,7 +62,7 @@
                                     @foreach ($states as $slug)
                                         <div class="col-6 col-sm-4 col-md-3 col-lg-2 state-item"
                                              data-state="{{ strtolower($slug->state) }}">
-                                            <a href="{{ url('/en-us/parks/usa/'.$slug->state) }}"
+                                            <a href="{{ url('/campgrounds/' . Str::slug($slug->state)) }}"
                                                class="d-block text-decoration-none p-1 rounded-3 fw-semibold shadow-sm transition-all text-dark"
                                                style="background-color: rgba(255,255,255,0.90); border: 2px solid {{ !empty($slug->color) ? $slug->color : '#6c757d' }};"
                                                tabindex="0">

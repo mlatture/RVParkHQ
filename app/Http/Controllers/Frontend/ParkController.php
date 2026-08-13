@@ -7,16 +7,17 @@ use App\Http\Requests\Frontend\ParkRequest;
 use App\Models\Park;
 use App\Models\Review;
 use App\Models\WinnerPark;
-use App\Models\Favorite;
 use App\Services\Frontend\ReviewService;
 use App\Services\ParkService;
 use Illuminate\Http\Request;
-use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
+use Intervention\Image\Facades\Image;
 
 class ParkController extends Controller
 {
     protected $reviewService;
+
     protected $parkService;
 
     public function __construct(ReviewService $reviewService, ParkService $parkService)
@@ -27,12 +28,25 @@ class ParkController extends Controller
 
     public function index(Request $request)
     {
-        if(!empty($request->segment('4'))) {
+        if ($request->is('en-us/parks') || $request->is('en-us/parks/usa') || $request->is('en-us/parks/usa/*')) {
+            if ($request->segment(4)) {
+                return redirect('/campgrounds/'.Str::slug($request->segment(4)), 301);
+            }
+
+            $query = [];
+            if ($request->filled('global_search')) {
+                $query['search'] = $request->input('global_search');
+            }
+
+            return redirect()->route('campgrounds.index', $query, 301);
+        }
+
+        if (! empty($request->segment('4'))) {
             $filters['state'] = $request->segment('4');
-            $data['parks'] = $this->parkService->getFilteredParks($filters);    
+            $data['parks'] = $this->parkService->getFilteredParks($filters);
         } else {
             $filters = $request->only(['country', 'state', 'city', 'states', 'global_search', 'site_availability', 'amenities']);
-            $data['parks'] = $this->parkService->getFilteredParks($filters);   
+            $data['parks'] = $this->parkService->getFilteredParks($filters);
         }
         // All unique states for the filter dropdown
         $data['allStates'] = Park::whereNotNull('state')
@@ -51,52 +65,52 @@ class ParkController extends Controller
 
         return response()->json([
             'message' => 'A confirmation email has been sent. Please check your inbox.',
-            'icon' => 'success'
+            'icon' => 'success',
         ]);
     }
-    
-  public function confirmReview(Request $request, string $token)
-{
-    // 'signed' + 'throttle' are already on the route — good.
 
-    $status = $this->reviewService->confirmReview($token);
+    public function confirmReview(Request $request, string $token)
+    {
+        // 'signed' + 'throttle' are already on the route — good.
 
-    // Map service statuses to user-facing flashes
-    return match ($status) {
-        'invalid' => redirect()->route('rv-park.park')->with([
-            'success' => 'This confirmation link is invalid or has expired.',
-            'icon'    => 'error',
-        ]),
-        'expired' => redirect()->route('rv-park.park')->with([
-            'success' => 'This confirmation link has expired. Please submit your review again.',
-            'icon'    => 'error',
-        ]),
-        'already_confirmed', 'already_submitted' => redirect()->route('rv-park.park')->with([
-            'success' => 'A review has already been submitted for this park using your email address.',
-            'icon'    => 'info',
-        ]),
-        'confirmed' => redirect()->route('rv-park.park')->with([
-            'success' => 'Your review has been confirmed and submitted.',
-            'icon'    => 'success',
-        ]),
-        default => redirect()->route('rv-park.park')->with([
-            'success' => 'We could not process this confirmation link.',
-            'icon'    => 'error',
-        ]),
-    };
-}
-    
+        $status = $this->reviewService->confirmReview($token);
+
+        // Map service statuses to user-facing flashes
+        return match ($status) {
+            'invalid' => redirect()->route('rv-park.park')->with([
+                'success' => 'This confirmation link is invalid or has expired.',
+                'icon' => 'error',
+            ]),
+            'expired' => redirect()->route('rv-park.park')->with([
+                'success' => 'This confirmation link has expired. Please submit your review again.',
+                'icon' => 'error',
+            ]),
+            'already_confirmed', 'already_submitted' => redirect()->route('rv-park.park')->with([
+                'success' => 'A review has already been submitted for this park using your email address.',
+                'icon' => 'info',
+            ]),
+            'confirmed' => redirect()->route('rv-park.park')->with([
+                'success' => 'Your review has been confirmed and submitted.',
+                'icon' => 'success',
+            ]),
+            default => redirect()->route('rv-park.park')->with([
+                'success' => 'We could not process this confirmation link.',
+                'icon' => 'error',
+            ]),
+        };
+    }
+
     public function show($slug_path)
     {
         $data = $this->parkService->getParkDetails($slug_path);
-        
+
         return view('frontend.pages.park.show', [
             'parks' => $data['park'],
             'reviews' => $data['reviews'],
             'approvedClaim' => $data['approvedClaim'] ?? null,
         ]);
     }
-    
+
     public function winnerPark()
     {
         $topParkReview = Review::select('park_id')
@@ -111,7 +125,7 @@ class ParkController extends Controller
             'date' => now(),
         ]);
     }
-    
+
     public function parkCountry()
     {
         $states = Park::selectRaw('state, MIN(color) as color, COUNT(*) as park_count')
@@ -120,35 +134,38 @@ class ParkController extends Controller
             ->groupBy('state')
             ->orderBy('state')
             ->get();
+
         return view('frontend.pages.park.state', compact('states'));
     }
-    
+
     public function favoritePark(Request $request)
     {
         $request->validate(['park_id' => 'required|exists:parks,id']);
         $user = Auth::user();
         $parkId = $request->park_id;
-        if (!$user->favorites()->where('park_id', $parkId)->exists()) {
+        if (! $user->favorites()->where('park_id', $parkId)->exists()) {
             $user->favorites()->create(['park_id' => $parkId]);
         }
+
         return response()->json(['status' => 'favorited']);
     }
-    
+
     public function unfavoritePark(Request $request)
     {
         $request->validate(['park_id' => 'required|exists:parks,id']);
         $user = Auth::user();
         $parkId = $request->park_id;
         $user->favorites()->where('park_id', $parkId)->delete();
+
         return response()->json(['status' => 'unfavorited']);
     }
-    
-    public function generateBadge($slug) {
+
+    public function generateBadge($slug)
+    {
         $park = Park::whereSlug($slug)->firstOrFail();
         $awards = $park->winnerParks;
-        //$awards = ['2025' => 'Gold', '2026' => 'Silver'];
-        
-        
+        // $awards = ['2025' => 'Gold', '2026' => 'Silver'];
+
         // $img = Image::canvas(768, 768, '#ffffff');
 
         // // // Load shield image or draw one (optional)
@@ -156,42 +173,42 @@ class ParkController extends Controller
         //     ->resize(700, 700)
         //     ->opacity(100)
         //     ->brightness(10);
-    
+
         // $img->insert($shield, 'center');
-        
+
         $img = Image::canvas(300, 300, [0, 0, 0, 0]);
-        
+
         $shield = Image::make(public_path('images/blank_sheild.png'))
             ->resize(280, 280, function ($constraint) {
                 $constraint->aspectRatio();
                 $constraint->upsize();
             });
-    
+
         // STEP 3: Insert shield centered
         $img->insert($shield, 'center');
-        
+
         $img->text('Review Us', 150, 130, function ($font) {
             $font->file(public_path('fonts/OpenSans-Bold.ttf'));
             $font->size(18);
             $font->color('#ffffff');
             $font->align('center');
         });
-        
+
         $img->text('On', 150, 155, function ($font) {
             $font->file(public_path('fonts/OpenSans-Bold.ttf'));
             $font->size(16);
             $font->color('#ffffff');
             $font->align('center');
         });
-    
+
         $img->text('RVParkHQ', 150, 185, function ($font) {
             $font->file(public_path('fonts/OpenSans-Bold.ttf'));
             $font->size(18);
             $font->color('#000000');
             $font->align('center');
         });
-    
-        if($awards->count() > 0) {
+
+        if ($awards->count() > 0) {
             $y = 80;
             foreach ($awards as $year => $level) {
                 $img->text("🏅 $year $level", 300, $y, function ($font) {
@@ -201,9 +218,9 @@ class ParkController extends Controller
                     $font->align('center');
                 });
                 $y += 20;
-            }   
+            }
         }
-        
+
         return $img->response('png');
     }
 }
