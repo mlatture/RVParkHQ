@@ -25,6 +25,9 @@ Route::name('rv-park.')->group(function () {
     Route::get('/our-team', [\App\Http\Controllers\Frontend\TeamController::class, 'index'])->name('team');
     Route::get('/services', [\App\Http\Controllers\Frontend\ServiceController::class, 'index'])->name('service');
     Route::get('/contact', [\App\Http\Controllers\Frontend\ContactController::class, 'index'])->name('contact');
+    Route::view('/privacy-policy', 'frontend.pages.legal.privacy-policy')->name('privacy-policy');
+    Route::view('/terms-of-use', 'frontend.pages.legal.terms-of-use')->name('terms-of-use');
+    Route::view('/review-guidelines', 'frontend.pages.legal.review-guidelines')->name('review-guidelines');
 
     Route::prefix('en-us/parks')->controller(ParkController::class)->group(function () {
         Route::get('/confirm-review/{token}', 'confirmReview')->name('conform-review')->middleware(['signed', 'throttle:10,1']); // signed link + 10 req/min

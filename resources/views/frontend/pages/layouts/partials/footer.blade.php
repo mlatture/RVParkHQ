@@ -114,12 +114,11 @@
                         <div class="widget-title">Quick Links</div>
                         <ul class="list text-white">
                             <li><a href="{{ route('rv-park.home') }}">Home</a></li>
-                            <li><a href="{{ route('rv-park.all-parks') }}">Campgrounds</a></li>
                             <li><a href="{{ route('rv-park.team') }}">Our Team</a></li>
-{{--                            <li><a href="{{ route('rv-park.blogs.index') }}">Blog</a></li>--}}
-                            <li><a href="{{ route('rv-park.advertise.index') }}">Advertiser Inquiries</a></li>
-{{--                            <li><a href="{{ route('rv-park.service') }}">Services</a></li>--}}
-                            <li><a href="mailto:info@rvparkhq.com">Contact</a></li>
+                            <li><a href="{{ route('rv-park.privacy-policy') }}">Privacy Policy</a></li>
+                            <li><a href="{{ route('rv-park.terms-of-use') }}">Terms of Use</a></li>
+                            <li><a href="{{ route('rv-park.review-guidelines') }}">Review Guidelines</a></li>
+                            <li><a href="{{ route('rv-park.contact') }}">Contact</a></li>
                         </ul>
                     </div>
                 </div>
