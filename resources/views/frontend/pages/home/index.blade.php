@@ -18,14 +18,11 @@
         </div>
 
         <!-- SLIDE 2 -->
-        <div class="slide" data-bg-video="assets/video/pexels-waves.mp4"></div>
-
-        <!-- SLIDE 3 -->
         <div class="slide kenburns" data-bg-video="assets/video/explore.mp4">
             <div class="bg-overlay"></div>
             <div class="container">
                 <div class="slide-captions text-center text-light">
-                    <h1>Explore 10+ Campgrounds Across the USA</h1>
+                    <h1>Explore {{ number_format($totalParks) }} Campgrounds Across the USA</h1>
                     <p class="text-small">Pet-friendly, big-rig ready, tent-only, and everything in between</p>
                     <div>
                         <a href="{{ route('campgrounds.index') }}" class="btn btn-primary">Browse by State</a>
@@ -34,7 +31,7 @@
             </div>
         </div>
         
-        <!-- SLIDE 4 -->
+        <!-- SLIDE 3 -->
         <div class="slide kenburns" data-bg-video="assets/video/explore.mp4">
             <div class="bg-overlay"></div>
             <div class="container">
@@ -47,7 +44,7 @@
                 </div>
             </div>
         </div>
-        <!-- end: Slide 2 -->
+        <!-- end: slides -->
     </div>
     
     <section id="welcome" class="p-b-0">
