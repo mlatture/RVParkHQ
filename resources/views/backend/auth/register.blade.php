@@ -12,6 +12,7 @@
 
     <form action="{{ route('admin.register.submit') }}" method="POST" class="space-y-6">
         @csrf
+        <x-form-abuse-protection />
         @include('backend.layouts.partials.messages')
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">

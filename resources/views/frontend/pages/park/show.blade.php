@@ -1175,6 +1175,7 @@
                     <div class="m-t-30">
                         <form id="review-form" method="POST" action="{{ route('rv-park.pending-review') }}">
                             @csrf
+                            <x-form-abuse-protection />
                             <input type="hidden" name="park_id" value="{{ $parks->id }}">
 
                             <div class="form-group mt-4">

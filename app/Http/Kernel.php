@@ -64,7 +64,8 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-            'flow.api' => \App\Http\Middleware\FlowApiTokenMiddleware::class,
-            'bot.api' => \App\Http\Middleware\BotApiTokenMiddleware::class,
+        'form.abuse' => \App\Http\Middleware\ProtectPublicForm::class,
+        'flow.api' => \App\Http\Middleware\FlowApiTokenMiddleware::class,
+        'bot.api' => \App\Http\Middleware\BotApiTokenMiddleware::class,
     ];
 }
