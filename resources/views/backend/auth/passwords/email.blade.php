@@ -17,6 +17,7 @@
     <div>
         <form action="{{ route('admin.password.update') }}" method="POST">
             @csrf
+            <x-form-abuse-protection />
             <div class="space-y-5">
                 @include('backend.layouts.partials.messages')
                 <!-- Email -->

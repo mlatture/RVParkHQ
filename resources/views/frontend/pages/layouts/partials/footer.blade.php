@@ -134,6 +134,7 @@
                         <p class="mb-3 text-white">Join our mailing list for top camping tips, exclusive discounts, and nearby park alerts.</p>
                         <form class="footer-subscribe d-flex flex-wrap" method="POST" action="{{ route('rv-park.email.subscribe') }}">
                             @csrf
+                            <x-form-abuse-protection />
                             <input type="email" name="email" placeholder="Enter your email" required />
                             <button type="submit">Subscribe</button>
                         </form>

@@ -26,6 +26,7 @@
                     <div class="mt-4">
                         <form id="review-form" method="POST" action="{{ route('rv-park.suggest.park.store') }}">
                         @csrf
+                        <x-form-abuse-protection />
 
                             <h5 class="fw-semibold mb-3 mt-5">👤 Your Info</h5>
                             <div class="row">

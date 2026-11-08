@@ -6,6 +6,7 @@
 
                 <form class="form-grey-fields" method="POST" action="{{ route('rv-park.claim-park.store') }}">
                     @csrf
+                    <x-form-abuse-protection />
                     @if ($errors->any())
                         <div class="alert alert-danger">
                             @foreach ($errors->all() as $error)

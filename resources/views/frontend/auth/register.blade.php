@@ -6,6 +6,7 @@
 
                 <form class="form-grey-fields" method="POST" action="{{ route('modal.register') }}">
                     @csrf
+                    <x-form-abuse-protection />
 
                     @if ($errors->has('email'))
                         <div class="alert alert-danger">{{ $errors->first('email') }}</div>

@@ -440,6 +440,7 @@
                                     <form action="{{ route('rv-park.advertise.store') }}" method="post"
                                           class="needs-validation" novalidate>
                                         @csrf
+                                        <x-form-abuse-protection />
 
                                         <div class="row g-3 mb-4">
                                             <div class="col-md-6">
