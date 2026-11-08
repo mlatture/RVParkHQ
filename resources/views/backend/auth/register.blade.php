@@ -69,6 +69,8 @@
                    class="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-md text-sm focus:ring focus:ring-blue-200 dark:bg-gray-800 dark:text-white"/>
         </div>
 
+        <x-turnstile />
+
         <!-- Submit -->
         <div>
             <button type="submit"

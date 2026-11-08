@@ -494,6 +494,10 @@
                                                       placeholder="What would you like to achieve with your advertising campaign?"></textarea>
                                         </div>
 
+                                        <div class="mb-4">
+                                            <x-turnstile />
+                                        </div>
+
                                         <div class="d-grid">
                                             <button type="submit" class="btn btn-primary btn-lg fw-bold py-3">Submit
                                                 Inquiry

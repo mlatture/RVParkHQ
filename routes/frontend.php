@@ -31,7 +31,7 @@ Route::name('rv-park.')->group(function () {
 
     Route::prefix('en-us/parks')->controller(ParkController::class)->group(function () {
         Route::get('/confirm-review/{token}', 'confirmReview')->name('conform-review')->middleware(['signed', 'throttle:10,1']); // signed link + 10 req/min
-        Route::post('/pending', 'pendingReview')->name('pending-review');
+        Route::post('/pending', 'pendingReview')->middleware('turnstile')->name('pending-review');
         Route::get('/winner-park', 'winnerPark');
         Route::get('{slug_path}/reviews/write', 'show')->where('slug_path', '.*')->name('park-show');
         Route::get('/{country?}/{state?}', 'index')->name('all-parks');
@@ -39,7 +39,7 @@ Route::name('rv-park.')->group(function () {
 
     Route::redirect('en-us/park/state', '/en-us/parks', 301)->name('park-country');
 
-    Route::post('/email/subscribe', [SubscriberController::class, 'store'])->name('email.subscribe');
+    Route::post('/email/subscribe', [SubscriberController::class, 'store'])->middleware('turnstile')->name('email.subscribe');
     Route::get('/confirm-email', [SubscriberController::class, 'index'])->name('email-confirm.index');
     Route::post('/confirm-subscribe', [SubscriberController::class, 'conformSubscribe'])->name('confirm-subscribe.store');
 
@@ -47,10 +47,10 @@ Route::name('rv-park.')->group(function () {
     Route::get('/blogs', [\App\Http\Controllers\frontend\BlogController::class, 'index'])->name('blogs.index');
 
     Route::get('/suggest-park', [\App\Http\Controllers\Frontend\SuggestController::class, 'index'])->name('suggest.park');
-    Route::post('/suggest-park', [\App\Http\Controllers\Frontend\SuggestController::class, 'store'])->name('suggest.park.store');
+    Route::post('/suggest-park', [\App\Http\Controllers\Frontend\SuggestController::class, 'store'])->middleware('turnstile')->name('suggest.park.store');
 
     Route::get('/advertise', [AdvertiseController::class, 'index'])->name('advertise.index');
-    Route::post('/advertise/store', [AdvertiseController::class, 'store'])->name('advertise.store');
+    Route::post('/advertise/store', [AdvertiseController::class, 'store'])->middleware('turnstile')->name('advertise.store');
 
     Route::get('/CampConnect', [CampConnectController::class, 'index'])->name('CampConnect.index');
 
@@ -79,15 +79,15 @@ Route::name('rv-park.')->group(function () {
         Route::post('/pay-bill/card/{id}', [PaymentController::class, 'processCardPayment'])->name('pay-bill.card.process');
     });
 
-    Route::post('/claim-park', [ClaimController::class, 'store'])->name('claim-park.store');
+    Route::post('/claim-park', [ClaimController::class, 'store'])->middleware('turnstile')->name('claim-park.store');
     Route::get('/claim-park/verify/{token}', [ClaimController::class, 'verify']);
 
     Route::get('/free-marketing', [FreeMarketingController::class, 'index'])->name('free_marketing.index');
     Route::post('/log/marketing-schedule', [FreeMarketingController::class, 'marketingSchedule'])->name('log.marketing.schedule');
 });
 
-Route::post('/modal-login', [FrontendLoginController::class, 'loginModal'])->name('modal.login');
-Route::post('/modal-register', [FrontendRegisterController::class, 'registerModal'])->name('modal.register');
+Route::post('/modal-login', [FrontendLoginController::class, 'loginModal'])->middleware('turnstile')->name('modal.login');
+Route::post('/modal-register', [FrontendRegisterController::class, 'registerModal'])->middleware('turnstile')->name('modal.register');
 Route::get('/frontend-verify/{id}/{hash}', [FrontendRegisterController::class, 'verify'])->name('frontend.verification.verify');
 
 Route::get('email/verify', [FrontendLoginController::class, 'showVerificationNotice'])->name('verification.notice');
