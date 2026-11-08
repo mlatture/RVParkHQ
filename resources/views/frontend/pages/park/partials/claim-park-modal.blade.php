@@ -76,6 +76,9 @@
                         </div>
                     </div>
 
+                    <div class="mb-3 mt-3">
+                        <x-turnstile />
+                    </div>
                     <div class="text-start mb-3 mt-3">
                         <button type="submit" class="btn btn-primary w-100">Submit Claim</button>
                     </div>

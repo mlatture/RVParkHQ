@@ -39,12 +39,18 @@ return [
         'api_key' => env('GOHIGHLEVEL_API_KEY'),
         'location_id' => env('GOHIGHLEVEL_LOCATION_ID'),
     ],
-    
+
     'flow_api' => [
         'token' => env('FLOW_API_TOKEN'),
     ],
 
     'bot_api' => [
         'token' => env('BOT_API_TOKEN'),
+    ],
+
+    'turnstile' => [
+        'site_key' => env('TURNSTILE_SITE_KEY'),
+        'secret_key' => env('TURNSTILE_SECRET_KEY'),
+        'verify_url' => env('TURNSTILE_VERIFY_URL', 'https://challenges.cloudflare.com/turnstile/v0/siteverify'),
     ],
 ];

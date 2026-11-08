@@ -135,6 +135,7 @@
                         <form class="footer-subscribe d-flex flex-wrap" method="POST" action="{{ route('rv-park.email.subscribe') }}">
                             @csrf
                             <input type="email" name="email" placeholder="Enter your email" required />
+                            <x-turnstile size="compact" />
                             <button type="submit">Subscribe</button>
                         </form>
                     </div>
