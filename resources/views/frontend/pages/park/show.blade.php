@@ -1217,6 +1217,9 @@
                                     camping tips, special offers, and nearby park promotions. Unsubscribe anytime.
                                 </small>
                             </div>
+                            <div class="form-group mt-3">
+                                <x-turnstile id="review-turnstile" :explicit="true" />
+                            </div>
                             <button class="btn btn-dark mt-1" type="submit" id="form-submit">
                                 <i class="fa fa-paper-plane"></i>&nbsp;Submit
                             </button>
@@ -1245,6 +1248,16 @@
     </script>
     
     <script>
+        let reviewTurnstileWidgetId = null;
+
+        window.addEventListener('load', function () {
+            window.turnstile.ready(function () {
+                reviewTurnstileWidgetId = window.turnstile.render('#review-turnstile', {
+                    sitekey: @json(config('services.turnstile.site_key'))
+                });
+            });
+        });
+
         $('#review-form').on('submit', function (e) {
             e.preventDefault();
 
@@ -1286,6 +1299,9 @@
                     }
                 },
                 complete: function () {
+                    if (window.turnstile && reviewTurnstileWidgetId !== null) {
+                        window.turnstile.reset(reviewTurnstileWidgetId);
+                    }
                     submitBtn.html('<i class="fa fa-paper-plane"></i> Submit').prop('disabled', false);
                 }
             });

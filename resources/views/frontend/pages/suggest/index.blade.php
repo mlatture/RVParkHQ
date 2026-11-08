@@ -133,6 +133,9 @@
                                     <textarea name="description" id="description" class="form-control" placeholder="Enter any additional park information or notes here..." rows="4"></textarea>
                                 </div>
                             </div>
+                            <div class="mt-4">
+                                <x-turnstile />
+                            </div>
                             <div class="mt-4 text-center">
                                 <button class="btn btn-dark" type="submit" id="form-submit">
                                     <i class="fa fa-paper-plane"></i>&nbsp;Submit
